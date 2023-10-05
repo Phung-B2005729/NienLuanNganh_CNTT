@@ -18,11 +18,8 @@ class HomeAppBarAction extends StatelessWidget {
                     radius: 18,
                     child: CircleAvatar(
                       // ignore: unnecessary_null_comparison
-                      backgroundImage: blocUserLogin.avata != null &&
-                              blocUserLogin.avata.isNotEmpty
-                          // ignore: prefer_interpolation_to_compose_strings
-                          ? AssetImage('assets/images/' + blocUserLogin.avata)
-                          : const AssetImage('assets/images/avatarmacdinh.png'),
+                      backgroundImage: NetworkImage(blocUserLogin.avata),
+
                       radius: 16,
                     ),
                   ),

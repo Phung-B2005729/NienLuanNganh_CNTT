@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 class FireStorage {
   // ignore: unused_field, prefer_final_fields
   FirebaseStorage _storageRef = FirebaseStorage.instance;
-  String collectionName = 'Name';
+  String collectionName = 'images';
 
   Future<String> uploadImage(File imageFile) async {
     String uploadFileName =

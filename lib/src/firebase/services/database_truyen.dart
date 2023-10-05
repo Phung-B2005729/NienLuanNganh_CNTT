@@ -57,6 +57,11 @@ class DatabaseTruyen {
         .doc(idtheloai)
         .get();
   }
+  // update
+
+  Future<void> updateTruyen(String idtruyen, String URL) async {
+    return truyenColection.doc(idtruyen).update({'linkanh': URL});
+  }
 
   Future<bool> kiemTraDSDocGia(String idtruyen, String iduser) async {
     var ds = await truyenColection.doc(idtruyen).get();

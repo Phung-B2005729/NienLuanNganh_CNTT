@@ -15,7 +15,7 @@ class TacGiaAvata extends StatefulWidget {
 
 class _TacGiaAvataState extends State<TacGiaAvata> {
   String? username;
-  String? avata;
+  String? avata = null;
   @override
   void initState() {
     super.initState();
@@ -23,12 +23,11 @@ class _TacGiaAvataState extends State<TacGiaAvata> {
   }
 
   gettingTacGia() async {
-    DatabaseUser(uid: widget.idtacgia).gettingUserIDData().then((value) {
+    await DatabaseUser(uid: widget.idtacgia).gettingUserIDData().then((value) {
       setState(() {
         username = value.docs[0]['username'];
-        print(username);
+
         avata = value.docs[0]['avata'];
-        print(avata);
       });
     });
   }
@@ -46,16 +45,16 @@ class _TacGiaAvataState extends State<TacGiaAvata> {
         ); */
       },
       child: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 10),
+        padding: EdgeInsets.only(top: 20, bottom: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
               // ignore: unnecessary_null_comparison
-              backgroundImage: avata != null && avata!.isNotEmpty
-                  // ignore: prefer_interpolation_to_compose_strings
-                  ? AssetImage("assets/images/" + avata!)
-                  : const AssetImage('assets/images/avatarmacdinh.png'),
+
+              backgroundImage: (avata != null && avata!.isNotEmpty)
+                  ? NetworkImage(avata!)
+                  : null,
               radius: 20,
             ),
             const SizedBox(

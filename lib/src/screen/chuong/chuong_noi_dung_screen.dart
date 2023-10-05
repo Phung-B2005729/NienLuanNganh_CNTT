@@ -135,9 +135,9 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                   children: <Widget>[
                     DrawerHeader(
                       // ignore: sort_child_properties_last
-                      child: Image.asset(
+                      child: Image.network(
                         // ignore: prefer_interpolation_to_compose_strings
-                        'assets/images/' + truyenData['linkanh'],
+                        truyenData['linkanh'],
                         height: 150,
                       ),
                       decoration: const BoxDecoration(color: Colors.white),

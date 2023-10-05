@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
+
+import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +76,8 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                     try {
                       imageURL = await FireStorage().uploadImage(image!);
                       print("URL " + imageURL);
+                      DatabaseUser()
+                          .updateUser("tAvEtV3ftRYZYDE1uyO3j9O4Iok2", imageURL);
                     } catch (e) {
                       print('Lỗi upload' + e.toString());
                     }

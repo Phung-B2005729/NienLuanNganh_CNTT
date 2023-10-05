@@ -65,10 +65,7 @@ class HomeUserAccountsDrawerHeader extends StatelessWidget {
             // ignore: unnecessary_null_comparison
             backgroundImage:
                 // ignore: unnecessary_null_comparison
-                blocUserLogin.avata != null && blocUserLogin.avata.isNotEmpty
-                    // ignore: prefer_interpolation_to_compose_strings
-                    ? AssetImage('assets/images/' + blocUserLogin.avata)
-                    : const AssetImage('assets/images/avatarmacdinh.png'),
+                NetworkImage(blocUserLogin.avata),
             radius: 20,
           ),
           onTap: () {

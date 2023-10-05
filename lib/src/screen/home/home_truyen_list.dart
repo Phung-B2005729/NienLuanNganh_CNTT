@@ -66,10 +66,9 @@ class HomeTruyenList extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(5),
-                              child: Image(
+                              child: Image.network(
                                 // ignore: prefer_interpolation_to_compose_strings
-                                image: AssetImage("assets/images/" +
-                                    snapshot.data.docs[index]['linkanh']),
+                                snapshot.data.docs[index]['linkanh'],
                               ),
                             ),
                             Positioned(

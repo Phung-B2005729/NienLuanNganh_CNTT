@@ -67,6 +67,7 @@ class _LoginFormState extends State<LoginForm> {
         await HelperFunctions.saveFullNameSF(snapshot.docs[0]['fullname']);
         await HelperFunctions.saveAnhNenSF(snapshot.docs[0]['anhnen']);
         await HelperFunctions.saveDateSF(snapshot.docs[0]['ngaysinh']);
+        await HelperFunctions.saveAnhMacDinh();
 
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushAndRemoveUntil(

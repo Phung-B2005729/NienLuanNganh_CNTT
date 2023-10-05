@@ -17,7 +17,8 @@ class DatabaseUser {
       "fullname": "",
       "email": email,
       "ngaysinh": "",
-      "avata": "avatarmacdinh.png",
+      "avata":
+          "https://firebasestorage.googleapis.com/v0/b/apparch-351df.appspot.com/o/images%2F1696494580475.jpg?alt=media&token=7f48e133-6caa-45cb-807c-bfa42c46054b",
       "anhnen": "",
       "hopchat": [],
     });
@@ -41,5 +42,10 @@ class DatabaseUser {
     QuerySnapshot snapshot =
         await userCollection.where("uid", isEqualTo: uid).get();
     return snapshot;
+  }
+
+  // updata anh
+  Future<void> updateUser(String iduser, String URL) async {
+    return userCollection.doc(iduser).update({'avata': URL});
   }
 }

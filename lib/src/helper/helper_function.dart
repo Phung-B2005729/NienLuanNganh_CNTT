@@ -13,7 +13,14 @@ class HelperFunctions {
   static String avataKey = 'AVATAKEY';
   static String anhnenKey = 'ANHNENKEY';
   static String ngaysinhKey = 'DATAKEY';
+
+  static String anhMacDinh = 'ANHMACDINH';
   // saving the data to SF
+  static Future<bool> saveAnhMacDinh() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    return await sf.setString(anhMacDinh,
+        'https://firebasestorage.googleapis.com/v0/b/apparch-351df.appspot.com/o/images%2F1696494580475.jpg?alt=media&token=7f48e133-6caa-45cb-807c-bfa42c46054b');
+  }
 
   static Future<bool> saveLoggedInStatus(bool isUserLoggedIn) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
@@ -61,6 +68,11 @@ class HelperFunctions {
   static Future<bool?> getLoggedInStatus() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return sf.getBool(LoggedInKey);
+  }
+
+  static Future<String?> getAnhMacDinh() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    return sf.getString(anhMacDinh);
   }
 
   static Future<String?> getEmailFromSF() async {

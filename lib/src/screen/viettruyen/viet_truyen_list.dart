@@ -60,17 +60,11 @@ class VietTruyenList extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Image(
-                                // ignore: prefer_interpolation_to_compose_strings
-                                image: snapshot.data.docs[index]['linkanh'] !=
-                                        null
-                                    // ignore: prefer_interpolation_to_compose_strings
-                                    ? AssetImage("assets/images/" +
-                                        snapshot.data.docs[index]['linkanh'])
-                                    : const AssetImage(
-                                        "assets/images/avatarmacdinh.png"),
-                                width: 120,
-                              ),
+                              snapshot.data.docs[index]['linkanh'] != null
+                                  ? Image.network(
+                                      snapshot.data.docs[index]['linkanh'])
+                                  : Image.asset(
+                                      "assets/images/avatarmacdinh.png"),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [

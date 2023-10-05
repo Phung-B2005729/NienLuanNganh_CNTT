@@ -96,9 +96,9 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
             ),
           ),
           flexibleSpace: FlexibleSpaceBar(
-            background: Image.asset(
+            background: Image.network(
               // ignore: prefer_interpolation_to_compose_strings
-              "assets/images/" + truyenData['linkanh'],
+              truyenData['linkanh'],
               fit: BoxFit.cover,
             ),
           ),
