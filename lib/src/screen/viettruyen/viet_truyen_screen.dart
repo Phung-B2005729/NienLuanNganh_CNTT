@@ -1,0 +1,76 @@
+import 'package:apparch/src/bloc/bloc_userlogin.dart';
+import 'package:apparch/src/helper/temple/Color.dart';
+import 'package:apparch/src/screen/viettruyen/taomoi/them_truyen_sceen.dart';
+import 'package:apparch/src/screen/viettruyen/truyen_ban_thao.dart';
+import 'package:apparch/src/screen/viettruyen/truyen_dang_tai.dart';
+import 'package:apparch/src/screen/viettruyen/viet_truyen_appbaraction.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../helper/temple/app_theme.dart';
+
+class VietTruyenScreen extends StatelessWidget {
+  const VietTruyenScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final blocUserLogin = Provider.of<BlocUserLogin>(context, listen: true);
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: ColorClass.xanh3Color,
+            shadowColor: ColorClass.xanh1Color,
+            title: Align(
+                alignment: Alignment.topLeft,
+                child:
+                    Text("Truyện", style: AppTheme.lightTextTheme.titleSmall)),
+            actions: <Widget>[VietTruyenAppbarAction()],
+            notificationPredicate: (ScrollNotification notification) {
+              return notification.depth == 1;
+            },
+            // The elevation value of the app bar when scroll view has
+            // scrolled underneath the app bar.
+            scrolledUnderElevation: 4.0,
+            bottom: TabBar(
+                indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(
+                      width: 2,
+                    ),
+                    insets: EdgeInsets.symmetric(horizontal: 20.0)),
+                labelStyle: AppTheme.lightTextTheme.headlineLarge,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.black,
+                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+                tabs: <Widget>[
+                  Tab(
+                    text: 'Truyện đã đăng',
+                  ),
+                  Tab(
+                    text: 'Bản thảo',
+                  ),
+                ]),
+          ),
+          body: TabBarView(children: <Widget>[
+            TruyenDangTai(
+              iduser: blocUserLogin.id,
+            ),
+            TruyenBanThao(
+              iduser: blocUserLogin.id,
+            )
+          ]),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              print('chuyen trang');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const InsertTruyenScreen()));
+            },
+            // ignore: sort_child_properties_last
+            child: const Icon(Icons.add),
+            backgroundColor: ColorClass.fiveColor,
+          )),
+    );
+  }
+}

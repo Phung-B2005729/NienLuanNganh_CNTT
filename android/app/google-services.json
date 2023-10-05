@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "703982060597",
+    "project_id": "apparch-351df",
+    "storage_bucket": "apparch-351df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703982060597:android:b949752e030a6ebf659d7c",
+        "android_client_info": {
+          "package_name": "com.example.apparch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703982060597-9n31def771on758l2flvb12vgd1r127k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.apparch",
+            "certificate_hash": "76404efdee226b865653d3881bceb22f9b6d4f54"
+          }
+        },
+        {
+          "client_id": "703982060597-d51h4onk4gd8u6k3porr71shcmpl56j4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy2tZGpj4kHL1MymOPPadgE5-Zblg12pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703982060597-d51h4onk4gd8u6k3porr71shcmpl56j4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
