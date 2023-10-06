@@ -3,7 +3,6 @@ import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../helper/date_time_function.dart';
 
 // ignore: must_be_immutable
@@ -18,7 +17,7 @@ class VietTruyenList extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: truyenStream,
       builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
+        return (snapshot.hasData && snapshot.data.docs.length != 0)
             ? ListView.separated(
                 separatorBuilder: (context, index) {
                   return const SizedBox(width: 2);
@@ -166,7 +165,31 @@ class VietTruyenList extends StatelessWidget {
                   );
                 },
               )
-            : Container(color: const Color.fromARGB(0, 164, 10, 10));
+            : Padding(
+                padding: const EdgeInsets.only(
+                    left: 15, right: 15, bottom: 70, top: 0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Flexible(
+                        child: AspectRatio(
+                          aspectRatio: 1 / 1,
+                          child: Image.asset('assets/images/sachempty.png'),
+                        ),
+                      ),
+                      Text('Không có truyện',
+                          style: AppTheme.lightTextTheme.headlineLarge),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Viết tryện mới?\n'
+                        'Nhấn + bên dưới để tạo ngay!',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              );
       },
     );
   }

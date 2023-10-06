@@ -1,6 +1,7 @@
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/chuong/chuong_amition.dart';
+import 'package:apparch/src/screen/share/tag.dart';
 import 'package:apparch/src/screen/truyen/tacgia_avata.dart';
 import 'package:apparch/src/screen/truyen/truyen_the_loai.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -223,34 +224,8 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                           left: 5, top: 0),
-                                      child: ListView.separated(
-                                          separatorBuilder: (context, index) {
-                                            return const SizedBox(width: 2);
-                                          },
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: snapshot.data.docs[0]
-                                                      ['tags'] !=
-                                                  null
-                                              ? snapshot
-                                                  .data.docs[0]['tags'].length
-                                              : 0, // Số lượng phần tử ngang
-                                          itemBuilder: (context, index) {
-                                            return Center(
-                                              child: TextButton(
-                                                  onPressed: () {},
-                                                  style: TextButton.styleFrom(
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.black),
-                                                  ),
-                                                  child: Text(
-                                                    snapshot.data.docs[0]
-                                                        ['tags'][index],
-                                                    style: const TextStyle(
-                                                        color: Colors.black),
-                                                  )),
-                                            );
-                                          }),
+                                      child: TagTruyen(
+                                          tag: snapshot.data.docs[0]['tags']),
                                     ),
                                   )
                               ],

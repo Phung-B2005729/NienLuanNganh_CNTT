@@ -18,7 +18,7 @@ class DatabaseTruyen {
   }
 
   Future getTruyenId(String idtruyen) async {
-    return truyenColection.doc(idtruyen).get();
+    return truyenColection.doc(idtruyen).snapshots();
   }
 
   // lay danh sach tat ca truyen theo dieukien

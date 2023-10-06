@@ -33,7 +33,7 @@ class VietTruyenScreen extends StatelessWidget {
             // scrolled underneath the app bar.
             scrolledUnderElevation: 4.0,
             bottom: TabBar(
-                indicator: UnderlineTabIndicator(
+                indicator: const UnderlineTabIndicator(
                     borderSide: BorderSide(
                       width: 2,
                     ),
@@ -42,7 +42,7 @@ class VietTruyenScreen extends StatelessWidget {
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.black,
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
-                tabs: <Widget>[
+                tabs: const <Widget>[
                   Tab(
                     text: 'Truyện đã đăng',
                   ),
