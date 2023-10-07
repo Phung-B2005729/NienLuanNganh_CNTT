@@ -1,6 +1,7 @@
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/chuong/chuong_amition.dart';
+import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/share/tag.dart';
 import 'package:apparch/src/screen/truyen/tacgia_avata.dart';
 import 'package:apparch/src/screen/truyen/truyen_the_loai.dart';
@@ -155,17 +156,25 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
                                 height: 50,
                                 child: TextButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChuongAmition(
-                                                      listchuong:
-                                                          snapshot.data.docs,
-                                                      vt: 0,
-                                                      idtruyen: widget.idtruyen,
-                                                      iduser: widget.iduser,
-                                                      edit: widget.edit)));
+                                      if (countChuong != 0) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChuongAmition(
+                                                        listchuong:
+                                                            snapshot.data.docs,
+                                                        vt: 0,
+                                                        idtruyen:
+                                                            widget.idtruyen,
+                                                        iduser: widget.iduser,
+                                                        edit: widget.edit)));
+                                      } else {
+                                        MsgDialog.showSnackbar(
+                                            context,
+                                            ColorClass.fiveColor,
+                                            "Chưa có chương được cập nhật");
+                                      }
                                     },
                                     child: Text(
                                       "Đọc",
@@ -270,11 +279,15 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
                                       ],
                                     ),
                                   Expanded(
-                                    child: Text(
-                                      snapshot.data.docs[0]['mota'],
-                                      softWrap: true,
-                                      style: AppTheme.lightTextTheme.bodySmall,
-                                      // textHeightBehavior: ,
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        snapshot.data.docs[0]['mota'],
+                                        softWrap: true,
+                                        style:
+                                            AppTheme.lightTextTheme.bodySmall,
+                                        // textHeightBehavior: ,
+                                      ),
                                     ),
                                   ),
                                   Align(

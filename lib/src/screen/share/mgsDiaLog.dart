@@ -32,6 +32,50 @@ class MsgDialog {
         });
   }
 
+  static void showXacNhanThongTin(
+      BuildContext context, String msg, Color tclo, Function xacnhan) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // title: const Text('Basic dialog title'),
+            content: Text(
+              msg,
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                // ignore: unnecessary_const
+                child:
+                    // ignore: unnecessary_const
+                    Text('Huỷ', style: TextStyle(color: tclo)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                // ignore: unnecessary_const
+                child:
+                    // ignore: unnecessary_const
+                    Text('OK', style: TextStyle(color: tclo)),
+                onPressed: () {
+                  xacnhan();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   // ignore: avoid_types_as_parameter_names
   static void showSnackbar(context, color, message) {
     ScaffoldMessenger.of(context).showSnackBar(

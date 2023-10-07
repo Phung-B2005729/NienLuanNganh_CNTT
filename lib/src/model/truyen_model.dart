@@ -5,40 +5,70 @@ class TruyenModel {
   String? tacgia;
   String? tentruyen;
   String? mota;
-  DateTime? ngaycapnhat = DateTime.now();
+  DateTime? ngaycapnhat;
   int? tongluotxem;
   int? tongbinhchon;
   String? tinhtrang;
   String? linkanh;
   List<String>? danhsachdocgia;
   List<String>? tags;
-  List<String>? theloai;
+  String? theloai;
   TruyenModel(
-      {this.idtruyen,
-      this.tacgia,
-      this.tentruyen,
-      this.mota,
-      this.ngaycapnhat,
+      {this.idtruyen = '0',
+      required this.tacgia,
+      required this.tentruyen,
+      required this.mota,
+      required this.ngaycapnhat,
       this.tongbinhchon = 0,
       this.tongluotxem = 0,
-      this.linkanh,
-      this.tinhtrang = 'Trưởng thành',
-      this.danhsachdocgia,
-      this.tags = const [],
-      this.theloai});
+      required this.linkanh,
+      required this.tinhtrang,
+      required this.danhsachdocgia,
+      required this.tags,
+      required this.theloai});
+  TruyenModel copyWith({
+    String? idtruyen,
+    String? tacgia,
+    String? tentruyen,
+    String? mota,
+    DateTime? ngaycapnhat,
+    int? tongluotxem,
+    int? tongbinhchon,
+    String? tinhtrang,
+    String? linkanh,
+    List<String>? danhsachdocgia,
+    List<String>? tags,
+    String? theloai,
+  }) {
+    return TruyenModel(
+        idtruyen: idtruyen ?? this.idtruyen,
+        tacgia: tacgia ?? this.tacgia,
+        tentruyen: tentruyen ?? this.tentruyen,
+        mota: mota ?? this.mota,
+        ngaycapnhat: ngaycapnhat ?? this.ngaycapnhat,
+        tongbinhchon: tongbinhchon ?? this.tongbinhchon,
+        tongluotxem: tongluotxem ?? this.tongluotxem,
+        linkanh: linkanh ?? this.linkanh,
+        tinhtrang: tinhtrang ?? this.tinhtrang,
+        danhsachdocgia: danhsachdocgia ?? this.danhsachdocgia,
+        tags: tags ?? this.tags,
+        theloai: theloai ?? this.theloai);
+  }
 
   TruyenModel.fromMap(Map<String, dynamic> map) {
     idtruyen = map['idtruyen'];
     tacgia = map['tacgia'];
     tentruyen = map['tentruyen'];
     mota = map['mota'];
-    ngaycapnhat = DatetimeFunction.getTimeToDateTime(map['ngaycapnhat']);
+    ngaycapnhat = map['ngaycapnhat'] != null
+        ? DatetimeFunction.getTimeToDateTime(map['ngaycapnhat'])
+        : DateTime.now();
     tongbinhchon = map['tongbinhchon'];
     tongluotxem = map['tongluotxem'];
     linkanh = map['linkanh'];
     tinhtrang = map['tinhtrang'];
     danhsachdocgia = map['danhsachdoc'];
-    tags = map['tags']; //.cast<String>();
+    tags = map['tags'];
     theloai = map['theloai'];
   }
 
@@ -53,7 +83,7 @@ class TruyenModel {
       'tongluotxem': tongluotxem,
       'linkanh': linkanh,
       'tinhtrang': tinhtrang,
-      'danhsachdoc': danhsachdocgia,
+      'danhsachdocgia': danhsachdocgia,
       'tags': tags,
       'theloai': theloai
     };

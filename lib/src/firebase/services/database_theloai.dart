@@ -9,10 +9,13 @@ class DatabaseTheLoai {
     return theLoaiColection.snapshots();
   }
 
-  Future getTheLoaiId(String idtheloai) async {
-    return FirebaseFirestore.instance
-        .collection('theloai')
-        .doc(idtheloai)
-        .get();
+  Future getOneTheLoaiThepId(String idtheloai) async {
+    return theLoaiColection.doc(idtheloai).get();
+  }
+
+  Future getIdTheLoai(String name) async {
+    QuerySnapshot snapshot =
+        await theLoaiColection.where("tenloai", isEqualTo: name).get();
+    return snapshot.docs[0]['idloai'].toString();
   }
 }

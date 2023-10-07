@@ -1,20 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
 import 'package:apparch/src/firebase/services/database_theloai.dart';
+import 'package:apparch/src/firebase/services/database_truyen.dart';
 
 import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/model/truyen_model.dart';
 import 'package:apparch/src/screen/chuong/them_chuong.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/share/tag.dart';
+import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
+import 'package:apparch/src/screen/truyen/truyen_chi_tiet_screen.dart';
+import 'package:apparch/src/screen/viettruyen/taomoi/textFormField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
@@ -43,6 +50,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
   final FocusNode theloaiFocusNode = FocusNode();
   final FocusNode tagFocusNode = FocusNode();
   final FocusNode motaFocusNode = FocusNode();
+  String idtruyen = '';
   dynamic temControl = '';
   List<String> hashtags = [];
   var charter = null;
@@ -68,58 +76,6 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
     }
   }
 
-  Future pickImage() async {
-    print('goi ham imgae');
-    try {
-      final picker = ImagePicker();
-      final XFile? pickedFile =
-          await picker.pickImage(source: ImageSource.gallery);
-      setState(() {
-        if (pickedFile != null) {
-          image = File(pickedFile.path);
-          imageName = pickedFile.name.toString();
-          print(pickedFile.path);
-          print(imageName);
-          print(image);
-        } else {
-          print('No image selected.');
-        }
-      });
-    } catch (e) {
-      // ignore: avoid_print
-      print('loi image  ' + e.toString());
-    }
-  }
-
-  saveTruyen(BuildContext context, String action) {
-    if (_formKey.currentState!.validate()) {
-      if (image != null) {
-        //lay anh
-        // luu anh
-        /* try {
-                      imageURL = await FireStorage().uploadImage(image!); // lay linkanh
-                        
-                    } catch (e) {
-                      print('Lỗi upload' + e.toString());
-                    } */
-
-        // kiem tra hanh dong là gì? lưu => tình trạng == bản thảo, hay đăng => trường thành
-        // luu truyen
-        // hien thi thong bao
-        if (action == 'Lưu')
-          // ignore: curly_braces_in_flow_control_structures
-          MsgDialog.showSnackbar(context, ColorClass.fiveColor, "Đã lưu!");
-        if (action == 'Đăng')
-          // ignore: curly_braces_in_flow_control_structures
-          MsgDialog.showSnackbar(
-              context, ColorClass.fiveColor, "Đã đăng một truyện!");
-      } else {
-        MsgDialog.showLoadingDialog(
-            context, "Bạn chưa thêm ảnh bìa của truyện");
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,37 +84,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
           actions: [
             PopupMenuButton(
                 onSelected: (value) {
-                  if (value == 'Xem trước') {
-                    print(value);
-
-                    // goi ham luu => kiem tra du lieu
-                    saveTruyen(context, 'Lưu');
-                    // lay idtruyen
-                    // chuyen trang chi tiet truyen
-                  } else if (value == 'Lưu') {
-                    print(value);
-                    // goi ham luu => kiem tra du lieu
-                    saveTruyen(context, 'Lưu');
-                    // chuyen về trang viettruyen
-                  } else if (value == 'Đăng') {
-                    print(value);
-                    // goi ham luu => kiem tra du lieu
-                    saveTruyen(context, 'Đăng');
-                    // chuyen về trang viettruyen
-                  } else if (value == 'Thoát') {
-                    print(value);
-                    Navigator.pop(context);
-                  } else if (value == 'Thêm chương') {
-                    print(value);
-                    // goi ham luu
-                    // lay idtruyen
-                    // chuyen trang them chuong moi
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                InsertChuong(idtruyen: '1'))); // doi id truyen
-                  }
+                  checkValue(context, value);
                 },
                 color: const Color.fromARGB(255, 237, 236, 236),
                 icon: const Icon(
@@ -253,56 +179,21 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                 const SizedBox(
                   height: 50,
                 ),
-                TextFormField(
-                  focusNode: nameFocusNode,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Vui lòng nhập tên truyện';
-                    }
-                    return null;
-                  },
-                  controller: _nameController,
-                  style: AppTheme.lightTextTheme.headlineMedium,
-                  decoration: InputDecoration(
-                    errorStyle: const TextStyle(fontSize: 12),
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: ColorClass.fiveColor),
-                    ),
-                    // Để chỉnh màu gạch ngang khi focus
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: ColorClass.fiveColor),
-                    ),
-                    label: const Text('Tên truyện'),
-                    labelStyle: AppTheme.lightTextTheme.headlineLarge,
-                  ),
-                ),
+                textFormField(
+                    nameFocusNode: nameFocusNode,
+                    nameController: _nameController,
+                    label: 'Tên truyện',
+                    style: AppTheme.lightTextTheme.headlineMedium,
+                    labelstyle: AppTheme.lightTextTheme.headlineLarge),
                 const SizedBox(
                   height: 40,
                 ),
-                TextFormField(
-                  focusNode: motaFocusNode,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Vui lòng nhập mô tả';
-                    }
-                    return null;
-                  },
-                  style: AppTheme.lightTextTheme.bodyMedium,
-                  maxLines: null,
-                  controller: _motaController,
-                  decoration: InputDecoration(
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: ColorClass.fiveColor),
-                    ),
-                    // Để chỉnh màu gạch ngang khi focus
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: ColorClass.fiveColor),
-                    ),
-
-                    label: const Text('Mô tả'),
-                    labelStyle: AppTheme.lightTextTheme.headlineLarge,
-                  ),
-                ),
+                textFormField(
+                    nameFocusNode: motaFocusNode,
+                    nameController: _motaController,
+                    label: 'Mô tả',
+                    style: AppTheme.lightTextTheme.bodyMedium,
+                    labelstyle: AppTheme.lightTextTheme.headlineLarge),
                 const SizedBox(
                   height: 40,
                 ),
@@ -485,5 +376,163 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                 }
               });
         });
+  }
+
+  Future pickImage() async {
+    print('goi ham imgae');
+    try {
+      final picker = ImagePicker();
+      final XFile? pickedFile =
+          await picker.pickImage(source: ImageSource.gallery);
+      setState(() {
+        if (pickedFile != null) {
+          image = File(pickedFile.path);
+          imageName = pickedFile.name.toString();
+          print(pickedFile.path);
+          print(imageName);
+          print(image);
+        } else {
+          print('No image selected.');
+        }
+      });
+    } catch (e) {
+      // ignore: avoid_print
+      print('loi image  ' + e.toString());
+    }
+  }
+
+  Future<dynamic> saveTruyen(BuildContext context, String action) async {
+    if (_formKey.currentState!.validate()) {
+      if (image != null) {
+        print('gọi hàm save');
+        try {
+          // ignore: unused_local_variable
+          final blocUserLogin =
+              Provider.of<BlocUserLogin>(context, listen: false);
+          // luu anh
+          // lay linkanh
+          imageURL = await FireStorage().uploadImage(image!);
+          // lay du lieu;
+          String name = _nameController.text;
+          String mota = _motaController.text;
+          String theloai = '';
+          // lay id the loai;
+          await DatabaseTheLoai()
+              .getIdTheLoai(_theloaiController.text)
+              .then((value) => theloai = value);
+
+          // kiem tra hanh dong là gì? lưu => tình trạng == bản thảo, hay đăng => trường thành
+          TruyenModel truyen = TruyenModel(
+              tacgia: blocUserLogin.id,
+              tentruyen: name,
+              mota: mota,
+              linkanh: imageURL,
+              theloai: theloai,
+              tinhtrang: 'Trưởng thành',
+              ngaycapnhat: DateTime.now(),
+              danhsachdocgia: [],
+              tags: []);
+
+          String id = '';
+          if (action == 'Lưu') {
+            // ignore: unused_local_variable
+            TruyenModel truyenUpdate =
+                await truyen.copyWith(tinhtrang: 'Bản thảo');
+            // ignore: unused_local_variable
+            id = await DatabaseTruyen().createTruyen(truyenUpdate);
+            // ignore: curly_braces_in_flow_control_structures, use_build_context_synchronously
+            print("id " + id);
+            if (id != '') {
+              MsgDialog.showSnackbar(context, ColorClass.fiveColor, "Đã lưu!");
+              return id;
+            } else {
+              MsgDialog.showLoadingDialog(context, "Lỗi vui lòng thử lại!");
+              return '';
+            }
+          }
+
+          if (action == 'Đăng') {
+            // ignore: unused_local_variable
+            id = await DatabaseTruyen().createTruyen(truyen);
+            // ignore: curly_braces_in_flow_control_structures, use_build_context_synchronously
+            if (id != '') {
+              MsgDialog.showSnackbar(
+                  context, ColorClass.fiveColor, "Đã đăng một truyện!");
+              return id;
+            } else {
+              MsgDialog.showLoadingDialog(context, "Lỗi vui lòng thử lại!");
+              return '';
+            }
+          }
+        } catch (e) {
+          print('Lỗi ' + e.toString());
+        }
+      } else {
+        MsgDialog.showLoadingDialog(
+            context, "Bạn chưa thêm ảnh bìa của truyện");
+        return '';
+      }
+    }
+  }
+
+  checkValue(BuildContext context, String value) async {
+    if (value == 'Xem trước') {
+      print(value);
+      // goi ham luu => kiem tra du lieu => // lay idtruyen
+      idtruyen = await saveTruyen(context, 'Lưu');
+      if (idtruyen != '') {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (_) =>
+                    TruyenChiTietScreen(idtruyen: idtruyen, edit: true)));
+      }
+    } else if (value == 'Lưu') {
+      print(value);
+      // goi ham luu => kiem tra du lieu
+      idtruyen = await saveTruyen(context, 'Lưu');
+      // ignore: prefer_interpolation_to_compose_strings
+      print('idtruyen thu duoc ' + idtruyen);
+      // chuyen về trang viettruyen
+      if (idtruyen != '') {
+        // ignore: use_build_context_synchronously
+
+        Navigator.pop(context);
+      }
+    } else if (value == 'Đăng') {
+      print(value);
+      // goi ham luu => kiem tra du lieu
+      idtruyen = await saveTruyen(context, 'Đăng');
+      print('idtruyen thu duoc ' + idtruyen);
+      if (idtruyen != '') {
+        Navigator.pop(context);
+      }
+      // chuyen về trang viettruyen
+      // ignore: use_build_context_synchronously
+    } else if (value == 'Thoát') {
+      MsgDialog.showXacNhanThongTin(
+          context,
+          'Lưu ý sau khi thoát nội dung của truyện sẽ không được lưu!',
+          ColorClass.fiveColor, () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      });
+
+      print(value);
+    } else if (value == 'Thêm chương') {
+      print(value);
+      // goi ham luu //    // lay idtruyen
+      idtruyen = await saveTruyen(context, 'Lưu');
+      if (idtruyen != '') {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (_) => InsertChuong(
+                      idtruyen: idtruyen,
+                      idc: '',
+                    )));
+      }
+    }
   }
 }

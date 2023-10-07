@@ -8,24 +8,23 @@ class TagTruyen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        separatorBuilder: (context, index) {
-          return const SizedBox(width: 3);
-        },
+    return ListView(
         scrollDirection: Axis.horizontal,
-        itemCount: tag.isNotEmpty ? tag.length : 0, // Số lượng phần tử ngang
-        itemBuilder: (context, index) {
-          return Center(
-            child: Chip(
-                label: Text(
-              tag[index],
-              style: GoogleFonts.openSans(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
-            )),
-          );
-        });
+        // Số lượng phần tử ngang
+        children: [
+          for (var index = 0; index < tag.length; index++)
+            if (tag[index] != '')
+              Center(
+                child: Chip(
+                    label: Text(
+                  tag[index],
+                  style: GoogleFonts.openSans(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                )),
+              )
+        ]);
   }
 }

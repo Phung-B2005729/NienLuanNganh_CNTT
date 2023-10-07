@@ -45,13 +45,19 @@ class _HomePagesState extends State<HomePages> {
       });
     });
     DatabaseTruyen().getAllTruyenSapXep("tongluotxem").then((val) {
-      truyenluotxem = val;
+      setState(() {
+        truyenluotxem = val;
+      });
     });
-    DatabaseTruyen().getAllTruyenSapXep("ngaycapnhat").then((vali) {
-      truyenmoi = vali;
+    DatabaseTruyen().getAllTruyenSapXep('ngaycapnhat').then((vali) {
+      setState(() {
+        truyenmoi = vali;
+      });
     });
     DatabaseTruyen().getAllTruyen().then((vale) {
-      tatcatruyen = vale;
+      setState(() {
+        tatcatruyen = vale;
+      });
     });
   }
 

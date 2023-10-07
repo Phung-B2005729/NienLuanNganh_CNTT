@@ -2,6 +2,7 @@ import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/chuong/chuong_amition.dart';
+import 'package:apparch/src/screen/chuong/them_chuong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -54,6 +55,14 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
       floatingActionButton: widget.edit == true
           ? FloatingActionButton(
               onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => InsertChuong(
+                              idtruyen: widget.idtruyen,
+                              idc: '',
+                            )));
+
                 // chuyen qua them chương mới
               },
               child: const Icon(

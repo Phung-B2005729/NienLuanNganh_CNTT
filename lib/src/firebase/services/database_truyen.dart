@@ -12,13 +12,15 @@ class DatabaseTruyen {
   Future createTruyen(TruyenModel truyenModel) async {
     DocumentReference truyenDocument =
         await truyenColection.add(truyenModel.toMap()); // them truyen
-    return await truyenDocument.update({
+    await truyenDocument.update({
       "idtruyen": truyenDocument.id // update idtruyen;
     });
+    print('Gọi hàm create truyenDocumentid' + truyenDocument.id.toString());
+    return truyenDocument.id;
   }
 
   Future getTruyenId(String idtruyen) async {
-    return truyenColection.doc(idtruyen).snapshots();
+    return truyenColection.doc(idtruyen).get();
   }
 
   // lay danh sach tat ca truyen theo dieukien
@@ -44,6 +46,13 @@ class DatabaseTruyen {
   // lay tat ca danh sach theo sap xep thu tu lớn đến bé
   getAllTruyenSapXep(String tencot) async {
     return truyenColection.orderBy(tencot, descending: true).snapshots();
+  }
+
+  getAllTruyenMoi() async {
+    return truyenColection
+        .where('tinhtrang', isNotEqualTo: 'Bản thảo')
+        .orderBy('ngaycapnhat', descending: true)
+        .snapshots();
   }
 
   // tat ca truyen

@@ -14,9 +14,10 @@ class DatabaseChuong {
         .doc(idtruyen)
         .collection('chuong')
         .add(chuongModel.toMap());
-    return await chuongDocument.update({
+    await chuongDocument.update({
       "idchuong": chuongDocument.id // update idchuong;
     });
+    return chuongDocument.id;
   }
 
 // lay tat ca chuong theo truyen
@@ -54,6 +55,23 @@ class DatabaseChuong {
         .doc(idtruyen)
         .collection('chuong')
         .doc(idchuong)
-        .snapshots();
+        .get();
+  }
+
+// xoa
+  Future deleteOneChuong(String idtruyen) async {
+    return truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .delete();
+  }
+
+  Future updateTinhTrangChuong(String idtruyen) async {
+    return await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .update({'tinhtrang': 'Đã đăng'});
   }
 }

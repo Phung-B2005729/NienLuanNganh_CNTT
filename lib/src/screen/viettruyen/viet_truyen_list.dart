@@ -38,7 +38,8 @@ class VietTruyenList extends StatelessWidget {
                                   )));
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(
+                          top: 8, bottom: 8, left: 8, right: 0),
                       child: Container(
                         height: 150,
                         width: 325,
@@ -56,107 +57,112 @@ class VietTruyenList extends StatelessWidget {
                         ),
                         child: Card(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               snapshot.data.docs[index]['linkanh'] != null
                                   ? Image.network(
-                                      snapshot.data.docs[index]['linkanh'])
+                                      snapshot.data.docs[index]['linkanh'],
+                                    )
                                   : Image.asset(
-                                      "assets/images/avatarmacdinh.png"),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Text(
-                                            snapshot.data.docs[index]
-                                                ['tentruyen'],
-                                            style: GoogleFonts.arizonia(
-                                              //roboto
-                                              // arizonia
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                            softWrap: true),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: PopupMenuButton(
-                                            onSelected: (value) {
-                                              if (value == 'xem trước') {
-                                                print(value);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            TruyenChiTietAmition(
-                                                              lisTruyen:
-                                                                  snapshot.data
-                                                                      .docs,
-                                                              vttruyen: index,
-                                                              edit: true,
-                                                            )));
-                                              } else if (value == 'chỉnh sửa') {
-                                                print(value);
-                                                // Xử lý khi chọn "Chỉnh sửa"
-                                                // Đặt mã xử lý ở đây
-                                              } else if (value == 'xoá') {
-                                                print(value);
-                                                // Xử lý khi chọn "Xóa"
-                                                // Đặt mã xử lý ở đây
-                                              }
-                                            },
-                                            color: const Color.fromARGB(
-                                                255, 237, 236, 236),
-                                            icon: const Icon(
-                                              Icons.more_vert,
-                                              color: Colors.black,
-                                            ),
-                                            itemBuilder:
-                                                (BuildContext context) =>
-                                                    <PopupMenuEntry<String>>[
-                                                      PopupMenuItem<String>(
-                                                        value: 'xem trước',
-                                                        child: Text(
-                                                          'xem trước',
-                                                          style: AppTheme
-                                                              .lightTextTheme
-                                                              .bodySmall,
-                                                        ),
-                                                      ),
-                                                      PopupMenuItem<String>(
-                                                        value: 'chỉnh sửa',
-                                                        child: Text('chỉnh sửa',
-                                                            style: AppTheme
-                                                                .lightTextTheme
-                                                                .bodySmall),
-                                                      ),
-                                                      PopupMenuItem<String>(
-                                                        value: 'xoá',
-                                                        child: Text('xoá',
-                                                            style: AppTheme
-                                                                .lightTextTheme
-                                                                .bodySmall),
-                                                      ),
-                                                    ]),
-                                      )
-                                    ],
-                                  ),
-                                  Text(
-                                    // ignore: prefer_interpolation_to_compose_strings
-                                    "Ngày cập nhật " +
-                                        DatetimeFunction.getTimeFormatDatabase(
-                                            snapshot.data.docs[index]
-                                                ['ngaycapnhat']),
-                                    style: AppTheme.lightTextTheme.bodySmall,
-                                    softWrap: true,
-                                  )
-                                ],
+                                      "assets/images/avatarmacdinh.png",
+                                      width: 100,
+                                      height: 180,
+                                    ),
+                              SizedBox(
+                                width: 20,
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Column(
+                                  children: [
+                                    Text(snapshot.data.docs[index]['tentruyen'],
+                                        style: GoogleFonts.arizonia(
+                                          //roboto
+                                          // arizonia
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        softWrap: true),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          // ignore: prefer_interpolation_to_compose_strings
+                                          "Ngày cập nhật ",
+                                          style:
+                                              AppTheme.lightTextTheme.bodySmall,
+                                        ),
+                                        Text(
+                                          DatetimeFunction
+                                              .getTimeFormatDatabase(snapshot
+                                                  .data
+                                                  .docs[index]['ngaycapnhat']),
+                                          style:
+                                              AppTheme.lightTextTheme.bodySmall,
+                                          softWrap: true,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: PopupMenuButton(
+                                    onSelected: (value) {
+                                      if (value == 'xem trước') {
+                                        print(value);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    TruyenChiTietAmition(
+                                                      lisTruyen:
+                                                          snapshot.data.docs,
+                                                      vttruyen: index,
+                                                      edit: true,
+                                                    )));
+                                      } else if (value == 'chỉnh sửa') {
+                                        print(value);
+                                        // Xử lý khi chọn "Chỉnh sửa"
+                                        // Đặt mã xử lý ở đây
+                                      } else if (value == 'xoá') {
+                                        print(value);
+                                        // Xử lý khi chọn "Xóa"
+                                        // Đặt mã xử lý ở đây
+                                      }
+                                    },
+                                    color: const Color.fromARGB(
+                                        255, 237, 236, 236),
+                                    icon: const Icon(
+                                      Icons.more_vert,
+                                      color: Colors.black,
+                                    ),
+                                    itemBuilder: (BuildContext context) =>
+                                        <PopupMenuEntry<String>>[
+                                          PopupMenuItem<String>(
+                                            value: 'xem trước',
+                                            child: Text(
+                                              'xem trước',
+                                              style: AppTheme
+                                                  .lightTextTheme.bodySmall,
+                                            ),
+                                          ),
+                                          PopupMenuItem<String>(
+                                            value: 'chỉnh sửa',
+                                            child: Text('chỉnh sửa',
+                                                style: AppTheme
+                                                    .lightTextTheme.bodySmall),
+                                          ),
+                                          PopupMenuItem<String>(
+                                            value: 'xoá',
+                                            child: Text('xoá',
+                                                style: AppTheme
+                                                    .lightTextTheme.bodySmall),
+                                          ),
+                                        ]),
+                              )
                             ],
                           ),
                         ),
