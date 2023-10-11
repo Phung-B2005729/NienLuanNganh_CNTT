@@ -95,14 +95,22 @@ class _ChuongXemTruocState extends State<ChuongXemTruoc> {
           child: Expanded(
             child: Padding(
                 padding:
-                    EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
                 child: quill.QuillEditor.basic(
                   controller: quill.QuillController(
+                    onSelectionChanged: (textSelection) {
+                      // không copy được
+                      setState(() {
+                        tapbarbool = !tapbarbool;
+                      });
+                    },
                     document:
                         quill.Document.fromJson(jsonDecode(widget.noidung)),
                     selection: const TextSelection.collapsed(offset: 0),
                   ),
                   readOnly: true,
+                  focusNode: null,
+                  autoFocus: false,
                 )),
           ),
         ),

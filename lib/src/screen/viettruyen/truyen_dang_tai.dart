@@ -39,7 +39,7 @@ class _TruyenDangTaiState extends State<TruyenDangTai> {
   @override
   Widget build(BuildContext context) {
     if (truyenDang != null) {
-      return Scaffold(body: VietTruyenList(truyenDang, true, Colors.black));
+      return Scaffold(body: VietTruyenList(truyenDang, false, Colors.black));
     } else {
       return const Center(
           child: CircularProgressIndicator(

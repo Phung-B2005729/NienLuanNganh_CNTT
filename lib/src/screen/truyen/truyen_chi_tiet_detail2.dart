@@ -2,7 +2,7 @@ import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/chuong/chuong_amition.dart';
-import 'package:apparch/src/screen/chuong/them_chuong.dart';
+import 'package:apparch/src/screen/chuong/chuong_them.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -34,8 +34,10 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
   }
 
   getALLChuong() async {
+    bool ktrbanthao = true;
+    if (widget.edit == true) ktrbanthao = false;
     await DatabaseChuong()
-        .getALLChuongSnapshots(widget.idtruyen, sapxep)
+        .getALLChuongSnapshots(widget.idtruyen, sapxep, ktrbanthao)
         .then((vale) {
       setState(() {
         allChuongStream = vale;
@@ -60,7 +62,6 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
                     MaterialPageRoute(
                         builder: (_) => InsertChuong(
                               idtruyen: widget.idtruyen,
-                              idc: '',
                             )));
 
                 // chuyen qua them chương mới

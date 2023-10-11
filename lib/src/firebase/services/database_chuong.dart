@@ -1,3 +1,4 @@
+import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/model/chuong_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -21,13 +22,22 @@ class DatabaseChuong {
   }
 
 // lay tat ca chuong theo truyen
-  getALLChuongSnapshots(String idtruyen, bool des) async {
+  getALLChuongSnapshots(String idtruyen, bool des, bool dkbanthao) async {
     // ignore: await_only_futures
-    return truyenColection
-        .doc(idtruyen)
-        .collection("chuong")
-        .orderBy('ngaycapnhat', descending: des)
-        .snapshots();
+    if (dkbanthao == false) {
+      return truyenColection
+          .doc(idtruyen)
+          .collection("chuong")
+          .orderBy('ngaycapnhat', descending: des)
+          .snapshots();
+    } else {
+      return truyenColection
+          .doc(idtruyen)
+          .collection("chuong")
+          .where('tinhtrang', isEqualTo: 'Đã đăng')
+          .orderBy('ngaycapnhat', descending: des)
+          .snapshots();
+    }
   }
 
 //
@@ -67,11 +77,39 @@ class DatabaseChuong {
         .delete();
   }
 
-  Future updateTinhTrangChuong(String idtruyen) async {
+  Future updateTinhTrangChuong(String idtruyen, String tinhtrang) async {
     return await truyenColection
         .doc(idtruyen)
         .collection('chuong')
         .doc(idchuong)
-        .update({'tinhtrang': 'Đã đăng'});
+        .update({
+      'tinhtrang': tinhtrang,
+      'ngaycapnhat': DatetimeFunction.getTimeToInt(DateTime.now())
+    });
+  }
+
+  Future<void> updateAllTinhTrangChuong(
+      String idtruyen, String tinhtrang) async {
+    QuerySnapshot chuongSnapshot = await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .orderBy('ngaycapnhat')
+        .get();
+
+    for (QueryDocumentSnapshot chuongDoc in chuongSnapshot.docs) {
+      await chuongDoc.reference.update({
+        'tinhtrang': tinhtrang,
+        'ngaycapnhat': DatetimeFunction.getTimeToInt(DateTime.now())
+      });
+    }
+  }
+
+  Future<void> updateOneChuong(
+      String idtruyen, String idchuong, Map<String, dynamic> map) async {
+    return await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .update(map);
   }
 }

@@ -24,8 +24,8 @@ class FireStorage {
   Future<void> deleteImageFromStorage(String imageURL) async {
     Uri uri = Uri.parse(imageURL);
     String path = uri.path;
-    String fileName = path.split('/').last; // Extract the file name
-
+    String fileName = path.split('F').last; // Extract the file name
+    print('filename ' + fileName);
     // Construct the full reference to the image
     Reference reference =
         _storageRef.ref().child(collectionName).child(fileName);

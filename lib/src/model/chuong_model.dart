@@ -6,7 +6,7 @@ class ChuongModel {
   // ignore: non_constant_identifier_names
   String? idchuong;
   String? tenchuong;
-  dynamic? noidung;
+  dynamic noidung;
   DateTime? ngaycapnhat;
   int? luotxem;
   int? binhchon;

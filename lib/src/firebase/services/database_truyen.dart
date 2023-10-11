@@ -1,5 +1,8 @@
+import 'package:apparch/src/firebase/fire_base_storage.dart';
+import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/model/truyen_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class DatabaseTruyen {
   final String? idtruyen;
@@ -15,6 +18,7 @@ class DatabaseTruyen {
     await truyenDocument.update({
       "idtruyen": truyenDocument.id // update idtruyen;
     });
+    // ignore: avoid_print, prefer_interpolation_to_compose_strings
     print('Gọi hàm create truyenDocumentid' + truyenDocument.id.toString());
     return truyenDocument.id;
   }
@@ -68,8 +72,25 @@ class DatabaseTruyen {
   }
   // update
 
-  Future<void> updateTruyen(String idtruyen, String URL) async {
-    return truyenColection.doc(idtruyen).update({'linkanh': URL});
+  Future<void> updateAnhTruyen(String idtruyen, String URL) async {
+    truyenColection.doc(idtruyen).update({'linkanh': URL});
+    return updataNgayCapNhat(idtruyen);
+  }
+
+  Future<void> updateOneTruyen(
+      String idtruyen, Map<String, dynamic> map) async {
+    return truyenColection.doc(idtruyen).update(map);
+  }
+
+  Future<void> updateTinhTrangTruyen(String idtruyen, String tinhtrang) async {
+    truyenColection.doc(idtruyen).update({'tinhtrang': tinhtrang});
+    return updataNgayCapNhat(idtruyen);
+  }
+
+  Future<void> updataNgayCapNhat(String idtruyen) {
+    return truyenColection
+        .doc(idtruyen)
+        .update({'ngaycapnhat': DatetimeFunction.getTimeToInt(DateTime.now())});
   }
 
   Future<bool> kiemTraDSDocGia(String idtruyen, String iduser) async {
@@ -80,6 +101,13 @@ class DatabaseTruyen {
       }
     }
     return false;
+  }
+
+  Future deleleOneTruyen(String idtruyen) async {
+    var documentReference = await truyenColection.doc(idtruyen).get();
+    await FireStorage()
+        .deleteImageFromStorage(documentReference['linkanh'].toString());
+    return await truyenColection.doc(idtruyen).delete();
   }
 
   // them danh sach doc

@@ -1,5 +1,6 @@
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_detail1.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_detail2.dart';
+import 'package:apparch/src/screen/viettruyen/edit/truyen_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -69,10 +70,27 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
           actions: [
             if (widget.edit == true)
               IconButton(
-                  onPressed: () {
-                    // chuyen qua trang edit
-                  },
-                  icon: Icon(Icons.edit))
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => EditTruyenScreen(
+                              tinhtrang: truyenData['tinhtrang'],
+                              linkanh: truyenData['linkanh'],
+                              tag: truyenData['tags'],
+                              tentruyen: truyenData['tentruyen'],
+                              idtruyen: truyenData['idtruyen'],
+                              theloai: truyenData['theloai'],
+                              mota: truyenData['mota'],
+                              ktrbanthao: truyenData['tinhtrang'] == 'Bản thảo'
+                                  ? true
+                                  : false)));
+
+                  // chuyen qua trang edit
+                },
+                // ignore: prefer_const_constructors
+                icon: Icon(Icons.edit),
+              )
           ],
           title: Text(
             truyenData['tentruyen'],

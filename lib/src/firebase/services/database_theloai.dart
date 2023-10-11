@@ -18,4 +18,10 @@ class DatabaseTheLoai {
         await theLoaiColection.where("tenloai", isEqualTo: name).get();
     return snapshot.docs[0]['idloai'].toString();
   }
+
+  Future getNameTheLoai(String idtheloai) async {
+    QuerySnapshot snapshot =
+        await theLoaiColection.where("idloai", isEqualTo: idtheloai).get();
+    return snapshot.docs[0]['tenloai'].toString();
+  }
 }

@@ -1,32 +1,26 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
 import 'package:apparch/src/firebase/services/database_theloai.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
-
-import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/model/truyen_model.dart';
-import 'package:apparch/src/screen/chuong/them_chuong.dart';
+import 'package:apparch/src/screen/chuong/chuong_them.dart';
+import 'package:apparch/src/screen/share/loadingDialog.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/share/tag.dart';
-import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_screen.dart';
 import 'package:apparch/src/screen/viettruyen/taomoi/textFormField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 //import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 class InsertTruyenScreen extends StatefulWidget {
-  const InsertTruyenScreen({super.key});
+  InsertTruyenScreen({super.key});
 
   @override
   State<InsertTruyenScreen> createState() => _InsertTruyenScreenState();
@@ -406,6 +400,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
       if (image != null) {
         print('gọi hàm save');
         try {
+          LoadingDialog.showLoadingDialog(context, 'Loading....');
           // ignore: unused_local_variable
           final blocUserLogin =
               Provider.of<BlocUserLogin>(context, listen: false);
@@ -431,7 +426,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
               tinhtrang: 'Trưởng thành',
               ngaycapnhat: DateTime.now(),
               danhsachdocgia: [],
-              tags: []);
+              tags: hashtags);
 
           String id = '';
           if (action == 'Lưu') {
@@ -443,9 +438,11 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
             // ignore: curly_braces_in_flow_control_structures, use_build_context_synchronously
             print("id " + id);
             if (id != '') {
+              LoadingDialog.hideLoadingDialog(context);
               MsgDialog.showSnackbar(context, ColorClass.fiveColor, "Đã lưu!");
               return id;
             } else {
+              LoadingDialog.hideLoadingDialog(context);
               MsgDialog.showLoadingDialog(context, "Lỗi vui lòng thử lại!");
               return '';
             }
@@ -456,10 +453,12 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
             id = await DatabaseTruyen().createTruyen(truyen);
             // ignore: curly_braces_in_flow_control_structures, use_build_context_synchronously
             if (id != '') {
+              LoadingDialog.hideLoadingDialog(context);
               MsgDialog.showSnackbar(
                   context, ColorClass.fiveColor, "Đã đăng một truyện!");
               return id;
             } else {
+              LoadingDialog.hideLoadingDialog(context);
               MsgDialog.showLoadingDialog(context, "Lỗi vui lòng thử lại!");
               return '';
             }
@@ -468,6 +467,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
           print('Lỗi ' + e.toString());
         }
       } else {
+        LoadingDialog.hideLoadingDialog(context);
         MsgDialog.showLoadingDialog(
             context, "Bạn chưa thêm ảnh bìa của truyện");
         return '';
@@ -478,11 +478,14 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
   checkValue(BuildContext context, String value) async {
     if (value == 'Xem trước') {
       print(value);
+      if (idtruyen == '')
       // goi ham luu => kiem tra du lieu => // lay idtruyen
-      idtruyen = await saveTruyen(context, 'Lưu');
+      {
+        idtruyen = await saveTruyen(context, 'Lưu');
+      }
       if (idtruyen != '') {
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (_) =>
@@ -491,7 +494,13 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
     } else if (value == 'Lưu') {
       print(value);
       // goi ham luu => kiem tra du lieu
-      idtruyen = await saveTruyen(context, 'Lưu');
+      if (idtruyen == '')
+      // goi ham luu => kiem tra du lieu => // lay idtruyen
+      {
+        idtruyen = await saveTruyen(context, 'Lưu');
+      } else {
+        MsgDialog.showSnackbar(context, ColorClass.fiveColor, "Đã lưu!");
+      }
       // ignore: prefer_interpolation_to_compose_strings
       print('idtruyen thu duoc ' + idtruyen);
       // chuyen về trang viettruyen
@@ -503,7 +512,14 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
     } else if (value == 'Đăng') {
       print(value);
       // goi ham luu => kiem tra du lieu
-      idtruyen = await saveTruyen(context, 'Đăng');
+      if (idtruyen == '')
+      // goi ham luu => kiem tra du lieu => // lay idtruyen
+      {
+        idtruyen = await saveTruyen(context, 'Đăng');
+      } else {
+        MsgDialog.showSnackbar(
+            context, ColorClass.fiveColor, "Đã đăng một truyện!");
+      }
       print('idtruyen thu duoc ' + idtruyen);
       if (idtruyen != '') {
         Navigator.pop(context);
@@ -511,26 +527,42 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
       // chuyen về trang viettruyen
       // ignore: use_build_context_synchronously
     } else if (value == 'Thoát') {
-      MsgDialog.showXacNhanThongTin(
-          context,
-          'Lưu ý sau khi thoát nội dung của truyện sẽ không được lưu!',
-          ColorClass.fiveColor, () {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      });
+      if (idtruyen == '')
+      // chua luu
+      {
+        MsgDialog.showXacNhanThongTin(
+            context,
+            'Lưu ý sau khi thoát nội dung của truyện sẽ không được lưu!',
+            ColorClass.fiveColor, () async {
+          // xoa truyne
+          if (idtruyen != '') {
+            // xoa truyen
+            await DatabaseTruyen().deleleOneTruyen(idtruyen);
+          }
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
 
-      print(value);
+        print(value);
+      } else {
+        // da luu
+        Navigator.pop(context);
+      }
     } else if (value == 'Thêm chương') {
       print(value);
       // goi ham luu //    // lay idtruyen
-      idtruyen = await saveTruyen(context, 'Lưu');
+      if (idtruyen == '')
+      // goi ham luu => kiem tra du lieu => // lay idtruyen
+      {
+        idtruyen = await saveTruyen(context, 'Lưu');
+      }
       if (idtruyen != '') {
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (_) => InsertChuong(
                       idtruyen: idtruyen,
-                      idc: '',
                     )));
       }
     }

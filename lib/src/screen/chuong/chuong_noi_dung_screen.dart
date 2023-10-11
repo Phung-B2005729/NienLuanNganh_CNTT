@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
@@ -9,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../firebase/services/database_chuong.dart';
 import '../../firebase/services/database_danhsachdoc.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 // ignore: must_be_immutable
 class ChuongNoiDungScreen extends StatefulWidget {
@@ -60,12 +63,19 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
         truyenData = value;
       });
     });
+    bool ktrbanthao = true;
+    if (widget.edit == true) ktrbanthao = false;
     // lay ds tat ca chuong // noi dung 1 truyen;
-    await DatabaseChuong()
-        .getALLChuongSnapshots(widget.idtruyen, sapxep)
-        .then((vale) {
-      chuongStream = vale;
-    });
+    try {
+      await DatabaseChuong()
+          .getALLChuongSnapshots(widget.idtruyen, sapxep, ktrbanthao)
+          .then((vale) {
+        chuongStream = vale;
+      });
+    } catch (e) {
+      // ignore: prefer_interpolation_to_compose_strings
+      print('Lỗi  ' + e.toString());
+    }
     DsDocStream = await DatabaseDSDoc().getALLDanhSachDoc(widget.iduser);
   }
 
@@ -75,8 +85,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
         stream: chuongStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            noidung = splitString(
-                snapshot.data!.docs[widget.vtChuong]['noidung'] as String);
+            //  noidung = splitString(
+            //     snapshot.data!.docs[widget.vtChuong]['noidung'] as String);
             return SafeArea(
               child: Scaffold(
                 floatingActionButton: widget.edit == true
@@ -102,7 +112,10 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                       backgroundColor: ColorClass.xanh2Color,
                       title: Align(
                         alignment: Alignment.topLeft,
-                        child: widget.edit
+                        child: widget.edit &&
+                                snapshot.data!.docs[widget.vtChuong]
+                                        ['tinhtrang'] ==
+                                    'Bản thảo'
                             ? Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -114,7 +127,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                                     softWrap: true,
                                   ),
                                   Text(
-                                    '(Bản xem trước)',
+                                    '(Bản thảo)',
                                     style: AppTheme.lightTextTheme.bodySmall,
                                   )
                                 ],
@@ -234,20 +247,30 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                     });
                   },
                   child: (SingleChildScrollView(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 20, bottom: 20),
-                        child: Column(
-                          children: <Widget>[
-                            for (var doan in noidung)
-                              Column(
-                                children: [
-                                  Text(doan),
-                                  SizedBox(height: 10),
-                                ],
-                              ),
-                          ],
+                    child: Expanded(
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 20, bottom: 20),
+                          child: quill.QuillEditor.basic(
+                            controller: quill.QuillController(
+                              onSelectionChanged: (textSelection) {
+                                setState(() {
+                                  tapbarbool = !tapbarbool;
+                                });
+                              },
+                              document: quill.Document.fromJson(jsonDecode(
+                                  snapshot.data!.docs[widget.vtChuong]
+                                      ['noidung'])),
+                              selection:
+                                  const TextSelection.collapsed(offset: 0),
+                            ),
+                            readOnly: true,
+                            focusNode: null,
+                            autoFocus: false,
+
+                            //enableInteractiveSelection: false
+                          ),
                         ),
                       ),
                     ),
@@ -352,12 +375,5 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
             ));
           }
         });
-  }
-
-  //tac chuoi
-  splitString(String chuoi) {
-    // ignore: unused_local_variable
-    List<String> cacDoan = chuoi.split('.');
-    return cacDoan;
   }
 }

@@ -70,11 +70,15 @@ class HomeTruyenList extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(5),
-                                    child: Image.network(
-                                      // ignore: prefer_interpolation_to_compose_strings
-                                      snapshot.data.docs[index]['linkanh'],
-                                      height: 250,
+                                    child: Container(
+                                      height: 200,
                                       width: 110,
+                                      child: Image.network(
+                                        // ignore: prefer_interpolation_to_compose_strings
+                                        snapshot.data.docs[index]['linkanh'],
+
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                   Positioned(

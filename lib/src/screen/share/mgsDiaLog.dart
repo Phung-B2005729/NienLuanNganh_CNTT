@@ -1,4 +1,6 @@
 // ignore: file_names
+import 'package:apparch/src/helper/temple/app_theme.dart';
+import 'package:apparch/src/helper/temple/color.dart';
 import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
@@ -33,19 +35,16 @@ class MsgDialog {
   }
 
   static void showXacNhanThongTin(
-      BuildContext context, String msg, Color tclo, Function xacnhan) {
+      BuildContext context, String msg, Color tclo, Function hamxulyxoa) {
     showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (context) {
           return AlertDialog(
-            // title: const Text('Basic dialog title'),
-            content: Text(
-              msg,
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black),
+            title: Text(
+              'Bạn có chắc ?',
+              style: AppTheme.lightTextTheme.headlineLarge,
             ),
+            content: Text(msg, style: AppTheme.lightTextTheme.bodyMedium),
             actions: <Widget>[
               TextButton(
                 style: TextButton.styleFrom(
@@ -68,7 +67,7 @@ class MsgDialog {
                     // ignore: unnecessary_const
                     Text('OK', style: TextStyle(color: tclo)),
                 onPressed: () {
-                  xacnhan();
+                  hamxulyxoa();
                 },
               ),
             ],
@@ -111,5 +110,35 @@ class MsgDialog {
         ),
       ),
     );
+  }
+
+  static Future<bool?> showConfirmDialogDismissible(
+      BuildContext context, String message, Function hamxulyxacnhan) {
+    return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+                title: Text(
+                  'Bạn có chắc ?',
+                  style: AppTheme.lightTextTheme.headlineLarge,
+                ),
+                content:
+                    Text(message, style: AppTheme.lightTextTheme.bodyMedium),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('No',
+                        style: TextStyle(color: ColorClass.fiveColor)),
+                    onPressed: () {
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(ctx).pop(false);
+                    },
+                  ),
+                  TextButton(
+                      child: const Text('Yes',
+                          style: TextStyle(color: ColorClass.fiveColor)),
+                      onPressed: () async {
+                        await hamxulyxacnhan();
+                        Navigator.of(ctx).pop(true);
+                      })
+                ]));
   }
 }

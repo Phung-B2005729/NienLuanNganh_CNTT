@@ -10,8 +10,8 @@ class TruyenModel {
   int? tongbinhchon;
   String? tinhtrang;
   String? linkanh;
-  List<String>? danhsachdocgia;
-  List<String>? tags;
+  List<dynamic>? danhsachdocgia;
+  List<dynamic>? tags;
   String? theloai;
   TruyenModel(
       {this.idtruyen = '0',
@@ -36,8 +36,8 @@ class TruyenModel {
     int? tongbinhchon,
     String? tinhtrang,
     String? linkanh,
-    List<String>? danhsachdocgia,
-    List<String>? tags,
+    List<dynamic>? danhsachdocgia,
+    List<dynamic>? tags,
     String? theloai,
   }) {
     return TruyenModel(

@@ -1,6 +1,6 @@
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/helper/temple/Color.dart';
-import 'package:apparch/src/screen/viettruyen/taomoi/them_truyen_sceen.dart';
+import 'package:apparch/src/screen/viettruyen/taomoi/truyen_them_sceen.dart';
 import 'package:apparch/src/screen/viettruyen/truyen_ban_thao.dart';
 import 'package:apparch/src/screen/viettruyen/truyen_dang_tai.dart';
 import 'package:apparch/src/screen/viettruyen/viet_truyen_appbaraction.dart';
@@ -62,10 +62,8 @@ class VietTruyenScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               print('chuyen trang');
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const InsertTruyenScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => InsertTruyenScreen()));
             },
             // ignore: sort_child_properties_last
             child: const Icon(Icons.add),
