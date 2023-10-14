@@ -469,6 +469,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                                   // ignore: avoid_print
                                   print('Đã xoá');
                                 } catch (e) {
+                                  // ignore: use_build_context_synchronously
                                   MsgDialog.showSnackbar(context, Colors.red,
                                       "Lỗi vui lòng thử lại!!");
                                 }
@@ -571,6 +572,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                             onTap: () async {
                               await saveTruyen(context);
                               // them chuong
+                              // ignore: use_build_context_synchronously
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -595,7 +597,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.add,
                                               color: Colors.black,
                                               size: 25,
@@ -642,7 +644,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.add,
                                           color: Colors.black,
                                           size: 25,
@@ -666,6 +668,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
         ));
   }
 
+  // ignore: non_constant_identifier_names
   ShowSimpleDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -745,6 +748,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
         });
   }
 
+  // ignore: non_constant_identifier_names
   ShowSimpleDialogTinhTrang(BuildContext context) {
     return showDialog(
         context: context,
@@ -863,6 +867,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         LoadingDialog.showLoadingDialog(context, 'Loading....');
+        // ignore: unused_local_variable
         final blocUserLogin =
             Provider.of<BlocUserLogin>(context, listen: false);
         if (image != null) {
@@ -933,16 +938,18 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
       await saveTruyen(context);
       bool ktr = await dangTruyen(context, widget.idtruyen);
       if (ktr == true && update == true) {
+        // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(
             context, ColorClass.fiveColor, 'Đăng truyện thành công!!');
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
+        // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(context, Colors.red, 'Lỗi! Vui lòng thử lại');
       }
     } else if (value == 'Thoát') {
       // khong luu
       Navigator.pop(context);
-      print(value);
     }
   }
 }

@@ -281,7 +281,6 @@ class _TimKiemScreenState extends State<TimKiemScreen>
   }
 
   // ignore: override_on_non_overriding_member
-  @override
   Widget truyenGoiY(BuildContext context) {
     return Consumer<BlocTimKiem>(builder: (context, blocTimKiem, child) {
       return ListView(children: [
@@ -309,7 +308,6 @@ class _TimKiemScreenState extends State<TimKiemScreen>
     });
   }
 
-  @override
   Widget LichSu(BuildContext context) {
     return Consumer<BlocTimKiem>(builder: (context, blocTimKiem, child) {
       return ListView(

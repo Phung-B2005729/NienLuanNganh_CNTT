@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class TimKiemTagsSreen extends StatefulWidget {
   String value;
   TimKiemTagsSreen({super.key, required this.value});
@@ -201,7 +202,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                             Icons.visibility,
                                                             size: 18,
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 4,
                                                           ),
                                                           Text(
@@ -226,7 +227,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                             Icons.star,
                                                             size: 18,
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 4,
                                                           ),
                                                           Text(
@@ -314,6 +315,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
   }
 }
 
+// ignore: must_be_immutable
 class RowCountChuong extends StatefulWidget {
   String idtruyen;
   RowCountChuong({super.key, required this.idtruyen});

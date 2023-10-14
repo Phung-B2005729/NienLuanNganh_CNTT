@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
@@ -9,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class TimKiemTheLoaiSreen extends StatefulWidget {
   String value;
   String tenloai;
@@ -316,6 +315,7 @@ class _TimKiemTheLoaiSreenState extends State<TimKiemTheLoaiSreen> {
   }
 }
 
+// ignore: must_be_immutable
 class RowCountChuong extends StatefulWidget {
   String idtruyen;
   RowCountChuong({super.key, required this.idtruyen});
