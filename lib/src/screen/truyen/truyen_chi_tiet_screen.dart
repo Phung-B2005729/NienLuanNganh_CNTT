@@ -61,110 +61,117 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     if (truyenData != null && countChuong != null) {
-      return SafeArea(
-          child: CustomScrollView(slivers: <Widget>[
-        // appbar anh truyen + ten truyen
-        SliverAppBar(
-          toolbarHeight: 80,
-          pinned: true,
-          actions: [
-            if (widget.edit == true)
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => EditTruyenScreen(
-                              tinhtrang: truyenData['tinhtrang'],
-                              linkanh: truyenData['linkanh'],
-                              tag: truyenData['tags'],
-                              tentruyen: truyenData['tentruyen'],
-                              idtruyen: truyenData['idtruyen'],
-                              theloai: truyenData['theloai'],
-                              mota: truyenData['mota'],
-                              ktrbanthao: truyenData['tinhtrang'] == 'Bản thảo'
-                                  ? true
-                                  : false)));
+      return Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  forceElevated: innerBoxIsScrolled,
+                  toolbarHeight: 80,
+                  pinned: true,
+                  actions: [
+                    if (widget.edit == true)
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => EditTruyenScreen(
+                                      tinhtrang: truyenData['tinhtrang'],
+                                      linkanh: truyenData['linkanh'],
+                                      tag: truyenData['tags'],
+                                      tentruyen: truyenData['tentruyen'],
+                                      idtruyen: truyenData['idtruyen'],
+                                      theloai: truyenData['theloai'],
+                                      mota: truyenData['mota'],
+                                      ktrbanthao:
+                                          truyenData['tinhtrang'] == 'Bản thảo'
+                                              ? true
+                                              : false)));
 
-                  // chuyen qua trang edit
-                },
-                // ignore: prefer_const_constructors
-                icon: Icon(Icons.edit),
-              )
-          ],
-          title: Text(
-            truyenData['tentruyen'],
-            style: GoogleFonts.arizonia(
-              //roboto
-              // arizonia
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            softWrap: true,
-          ),
-          snap: false,
-          floating: false,
-          backgroundColor: const Color.fromARGB(246, 103, 161, 200),
-          expandedHeight: 350.0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(
-                  10), // Điều này sẽ bo tròn góc dưới của SliverAppBar
-            ),
-          ),
-          flexibleSpace: FlexibleSpaceBar(
-            background: Image.network(
-              // ignore: prefer_interpolation_to_compose_strings
-              truyenData['linkanh'],
-              fit: BoxFit.cover,
-            ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(40),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(width: 2, color: Colors.white),
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25))),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                  top: 5,
-                ),
-                child: TabBar(
-                  indicator: const UnderlineTabIndicator(
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: ColorClass.fiveColor,
-                      ),
-                      insets: EdgeInsets.symmetric(horizontal: 20.0)),
-
-                  labelStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                  labelColor: ColorClass.fiveColor,
-                  unselectedLabelColor: Colors.black,
-                  controller:
-                      _tabController, // Kết nối TabController với TabBar
-                  tabs: const [
-                    Tab(
-                      text: 'Chi Tiết',
-                    ),
-                    Tab(
-                      text: 'Chương',
-                    ),
+                          // chuyen qua trang edit
+                        },
+                        // ignore: prefer_const_constructors
+                        icon: Icon(Icons.edit),
+                      )
                   ],
+                  title: Text(
+                    truyenData['tentruyen'],
+                    style: GoogleFonts.arizonia(
+                      //roboto
+                      // arizonia
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    softWrap: true,
+                  ),
+                  snap: false,
+                  floating: false,
+                  backgroundColor: const Color.fromARGB(246, 103, 161, 200),
+                  expandedHeight: 350.0,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(
+                          10), // Điều này sẽ bo tròn góc dưới của SliverAppBar
+                    ),
+                  ),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Image.network(
+                      // ignore: prefer_interpolation_to_compose_strings
+                      truyenData['linkanh'],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(40),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 2, color: Colors.white),
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              topRight: Radius.circular(25))),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 5,
+                        ),
+                        child: TabBar(
+                          indicator: const UnderlineTabIndicator(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: ColorClass.fiveColor,
+                              ),
+                              insets: EdgeInsets.symmetric(horizontal: 20.0)),
+
+                          labelStyle: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                          labelColor: ColorClass.fiveColor,
+                          unselectedLabelColor: Colors.black,
+                          controller:
+                              _tabController, // Kết nối TabController với TabBar
+                          tabs: const [
+                            Tab(
+                              text: 'Chi Tiết',
+                            ),
+                            Tab(
+                              text: 'Chương',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-        //tap bar
-        SliverFillRemaining(
-          child: TabBarView(
+            ];
+          },
+          body: TabBarView(
             controller: _tabController, // Kết nối TabController với TabBarView
             children: <Widget>[
               Builder(builder: (BuildContext context) {
@@ -193,7 +200,7 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
             ],
           ),
         ),
-      ]));
+      );
     } else {
       return const Center(
           child: CircularProgressIndicator(

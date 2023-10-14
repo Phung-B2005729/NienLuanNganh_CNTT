@@ -113,7 +113,7 @@ class MsgDialog {
   }
 
   static Future<bool?> showConfirmDialogDismissible(
-      BuildContext context, String message, Function hamxulyxacnhan) {
+      BuildContext context, String message) {
     return showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -135,8 +135,7 @@ class MsgDialog {
                   TextButton(
                       child: const Text('Yes',
                           style: TextStyle(color: ColorClass.fiveColor)),
-                      onPressed: () async {
-                        await hamxulyxacnhan();
+                      onPressed: () {
                         Navigator.of(ctx).pop(true);
                       })
                 ]));

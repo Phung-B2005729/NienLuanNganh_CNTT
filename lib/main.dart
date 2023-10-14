@@ -1,3 +1,4 @@
+import 'package:apparch/src/bloc/bloc_timkiem.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/screen/home_screen.dart';
 import 'package:apparch/src/screen/log_sign/login_form.dart';
@@ -10,8 +11,10 @@ import 'package:flutter/material.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ChangeNotifierProvider(
-      create: (context) => BlocUserLogin(), child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => BlocUserLogin()),
+    ChangeNotifierProvider(create: (context) => BlocTimKiem())
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

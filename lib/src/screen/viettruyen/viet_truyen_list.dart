@@ -79,11 +79,26 @@ class VietTruyenList extends StatelessWidget {
                           confirmDismiss: (direction) {
                             // ham xac nhan loai bo
                             return MsgDialog.showConfirmDialogDismissible(
-                                context,
-                                "Bạn chắc chăn muốn xoá chương này ?",
-                                () async {});
+                              context,
+                              "Bạn chắc chăn muốn xoá truyện này ?",
+                            );
                           },
-                          onDismissed: (direction) {
+                          onDismissed: (direction) async {
+                            try {
+                              LoadingDialog.showLoadingDialog(
+                                  context, 'Loading...');
+                              await DatabaseTruyen().deleleOneTruyen(
+                                  snapshot.data.docs[index]['idtruyen']);
+                              // ignore: use_build_context_synchronously
+                              LoadingDialog.hideLoadingDialog(context);
+                            } catch (e) {
+                              // ignore: use_build_context_synchronously
+                              LoadingDialog.hideLoadingDialog(context);
+                              // ignore: use_build_context_synchronously
+                              MsgDialog.showSnackbar(context, Colors.red,
+                                  "Lỗi vui lòng thử lại!!");
+                              print("loi xoa image " + e.toString());
+                            }
                             // ignore: avoid_print
                             print('Đã xoá');
                           },

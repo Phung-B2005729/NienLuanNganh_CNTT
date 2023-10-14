@@ -2,7 +2,6 @@ import 'package:apparch/src/firebase/fire_base_storage.dart';
 import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/model/truyen_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class DatabaseTruyen {
   final String? idtruyen;
@@ -62,6 +61,12 @@ class DatabaseTruyen {
   // tat ca truyen
   getAllTruyen() async {
     return truyenColection.snapshots();
+  }
+
+  getALLTruyenNotBanThao() async {
+    return truyenColection
+        .where('tinhtrang', isNotEqualTo: 'Bản thảo')
+        .snapshots();
   }
 
   Future getTheLoaiTruyen(String idtheloai) async {
@@ -127,5 +132,12 @@ class DatabaseTruyen {
         'danhsachdocgia': FieldValue.arrayRemove([idu])
       });
     }
+  }
+
+  Future timKiemTruyen(String value) async {
+    return await truyenColection
+        .where("tentruyen", isGreaterThanOrEqualTo: value)
+        .where("tentruyen", isLessThan: value + 'z')
+        .snapshots();
   }
 }

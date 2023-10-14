@@ -81,7 +81,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
                 color: Colors.white,
                 child: Column(children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    padding: const EdgeInsets.only(left: 4, right: 4, top: 140),
                     child: Card(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,8 +139,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
                   if (snapshot.data.docs.length > 0)
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 4),
+                        padding: const EdgeInsets.only(left: 15, right: 15),
                         height: snapshot.data.docs.length * 1.0 + 5,
                         child: ListView.builder(
                           physics: const ScrollPhysics(),

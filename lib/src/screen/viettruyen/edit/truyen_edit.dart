@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
@@ -8,13 +7,12 @@ import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
-import 'package:apparch/src/model/truyen_model.dart';
+
 import 'package:apparch/src/screen/chuong/chuong_edit.dart';
 import 'package:apparch/src/screen/chuong/chuong_them.dart';
 import 'package:apparch/src/screen/share/loadingDialog.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/share/tag.dart';
-import 'package:apparch/src/screen/truyen/truyen_chi_tiet_screen.dart';
 import 'package:apparch/src/screen/viettruyen/taomoi/textFormField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -458,18 +456,22 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                               confirmDismiss: (direction) {
                                 // ham xac nhan loai bo
                                 return MsgDialog.showConfirmDialogDismissible(
-                                    context,
-                                    "Bạn chắc chăn muốn xoá chương này ?",
-                                    () async {
+                                  context,
+                                  "Bạn chắc chăn muốn xoá chương này ?",
+                                );
+                              },
+                              onDismissed: (direction) async {
+                                try {
                                   await DatabaseChuong(
                                           idchuong: snapshot.data.docs[i]
                                               ['idchuong'])
                                       .deleteOneChuong(widget.idtruyen);
-                                });
-                              },
-                              onDismissed: (direction) {
-                                // ignore: avoid_print
-                                print('Đã xoá');
+                                  // ignore: avoid_print
+                                  print('Đã xoá');
+                                } catch (e) {
+                                  MsgDialog.showSnackbar(context, Colors.red,
+                                      "Lỗi vui lòng thử lại!!");
+                                }
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 3),

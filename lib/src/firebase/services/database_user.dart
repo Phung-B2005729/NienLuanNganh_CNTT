@@ -24,6 +24,10 @@ class DatabaseUser {
     });
   }
 
+  getALLUser() async {
+    return userCollection.snapshots();
+  }
+
   // getting user data
   Future gettingUserData(String email) async {
     QuerySnapshot snapshot =
@@ -47,5 +51,12 @@ class DatabaseUser {
   // updata anh
   Future<void> updateUser(String iduser, String URL) async {
     return userCollection.doc(iduser).update({'avata': URL});
+  }
+
+  Future timKiemUser(String value) async {
+    return await userCollection
+        .where("username", isGreaterThanOrEqualTo: value)
+        .where("username", isLessThan: value + 'z')
+        .snapshots();
   }
 }

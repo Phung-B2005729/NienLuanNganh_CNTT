@@ -10,7 +10,6 @@ import 'package:apparch/src/screen/share/loadingDialog.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 // ignore: must_be_immutable
 class EditChuong extends StatefulWidget {
@@ -65,9 +64,11 @@ class _EditChuongState extends State<EditChuong> {
       // update tinh trang cac chuong
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Bản thảo');
+      // ignore: use_build_context_synchronously
       LoadingDialog.hideLoadingDialog(context);
       return true;
     } catch (e) {
+      // ignore: use_build_context_synchronously
       LoadingDialog.hideLoadingDialog(context);
       // MsgDialog.showSnackbar(context, Colors.red, 'Lỗi vui lòng thử lại');
       return false;
@@ -427,7 +428,7 @@ class _EditChuongState extends State<EditChuong> {
           ),
           Expanded(
             child: Container(
-              color: Color.fromARGB(255, 237, 237, 237),
+              color: const Color.fromARGB(255, 237, 237, 237),
               child: quill.QuillEditor.basic(
                 controller: _quillEditorcontroller,
                 readOnly: false,
