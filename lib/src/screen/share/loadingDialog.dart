@@ -1,3 +1,4 @@
+import 'package:apparch/src/helper/temple/color.dart';
 import 'package:flutter/material.dart';
 
 class LoadingDialog {
@@ -13,7 +14,9 @@ class LoadingDialog {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const CircularProgressIndicator(),
+                      const CircularProgressIndicator(
+                        color: ColorClass.fiveColor,
+                      ),
                       Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(

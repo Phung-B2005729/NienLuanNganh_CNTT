@@ -3,7 +3,7 @@ import 'package:apparch/src/helper/temple/Color.dart';
 import 'package:apparch/src/screen/viettruyen/taomoi/truyen_them_sceen.dart';
 import 'package:apparch/src/screen/viettruyen/truyen_ban_thao.dart';
 import 'package:apparch/src/screen/viettruyen/truyen_dang_tai.dart';
-import 'package:apparch/src/screen/viettruyen/viet_truyen_appbaraction.dart';
+import 'package:apparch/src/screen/share/user_appbar_action.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../helper/temple/app_theme.dart';
@@ -25,7 +25,7 @@ class VietTruyenScreen extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child:
                     Text("Truyện", style: AppTheme.lightTextTheme.titleSmall)),
-            actions: <Widget>[VietTruyenAppbarAction()],
+            actions: <Widget>[UserAppbarAction()],
             notificationPredicate: (ScrollNotification notification) {
               return notification.depth == 1;
             },

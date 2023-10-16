@@ -9,13 +9,15 @@ class ChuongAmition extends StatefulWidget {
   String idtruyen;
   String iduser;
   bool edit;
-  ChuongAmition(
-      {super.key,
-      required this.listchuong,
-      required this.vt,
-      required this.idtruyen,
-      required this.iduser,
-      required this.edit});
+
+  ChuongAmition({
+    super.key,
+    required this.listchuong,
+    required this.vt,
+    required this.idtruyen,
+    required this.iduser,
+    required this.edit,
+  });
 
   @override
   State<ChuongAmition> createState() => _TruyenChiTietAmitionState();
@@ -45,10 +47,11 @@ class _TruyenChiTietAmitionState extends State<ChuongAmition> {
       itemCount: widget.listchuong.length,
       itemBuilder: (BuildContext context, int index) {
         return ChuongNoiDungScreen(
-            idtruyen: widget.idtruyen,
-            iduser: widget.iduser,
-            vtChuong: index,
-            edit: widget.edit);
+          idtruyen: widget.idtruyen,
+          iduser: widget.iduser,
+          vtChuong: index,
+          edit: widget.edit,
+        );
       },
     );
   }

@@ -2,10 +2,10 @@ import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../bloc/bloc_userlogin.dart';
-import '../pages/ca_nhan.dart';
+import '../nguoidung/ca_nhan.dart';
 
 // ignore: use_key_in_widget_constructors
-class VietTruyenAppbarAction extends StatelessWidget {
+class UserAppbarAction extends StatelessWidget {
   //const HomeAppBar({super.key});
 
   @override

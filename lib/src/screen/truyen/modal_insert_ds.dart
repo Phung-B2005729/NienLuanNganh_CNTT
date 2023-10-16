@@ -1,4 +1,5 @@
 import 'package:apparch/src/firebase/services/database_truyen.dart';
+import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,8 @@ class ModelInser {
   Future<dynamic> ShowModal(
       BuildContext context,
       // ignore: non_constant_identifier_names
-      Stream<QuerySnapshot> DsDocStream,
+      Stream<QuerySnapshot>? DsDocStream,
+      Stream<QuerySnapshot>? ThuVienStream,
       String idtruyen) {
     return showModalBottomSheet(
         context: context,
@@ -24,95 +26,143 @@ class ModelInser {
             return StreamBuilder<QuerySnapshot>(
                 stream: DsDocStream,
                 builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data.docs.isNotEmpty) {
                     print(kiemDS(
                         idtruyen, snapshot.data.docs[0]['danhsachtruyen']));
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        TileThuVien(ThuVienStream, idtruyen, blocUserLogin),
                         for (var i = 0; i < snapshot.data.docs.length; i++)
-                          ListTile(
-                            leading: kiemDS(idtruyen,
-                                    snapshot.data.docs[i]['danhsachtruyen'])
-                                ? const Icon(Icons.check_circle)
-                                : const Icon(Icons.library_books_rounded),
-                            iconColor: kiemDS(idtruyen,
-                                    snapshot.data.docs[i]['danhsachtruyen'])
-                                ? ColorClass.selectedColor
-                                : Colors.black,
-                            textColor: kiemDS(idtruyen,
-                                    snapshot.data.docs[i]['danhsachtruyen'])
-                                ? ColorClass.selectedColor
-                                : Colors.black,
-                            title: Text(
-                              snapshot.data.docs[i]['tendanhsachdoc'],
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            onTap: () {
-                              print(kiemDS(idtruyen,
-                                  snapshot.data.docs[i]['danhsachtruyen']));
-                              if (kiemDS(idtruyen,
-                                  snapshot.data.docs[i]['danhsachtruyen'])) {
-                                DatabaseDSDoc().deleteTruyen(
-                                    blocUserLogin.id,
-                                    snapshot.data.docs[i]['iddanhsach'],
-                                    idtruyen);
-                                DatabaseTruyen()
-                                    .deleteDSDocGia(blocUserLogin.id, idtruyen);
-                              } else {
-                                DatabaseDSDoc().inserTruyen(
-                                    blocUserLogin.id,
-                                    snapshot.data.docs[i]['iddanhsach'],
-                                    idtruyen);
-                                DatabaseTruyen()
-                                    .insertDSDocGia(blocUserLogin.id, idtruyen);
-                              }
-                            },
-                          ),
-                        ListTile(
-                          iconColor: ColorClass.fiveColor,
-                          textColor: ColorClass.fiveColor,
-                          leading: const Icon(Icons.library_add),
-                          title: const Text('Tạo danh sách đọc',
-                              style: TextStyle(fontSize: 18)),
-                          onTap: () {
-                            showCreateDSDiaLog(
-                                context, blocUserLogin.id, idtruyen);
-                          },
-                        )
+                          tiltDsDoc(idtruyen, snapshot, i, blocUserLogin),
+                        tiltThem(context, blocUserLogin, idtruyen)
                       ],
                     );
                   } else {
-                    return SizedBox(
-                      height: 100,
-                      child: ListTile(
-                        iconColor: ColorClass.fiveColor,
-                        textColor: ColorClass.fiveColor,
-                        leading: const Icon(Icons.library_add),
-                        title: const Text('Tạo danh sách đọc',
-                            style: TextStyle(fontSize: 18)),
-                        onTap: () {
-                          showCreateDSDiaLog(
-                              context, blocUserLogin.id, idtruyen);
-                        },
-                      ),
-                    );
+                    return ThemDsMoi(
+                        ThuVienStream, idtruyen, blocUserLogin, context);
                   }
                 });
           } else {
-            return SizedBox(
-              height: 100,
-              child: ListTile(
-                iconColor: ColorClass.fiveColor,
-                textColor: ColorClass.fiveColor,
-                leading: const Icon(Icons.library_add),
-                title: const Text('Tạo danh sách đọc',
-                    style: TextStyle(fontSize: 16)),
-                onTap: () {
-                  showCreateDSDiaLog(context, blocUserLogin.id, idtruyen);
-                },
+            return ThemDsMoi(ThuVienStream, idtruyen, blocUserLogin, context);
+          }
+        });
+  }
+
+  ListTile tiltThem(
+      BuildContext context, BlocUserLogin blocUserLogin, String idtruyen) {
+    return ListTile(
+      iconColor: ColorClass.fiveColor,
+      textColor: ColorClass.fiveColor,
+      leading: const Icon(Icons.library_add),
+      title: const Text('Tạo danh sách đọc', style: TextStyle(fontSize: 18)),
+      onTap: () {
+        showCreateDSDiaLog(context, blocUserLogin.id, idtruyen);
+      },
+    );
+  }
+
+  ListTile tiltDsDoc(String idtruyen, AsyncSnapshot<dynamic> snapshot, int i,
+      BlocUserLogin blocUserLogin) {
+    return ListTile(
+      leading: kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen'])
+          ? const Icon(Icons.check_circle)
+          : const Icon(Icons.library_books_rounded),
+      iconColor: kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen'])
+          ? ColorClass.selectedColor
+          : Colors.black,
+      textColor: kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen'])
+          ? ColorClass.selectedColor
+          : Colors.black,
+      title: Text(
+        snapshot.data.docs[i]['tendanhsachdoc'],
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+      onTap: () {
+        print(kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen']));
+        if (kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen'])) {
+          DatabaseDSDoc()
+              .deleteTruyen(snapshot.data.docs[i]['iddanhsach'], idtruyen);
+          DatabaseTruyen().deleteDSDocGia(blocUserLogin.id, idtruyen);
+        } else {
+          DatabaseDSDoc()
+              .inserTruyen(snapshot.data.docs[i]['iddanhsach'], idtruyen);
+          DatabaseTruyen().insertDSDocGia(blocUserLogin.id, idtruyen);
+        }
+      },
+    );
+  }
+
+  Column ThemDsMoi(Stream<QuerySnapshot<Object?>>? ThuVienStream,
+      String idtruyen, BlocUserLogin blocUserLogin, BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TileThuVien(ThuVienStream, idtruyen, blocUserLogin),
+        tiltThem(context, blocUserLogin, idtruyen)
+      ],
+    );
+  }
+
+  StreamBuilder<QuerySnapshot<Object?>> TileThuVien(
+      Stream<QuerySnapshot<Object?>>? ThuVienStream,
+      String idtruyen,
+      BlocUserLogin blocUserLogin) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: ThuVienStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          // ignore: unnecessary_null_comparison
+          if (snapshot.hasData && snapshot != null) {
+            return ListTile(
+              // ignore: unrelated_type_equality_checks
+              leading: ktrThuVien(snapshot.data.docs, idtruyen)
+                  ? const Icon(Icons.check_circle)
+                  : const Icon(Icons.library_books_rounded),
+              // ignore: unrelated_type_equality_checks
+              iconColor: ktrThuVien(snapshot.data.docs, idtruyen)
+                  ? ColorClass.selectedColor
+                  : Colors.black,
+              // ignore: unrelated_type_equality_checks
+              textColor: ktrThuVien(snapshot.data.docs, idtruyen)
+                  ? ColorClass.selectedColor
+                  : Colors.black,
+              title: const Text(
+                'Thư viện',
+                style: TextStyle(fontSize: 16),
               ),
+              onTap: () {
+                print(ktrThuVien(snapshot.data.docs, idtruyen));
+                ktrThuVien(snapshot.data.docs, idtruyen) == true
+                    ? DatabaseUser()
+                        .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen)
+                    : DatabaseUser().createThuVien(blocUserLogin.id, idtruyen);
+              },
+            );
+          } else {
+            return ListTile(
+              // ignore: unrelated_type_equality_checks
+              leading: ktrThuVien([], idtruyen)
+                  ? const Icon(Icons.check_circle)
+                  : const Icon(Icons.library_books_rounded),
+              // ignore: unrelated_type_equality_checks
+              iconColor: ktrThuVien([], idtruyen)
+                  ? ColorClass.selectedColor
+                  : Colors.black,
+              // ignore: unrelated_type_equality_checks
+              textColor: ktrThuVien([], idtruyen)
+                  ? ColorClass.selectedColor
+                  : Colors.black,
+              title: const Text(
+                'Thư viện',
+                style: TextStyle(fontSize: 16),
+              ),
+              onTap: () {
+                print(ktrThuVien([], idtruyen));
+                ktrThuVien([], idtruyen)
+                    ? DatabaseUser()
+                        .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen)
+                    : DatabaseUser().createThuVien(blocUserLogin.id, idtruyen);
+              },
             );
           }
         });
@@ -125,6 +175,19 @@ class ModelInser {
       }
     }
     return false;
+  }
+
+  bool ktrThuVien(List<QueryDocumentSnapshot> truyen, String idtruyen) {
+    if (truyen.isNotEmpty) {
+      for (var i = 0; i < truyen.length; i++) {
+        if (idtruyen == truyen[i]['idtruyen']) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return false;
+    }
   }
 
   showCreateDSDiaLog(

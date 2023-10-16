@@ -7,6 +7,8 @@ class DatabaseUser {
   // reference for our collections
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("users");
+  final CollectionReference thuvienCollection =
+      FirebaseFirestore.instance.collection("thuvien");
 
   // saving the userdata
   // ignore: non_constant_identifier_names
@@ -58,5 +60,33 @@ class DatabaseUser {
         .where("username", isGreaterThanOrEqualTo: value)
         .where("username", isLessThan: value + 'z')
         .snapshots();
+  }
+  //thuvien
+
+  Future createThuVien(String iduser, String idtruyen) async {
+    // print('gọi create');
+    Map<String, dynamic> thuvien = {
+      'idtruyen': idtruyen,
+      'chuongdadoc': 0,
+    };
+    await userCollection
+        .doc(iduser)
+        .collection('thuvien')
+        .doc(idtruyen)
+        .set(thuvien);
+    //  await dsDocument.update({'iddanhsach': dsDocument.id});
+  }
+
+  Future deleteOneTruyenOnThuVien(String iduser, String idtruyen) async {
+    // print('gọi delete');
+    return userCollection
+        .doc(iduser)
+        .collection('thuvien')
+        .doc(idtruyen)
+        .delete();
+  }
+
+  getALLTruyenThuVien(String iduser, String idtruyen) async {
+    return userCollection.doc(iduser).collection('thuvien').snapshots();
   }
 }

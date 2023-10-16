@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
@@ -85,21 +87,18 @@ class VietTruyenList extends StatelessWidget {
                           },
                           onDismissed: (direction) async {
                             try {
-                              LoadingDialog.showLoadingDialog(
-                                  context, 'Loading...');
                               await DatabaseTruyen().deleleOneTruyen(
                                   snapshot.data.docs[index]['idtruyen']);
                               // ignore: use_build_context_synchronously
-                              LoadingDialog.hideLoadingDialog(context);
                             } catch (e) {
                               // ignore: use_build_context_synchronously
-                              LoadingDialog.hideLoadingDialog(context);
+
                               // ignore: use_build_context_synchronously
                               MsgDialog.showSnackbar(context, Colors.red,
                                   "Lỗi vui lòng thử lại!!");
                               print("loi xoa image " + e.toString());
                             }
-                            // ignore: avoid_print
+
                             print('Đã xoá');
                           },
                           child: Card(
@@ -362,23 +361,22 @@ class VietTruyenList extends StatelessWidget {
         context, 'Bạn có chắc chắn muốn xoá truyện này ?', ColorClass.fiveColor,
         () async {
       try {
-        LoadingDialog.showLoadingDialog(context, 'Loading...');
         await DatabaseTruyen().deleleOneTruyen(idtruyen);
         // ignore: use_build_context_synchronously
-        LoadingDialog.hideLoadingDialog(context);
+
         // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(
             context, ColorClass.fiveColor, "Đã xoá thành công!!");
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+        //Navigator.pop(context);
       } catch (e) {
         // ignore: use_build_context_synchronously
-        LoadingDialog.hideLoadingDialog(context);
+
         // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(context, Colors.red, "Lỗi vui lòng thử lại!!");
         print("loi xoa image " + e.toString());
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+        // Navigator.pop(context);
       }
     });
   }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:apparch/src/firebase/services/database_truyen.dart';
+import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/chuong/chuong_amition.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
@@ -38,9 +39,11 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
   Stream<QuerySnapshot>? truyenStream;
   // ignore: non_constant_identifier_names
   Stream<QuerySnapshot>? DsDocStream;
+  Stream<QuerySnapshot>? thuvien;
   @override
   void initState() {
     super.initState();
+
     getCountChuong();
   }
 
@@ -54,7 +57,14 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
     });
     try {
       DsDocStream = await DatabaseDSDoc().getALLDanhSachDoc(widget.iduser);
-      print(DsDocStream == null);
+
+      await DatabaseUser()
+          .getALLTruyenThuVien(widget.iduser, widget.idtruyen)
+          .then((value) {
+        setState(() {
+          thuvien = value;
+        });
+      });
     } catch (e) {
       print('Lỗi khi lấy dữ liệu: $e');
     }
@@ -168,13 +178,14 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       ChuongAmition(
-                                                          listchuong: snapshot
-                                                              .data.docs,
-                                                          vt: 0,
-                                                          idtruyen:
-                                                              widget.idtruyen,
-                                                          iduser: widget.iduser,
-                                                          edit: widget.edit)));
+                                                        listchuong:
+                                                            snapshot.data.docs,
+                                                        vt: 0,
+                                                        idtruyen:
+                                                            widget.idtruyen,
+                                                        iduser: widget.iduser,
+                                                        edit: widget.edit,
+                                                      )));
                                         } else {
                                           MsgDialog.showSnackbar(
                                               context,
@@ -194,7 +205,11 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
                                 FloatingActionButton(
                                   onPressed: () {
                                     ModelInser().ShowModal(
-                                        context, DsDocStream!, widget.idtruyen);
+                                      context,
+                                      DsDocStream,
+                                      thuvien,
+                                      widget.idtruyen,
+                                    );
                                   },
                                   backgroundColor:
                                       const Color.fromARGB(255, 229, 230, 231),

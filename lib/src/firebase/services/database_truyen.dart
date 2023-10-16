@@ -140,4 +140,20 @@ class DatabaseTruyen {
         .where("tentruyen", isLessThan: value + 'z')
         .snapshots();
   }
+
+  Future updateLuotXem(String idtruyen) async {
+    var tongluotxem = await truyenColection.doc(idtruyen).get();
+    return await truyenColection
+        .doc(idtruyen)
+        .update({'tongluotxem': tongluotxem['tongluotxem'] + 1});
+  }
+
+  Future updateBinhChon(String idtruyen, bool ktr) async {
+    var tongluotxem = await truyenColection.doc(idtruyen).get();
+    return await truyenColection.doc(idtruyen).update({
+      'tongbinhchon': (ktr == true)
+          ? tongluotxem['tongbinhchon'] + 1
+          : tongluotxem['tongbinhchon'] - 1
+    });
+  }
 }

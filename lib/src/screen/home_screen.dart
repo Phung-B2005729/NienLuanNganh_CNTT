@@ -1,10 +1,9 @@
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/screen/home/home_page.dart';
-import 'package:apparch/src/screen/pages/luu_tru.dart';
-import 'package:apparch/src/screen/pages/thong_bao.dart';
+import 'package:apparch/src/screen/luutru/luu_tru_screen.dart';
+import 'package:apparch/src/screen/thongbao/thong_bao_screen.dart';
 import 'package:apparch/src/screen/timkiem/tim_kiem_screen.dart';
 import 'package:apparch/src/screen/viettruyen/viet_truyen_screen.dart';
-//import 'package:apparch/src/temple/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -22,9 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Widget> _pages = [
     const HomePages(),
     TimKiemScreen(),
-    const LuuTru(),
+    const LuuTruScreen(),
     const VietTruyenScreen(),
-    const ThongBao(),
+    const ThongBaoScreen(),
   ];
   @override
   Widget build(BuildContext context) {

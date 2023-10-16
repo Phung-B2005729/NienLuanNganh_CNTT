@@ -24,7 +24,7 @@ class FirAuth {
       if (user != null) {
         // call our database service to update the user data.
         await DatabaseUser(uid: user.uid).savingUserData(UserName, email);
-        await DatabaseDSDoc().createDanhSachDoc(user.uid, 'Thư viện');
+        //   await DatabaseDSDoc().createDanhSachDoc(user.uid, 'Thư viện');
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {

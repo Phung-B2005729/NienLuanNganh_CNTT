@@ -1,5 +1,5 @@
 // ignore: camel_case_types
-import 'package:apparch/src/Screen/pages/ca_nhan.dart';
+import 'package:apparch/src/Screen/nguoidung/ca_nhan.dart';
 import 'package:apparch/src/firebase/fire_base_auth.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';

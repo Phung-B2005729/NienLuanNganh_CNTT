@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:apparch/src/firebase/services/database_truyen.dart';
+import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
@@ -21,12 +22,13 @@ class ChuongNoiDungScreen extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   var vtChuong;
 
-  ChuongNoiDungScreen(
-      {super.key,
-      required this.idtruyen,
-      required this.vtChuong,
-      required this.iduser,
-      required this.edit});
+  ChuongNoiDungScreen({
+    super.key,
+    required this.idtruyen,
+    required this.vtChuong,
+    required this.iduser,
+    required this.edit,
+  });
 
   @override
   State<ChuongNoiDungScreen> createState() => _ChuongNoiDungScreenState();
@@ -37,15 +39,24 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
   Stream<QuerySnapshot>? chuongStream;
   var truyenData;
   var tapbarbool = true;
+  String idchuong = '';
   var binhchon = false;
   int _currentIndex = 3;
   List<String> noidung = [];
   Stream<QuerySnapshot>? DsDocStream;
+  final ScrollController _controller = ScrollController();
+  double scrollProgress = 0.0;
+  var blocUserLogin;
+  Stream<QuerySnapshot>? thuvien;
   @override
   void initState() {
     super.initState();
+
     getData();
     getIndex();
+    _controller.addListener(() {
+      _scrollListener();
+    });
   }
 
   getIndex() {
@@ -53,6 +64,41 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
       _currentIndex = 0;
     } else {
       _currentIndex = 3;
+    }
+  }
+
+  void _scrollListener() {
+    setState(() {
+      scrollProgress =
+          _controller.position.pixels / _controller.position.maxScrollExtent;
+      if (idchuong != '') {
+        if (scrollProgress == 1.00) {
+          print(scrollProgress);
+          updateLuotXem(widget.idtruyen, idchuong);
+        }
+      }
+    });
+  }
+
+  Future updateLuotXem(String idtruyen, String idchuong) async {
+    print('gọi update');
+    try {
+      await DatabaseChuong().updateLuotXem(idtruyen, idchuong);
+
+      await DatabaseTruyen().updateLuotXem(idtruyen);
+    } catch (e) {
+      print('Lỗi ' + e.toString());
+    }
+  }
+
+  Future updateBinhChon(String idtruyen, String idchuong, bool ktr) async {
+    print('gọi update');
+    try {
+      await DatabaseChuong().updateBinhChon(idtruyen, idchuong, ktr);
+
+      await DatabaseTruyen().updateBinhChon(idtruyen, ktr);
+    } catch (e) {
+      print('Lỗi ' + e.toString());
     }
   }
 
@@ -70,13 +116,29 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
       await DatabaseChuong()
           .getALLChuongSnapshots(widget.idtruyen, sapxep, ktrbanthao)
           .then((vale) {
-        chuongStream = vale;
+        setState(() {
+          chuongStream = vale;
+        });
       });
     } catch (e) {
       // ignore: prefer_interpolation_to_compose_strings
       print('Lỗi  ' + e.toString());
     }
     DsDocStream = await DatabaseDSDoc().getALLDanhSachDoc(widget.iduser);
+    await DatabaseChuong()
+        .getStringIdChuong(widget.idtruyen, widget.vtChuong, sapxep)
+        .then((value) {
+      setState(() {
+        idchuong = value;
+      });
+    });
+    await DatabaseUser()
+        .getALLTruyenThuVien(widget.iduser, widget.idtruyen)
+        .then((value) {
+      setState(() {
+        thuvien = value;
+      });
+    });
   }
 
   @override
@@ -84,9 +146,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     return StreamBuilder<QuerySnapshot>(
         stream: chuongStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            //  noidung = splitString(
-            //     snapshot.data!.docs[widget.vtChuong]['noidung'] as String);
+          if (snapshot.hasData && snapshot.data != null) {
             return SafeArea(
               child: Scaffold(
                 floatingActionButton: widget.edit == true
@@ -171,7 +231,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                         child: Text(
                           truyenData['tentruyen'] ?? 'Tên truyện',
                           style: AppTheme.lightTextTheme.displayMedium,
-                          // softWrap: true,
+                          softWrap: true,
                         ),
                       ),
                     ),
@@ -193,7 +253,11 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                         child: TextButton(
                             onPressed: () {
                               ModelInser().ShowModal(
-                                  context, DsDocStream!, widget.idtruyen);
+                                context,
+                                DsDocStream,
+                                thuvien,
+                                widget.idtruyen,
+                              );
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -235,46 +299,75 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                       ),
                   ],
                 )),
-                body: InkWell(
-                  onTap: () {
-                    setState(() {
-                      tapbarbool = !tapbarbool;
-                    });
-                  },
-                  onLongPress: () {
-                    setState(() {
-                      tapbarbool = false;
-                    });
-                  },
-                  child: (SingleChildScrollView(
-                    child: Expanded(
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 20, bottom: 20),
-                          child: quill.QuillEditor.basic(
-                            controller: quill.QuillController(
-                              onSelectionChanged: (textSelection) {
-                                setState(() {
-                                  tapbarbool = !tapbarbool;
-                                });
-                              },
-                              document: quill.Document.fromJson(jsonDecode(
-                                  snapshot.data!.docs[widget.vtChuong]
-                                      ['noidung'])),
-                              selection:
-                                  const TextSelection.collapsed(offset: 0),
-                            ),
-                            readOnly: true,
-                            focusNode: null,
-                            autoFocus: false,
+                body: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            tapbarbool = !tapbarbool;
+                          });
+                        },
+                        onLongPress: () {
+                          setState(() {
+                            tapbarbool = false;
+                          });
+                        },
+                        child: SingleChildScrollView(
+                          controller: _controller,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 25, right: 25, top: 30, bottom: 20),
+                            child: quill.QuillEditor.basic(
+                              controller: quill.QuillController(
+                                onSelectionChanged: (textSelection) {
+                                  setState(() {
+                                    tapbarbool = !tapbarbool;
+                                  });
+                                },
+                                document: quill.Document.fromJson(jsonDecode(
+                                    snapshot.data!.docs[widget.vtChuong]
+                                        ['noidung'])),
+                                selection:
+                                    const TextSelection.collapsed(offset: 0),
+                              ),
+                              readOnly: true,
+                              focusNode: null,
+                              autoFocus: false,
 
-                            //enableInteractiveSelection: false
+                              //enableInteractiveSelection: false
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  )),
+                    Container(
+                      height: 18,
+                      margin: EdgeInsets.only(bottom: 2),
+                      child: Visibility(
+                        visible: tapbarbool,
+                        child: Slider(
+                          activeColor: ColorClass
+                              .xanh3Color, // Đây là màu cho phần slider đã chọn
+                          inactiveColor: ColorClass.xanh1Color,
+                          value: scrollProgress,
+                          onChanged: (value) {
+                            print('gọi onchang');
+
+                            setState(() {
+                              scrollProgress = value;
+                              // cập nhật tiến trình đọc nội dung dựa trên giá trị của `value`.
+                              double newScrollPosition =
+                                  value * _controller.position.maxScrollExtent;
+                              _controller.jumpTo(newScrollPosition);
+                            });
+                          },
+                          min: 0.0,
+                          max: 1.0,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 bottomNavigationBar: PreferredSize(
                     preferredSize: const Size.fromHeight(
@@ -291,7 +384,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                           selectedLabelStyle:
                               const TextStyle(color: ColorClass.xanh3Color),
                           backgroundColor:
-                              const Color.fromARGB(181, 255, 255, 255),
+                              const Color.fromARGB(181, 213, 213, 213),
                           //fixedColor: Colors.grey,
                           currentIndex:
                               _currentIndex, // Chỉ định mục được chọn bằng currentIndex
@@ -308,14 +401,17 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                                   if (widget.vtChuong <= 0) {
                                   } else {
                                     widget.vtChuong = widget.vtChuong - 1;
+                                    binhchon = false;
                                   }
-                                  // _currentIndex = 1;
+                                  //  _currentIndex = 1;
                                 });
                                 break;
                               case 1:
                                 setState(() {
                                   // them so luong binh chon cho chuong
                                   binhchon = !binhchon;
+                                  updateBinhChon(
+                                      widget.idtruyen, idchuong, binhchon);
                                   //  _currentIndex = 1;
                                 });
                                 break;
@@ -333,6 +429,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                                         "Đã cập nhật đến chương hiện có");
                                   } else {
                                     widget.vtChuong = widget.vtChuong + 1;
+                                    binhchon = false;
                                   }
                                   // _currentIndex = 1;
                                 });
@@ -354,7 +451,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                                       Icons.star_border_outlined,
                                       color: ColorClass.xanh3Color,
                                     ),
-                              label: 'Bình chọn',
+                              label:
+                                  '${snapshot.data!.docs[widget.vtChuong]['binhchon']}',
                             ),
                             const BottomNavigationBarItem(
                               icon: Icon(Icons.chat_bubble_outline),

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseDSDoc {
-  final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection("users");
+  final CollectionReference dsCollection =
+      FirebaseFirestore.instance.collection("danhsachdoc");
   // ignore: unused_field
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   // tao danh sach doc
@@ -13,11 +13,9 @@ class DatabaseDSDoc {
       'iddanhsach': '',
       'tendanhsachdoc': NameDS,
       'danhsachtruyen': [],
+      'iduser': UserID
     };
-    DocumentReference dsDocument = await userCollection
-        .doc(UserID)
-        .collection("danhsachdoc")
-        .add(danhsachdoc);
+    DocumentReference dsDocument = await dsCollection.add(danhsachdoc);
     await dsDocument.update({'iddanhsach': dsDocument.id});
   }
 
@@ -28,50 +26,35 @@ class DatabaseDSDoc {
       'iddanhsach': '',
       'tendanhsachdoc': tentruyen,
       'danhsachtruyen': [],
+      'iduser': iduser
     };
-    DocumentReference dsDocument = await userCollection
-        .doc(iduser)
-        .collection("danhsachdoc")
-        .add(danhsachdoc);
+    DocumentReference dsDocument = await dsCollection.add(danhsachdoc);
     await dsDocument.update({'iddanhsach': dsDocument.id});
-    return inserTruyen(iduser, dsDocument.id, idtruyen);
+    return inserTruyen(dsDocument.id, idtruyen);
   }
 
-  // get danh sach doc
+  // get danh sach doc cua nguoi dung
   getALLDanhSachDoc(String idu) {
-    return userCollection.doc(idu).collection('danhsachdoc').snapshots();
+    return dsCollection.where('iduser', isEqualTo: idu).snapshots();
   }
 
   //
-  Future inserTruyen(String iduser, String iddanhsach, String idtruyen) async {
-    return await userCollection
-        .doc(iduser)
-        .collection('danhsachdoc')
-        .doc(iddanhsach)
-        .update({
+  Future inserTruyen(String iddanhsach, String idtruyen) async {
+    return dsCollection.doc(iddanhsach).update({
       'danhsachtruyen': FieldValue.arrayUnion([idtruyen])
     });
   }
 
 // delete
-  Future deleteTruyen(String iduser, String iddanhsach, String idtruyen) async {
-    return await userCollection
-        .doc(iduser)
-        .collection('danhsachdoc')
-        .doc(iddanhsach)
-        .update({
+  Future deleteTruyen(String iddanhsach, String idtruyen) async {
+    return await dsCollection.doc(iddanhsach).update({
       'danhsachtruyen': FieldValue.arrayRemove([idtruyen])
     });
   }
 
   // kiemtratruyen co nam danh sach hay chua
-  Future<bool> kiemTraDSTruyen(
-      String idtruyen, String iduser, String idds) async {
-    var ds = await userCollection
-        .doc(iduser)
-        .collection('danhsachdoc')
-        .doc(idds)
-        .get();
+  Future<bool> kiemTraDSTruyen(String idtruyen, String idds) async {
+    var ds = await dsCollection.doc(idds).get();
     for (var i = 0; i < ds['danhsachtruyen'].length; i++) {
       if (idtruyen == ds['danhsachtruyen'][i].toString()) {
         return true;

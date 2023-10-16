@@ -217,11 +217,16 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ChuongAmition(
-                                            listchuong: snapshot.data.docs,
-                                            vt: index,
-                                            idtruyen: widget.idtruyen,
-                                            iduser: widget.iduser,
-                                            edit: widget.edit)));
+                                              listchuong: snapshot.data.docs,
+                                              vt: (sapxep == true)
+                                                  ? (snapshot.data.docs.length -
+                                                      1 -
+                                                      index)
+                                                  : index,
+                                              idtruyen: widget.idtruyen,
+                                              iduser: widget.iduser,
+                                              edit: widget.edit,
+                                            )));
                               },
                             );
                           },

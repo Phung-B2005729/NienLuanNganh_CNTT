@@ -68,6 +68,15 @@ class DatabaseChuong {
         .get();
   }
 
+  Future<String> getStringIdChuong(String idtruyen, int vt, bool des) async {
+    var chuong = await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .orderBy('ngaycapnhat', descending: des)
+        .get();
+    return chuong.docs[vt]['idchuong'];
+  }
+
 // xoa
   Future deleteOneChuong(String idtruyen) async {
     return truyenColection
@@ -111,5 +120,34 @@ class DatabaseChuong {
         .collection('chuong')
         .doc(idchuong)
         .update(map);
+  }
+
+  Future updateLuotXem(String idtruyen, String idchuong) async {
+    var luotxem = await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .get();
+    return await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .update({'luotxem': luotxem['luotxem'] + 1});
+  }
+
+  Future updateBinhChon(String idtruyen, String idchuong, bool ktr) async {
+    var luotxem = await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .get();
+    return await truyenColection
+        .doc(idtruyen)
+        .collection('chuong')
+        .doc(idchuong)
+        .update({
+      'binhchon':
+          (ktr == true) ? luotxem['binhchon'] + 1 : luotxem['binhchon'] - 1
+    });
   }
 }

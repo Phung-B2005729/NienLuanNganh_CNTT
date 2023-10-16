@@ -68,6 +68,7 @@ class MsgDialog {
                     Text('OK', style: TextStyle(color: tclo)),
                 onPressed: () {
                   hamxulyxoa();
+                  Navigator.of(context).pop();
                 },
               ),
             ],
@@ -85,11 +86,11 @@ class MsgDialog {
         ),
         backgroundColor: color,
         duration: const Duration(seconds: 2),
-        action: SnackBarAction(
+        /*  action: SnackBarAction(
           label: "OK",
           onPressed: () {},
           textColor: Colors.white,
-        ),
+        ), */
       ),
     );
   }
