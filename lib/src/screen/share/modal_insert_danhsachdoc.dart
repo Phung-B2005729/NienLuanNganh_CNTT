@@ -15,7 +15,9 @@ class ModelInser {
       // ignore: non_constant_identifier_names
       Stream<QuerySnapshot>? DsDocStream,
       Stream<QuerySnapshot>? ThuVienStream,
-      String idtruyen) {
+      bool ktrthuvien,
+      String idtruyen,
+      int chuongdadoc) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -32,19 +34,22 @@ class ModelInser {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        TileThuVien(ThuVienStream, idtruyen, blocUserLogin),
+                        if (ktrthuvien == true)
+                          TileThuVien(ThuVienStream, idtruyen, blocUserLogin,
+                              chuongdadoc),
                         for (var i = 0; i < snapshot.data.docs.length; i++)
                           tiltDsDoc(idtruyen, snapshot, i, blocUserLogin),
                         tiltThem(context, blocUserLogin, idtruyen)
                       ],
                     );
                   } else {
-                    return ThemDsMoi(
-                        ThuVienStream, idtruyen, blocUserLogin, context);
+                    return ThemDsMoi(ThuVienStream, idtruyen, blocUserLogin,
+                        context, ktrthuvien, chuongdadoc);
                   }
                 });
           } else {
-            return ThemDsMoi(ThuVienStream, idtruyen, blocUserLogin, context);
+            return ThemDsMoi(ThuVienStream, idtruyen, blocUserLogin, context,
+                ktrthuvien, chuongdadoc);
           }
         });
   }
@@ -78,27 +83,35 @@ class ModelInser {
         snapshot.data.docs[i]['tendanhsachdoc'],
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
-      onTap: () {
+      onTap: () async {
         print(kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen']));
         if (kiemDS(idtruyen, snapshot.data.docs[i]['danhsachtruyen'])) {
-          DatabaseDSDoc()
+          await DatabaseDSDoc()
               .deleteTruyen(snapshot.data.docs[i]['iddanhsach'], idtruyen);
-          DatabaseTruyen().deleteDSDocGia(blocUserLogin.id, idtruyen);
+          await DatabaseTruyen()
+              .deleteDSDocGia(snapshot.data.docs[i]['iddanhsach'], idtruyen);
         } else {
-          DatabaseDSDoc()
+          await DatabaseDSDoc()
               .inserTruyen(snapshot.data.docs[i]['iddanhsach'], idtruyen);
-          DatabaseTruyen().insertDSDocGia(blocUserLogin.id, idtruyen);
+          await DatabaseTruyen()
+              .insertDSDocGia(snapshot.data.docs[i]['iddanhsach'], idtruyen);
         }
       },
     );
   }
 
-  Column ThemDsMoi(Stream<QuerySnapshot<Object?>>? ThuVienStream,
-      String idtruyen, BlocUserLogin blocUserLogin, BuildContext context) {
+  Column ThemDsMoi(
+      Stream<QuerySnapshot<Object?>>? ThuVienStream,
+      String idtruyen,
+      BlocUserLogin blocUserLogin,
+      BuildContext context,
+      bool ktrthuvien,
+      int chuongdadoc) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TileThuVien(ThuVienStream, idtruyen, blocUserLogin),
+        if (ktrthuvien == true)
+          TileThuVien(ThuVienStream, idtruyen, blocUserLogin, chuongdadoc),
         tiltThem(context, blocUserLogin, idtruyen)
       ],
     );
@@ -107,7 +120,8 @@ class ModelInser {
   StreamBuilder<QuerySnapshot<Object?>> TileThuVien(
       Stream<QuerySnapshot<Object?>>? ThuVienStream,
       String idtruyen,
-      BlocUserLogin blocUserLogin) {
+      BlocUserLogin blocUserLogin,
+      int chuongdadoc) {
     return StreamBuilder<QuerySnapshot>(
         stream: ThuVienStream,
         builder: (context, AsyncSnapshot snapshot) {
@@ -127,7 +141,7 @@ class ModelInser {
                   ? ColorClass.selectedColor
                   : Colors.black,
               title: const Text(
-                'Thư viện',
+                'Thư viện (Riêng tư)',
                 style: TextStyle(fontSize: 16),
               ),
               onTap: () {
@@ -153,15 +167,21 @@ class ModelInser {
                   ? ColorClass.selectedColor
                   : Colors.black,
               title: const Text(
-                'Thư viện',
+                'Thư viện (Riêng tư)',
                 style: TextStyle(fontSize: 16),
               ),
-              onTap: () {
+              onTap: () async {
                 print(ktrThuVien([], idtruyen));
-                ktrThuVien([], idtruyen)
-                    ? DatabaseUser()
-                        .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen)
-                    : DatabaseUser().createThuVien(blocUserLogin.id, idtruyen);
+                if (ktrThuVien([], idtruyen)) {
+                  DatabaseUser()
+                      .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen);
+                } else {
+                  await DatabaseUser()
+                      .createThuVien(blocUserLogin.id, idtruyen);
+                  //update tiến trình
+                  await DatabaseUser().updateChuongDaDoc(
+                      blocUserLogin.id, idtruyen, chuongdadoc);
+                }
               },
             );
           }
@@ -227,7 +247,7 @@ class ModelInser {
                   onPressed: () async {
                     await DatabaseDSDoc()
                         .createNewInsert(iduser, idtruyen, inputText);
-                    await DatabaseTruyen().insertDSDocGia(iduser, idtruyen);
+
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   },

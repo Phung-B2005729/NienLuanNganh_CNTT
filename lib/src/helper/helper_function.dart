@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperFunctions {
@@ -16,6 +18,17 @@ class HelperFunctions {
 
   static String anhMacDinh = 'ANHMACDINH';
   static String LichSuTimKiem = 'LICHSUTIMKIEM';
+// tien trinh doc
+  static void saveIdtruyenTienTrinh(String nameIdTruyen, int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(nameIdTruyen, value);
+  }
+
+  static Future<int> getIdTruyenTienTrinh(String nameIdTruyen) async {
+    final prefs = await SharedPreferences.getInstance();
+    int tientrinh = prefs.getInt(nameIdTruyen) ?? -1;
+    return tientrinh;
+  }
 
 //lich su
   static void saveLichSuTimKiem(List<String> LS) async {

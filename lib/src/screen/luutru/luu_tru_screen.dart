@@ -1,6 +1,8 @@
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/screen/luutru/danhsachdoc_screen.dart';
+import 'package:apparch/src/screen/luutru/thuvien_screen.dart';
 import 'package:apparch/src/screen/share/user_appbar_action.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +24,7 @@ class LuuTruScreen extends StatelessWidget {
           title: Align(
               alignment: Alignment.topLeft,
               child:
-                  Text("Thư viện", style: AppTheme.lightTextTheme.titleSmall)),
+                  Text("Lưu trữ", style: AppTheme.lightTextTheme.titleSmall)),
           actions: <Widget>[UserAppbarAction()],
           notificationPredicate: (ScrollNotification notification) {
             return notification.depth == 1;
@@ -42,7 +44,7 @@ class LuuTruScreen extends StatelessWidget {
               unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
               tabs: const <Widget>[
                 Tab(
-                  text: 'Riêng tư',
+                  text: 'Thư viện',
                 ),
                 Tab(
                   text: 'Danh sách đọc',
@@ -50,8 +52,8 @@ class LuuTruScreen extends StatelessWidget {
               ]),
         ),
         body: const TabBarView(children: <Widget>[
-          Text('Danh sách truyện trong thư viện'),
-          Text('Danh sách đọc'),
+          ThuVienScreen(),
+          DanhSachDocScreen(),
         ]),
       ),
     );

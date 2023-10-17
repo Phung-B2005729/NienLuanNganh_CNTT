@@ -23,7 +23,7 @@ class DatabaseTruyen {
   }
 
   Future getTruyenId(String idtruyen) async {
-    return truyenColection.doc(idtruyen).get();
+    return await truyenColection.doc(idtruyen).get();
   }
 
   // lay danh sach tat ca truyen theo dieukien
@@ -51,10 +51,9 @@ class DatabaseTruyen {
     return truyenColection.orderBy(tencot, descending: true).snapshots();
   }
 
-  getAllTruyenMoi() async {
+  getALLTruyenHoanThanh() async {
     return truyenColection
-        .where('tinhtrang', isNotEqualTo: 'Bản thảo')
-        .orderBy('ngaycapnhat', descending: true)
+        .where('tinhtrang', isEqualTo: 'Hoàn thành')
         .snapshots();
   }
 
@@ -98,10 +97,10 @@ class DatabaseTruyen {
         .update({'ngaycapnhat': DatetimeFunction.getTimeToInt(DateTime.now())});
   }
 
-  Future<bool> kiemTraDSDocGia(String idtruyen, String iduser) async {
+  Future<bool> kiemTraDSDocGia(String idtruyen, String idds) async {
     var ds = await truyenColection.doc(idtruyen).get();
     for (var i = 0; i < ds['danhsachdocgia'].length; i++) {
-      if (iduser == ds['danhsachdocgia'][i].toString()) {
+      if (idds == ds['danhsachdocgia'][i].toString()) {
         return true;
       }
     }
@@ -116,20 +115,20 @@ class DatabaseTruyen {
   }
 
   // them danh sach doc
-  Future insertDSDocGia(String idu, String idtruyen) async {
-    var ktr = await kiemTraDSDocGia(idtruyen, idu);
+  Future insertDSDocGia(String idds, String idtruyen) async {
+    var ktr = await kiemTraDSDocGia(idtruyen, idds);
     if (ktr == false) {
       return await truyenColection.doc(idtruyen).update({
-        'danhsachdocgia': FieldValue.arrayUnion([idu])
+        'danhsachdocgia': FieldValue.arrayUnion([idds])
       });
     }
   }
 
-  Future deleteDSDocGia(String idu, String idtruyen) async {
-    var ktr = await kiemTraDSDocGia(idtruyen, idu);
+  Future deleteDSDocGia(String idds, String idtruyen) async {
+    var ktr = await kiemTraDSDocGia(idtruyen, idds);
     if (ktr == true) {
       return await truyenColection.doc(idtruyen).update({
-        'danhsachdocgia': FieldValue.arrayRemove([idu])
+        'danhsachdocgia': FieldValue.arrayRemove([idds])
       });
     }
   }

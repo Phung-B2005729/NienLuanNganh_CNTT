@@ -1,69 +1,104 @@
-import 'package:apparch/src/firebase/services/database_chuong.dart';
+import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/screen/share/mgsDiaLog.dart';
+import 'package:apparch/src/screen/timkiem/tim_kiem_tags_screen.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
-class TimKiemTagsSreen extends StatefulWidget {
-  String value;
-  TimKiemTagsSreen({super.key, required this.value});
+class DanhSachDocChiTietScreen extends StatefulWidget {
+  String idds;
+  String name;
+  int soluong;
+  DanhSachDocChiTietScreen(
+      {super.key,
+      required this.idds,
+      required this.name,
+      required this.soluong});
 
   @override
-  State<TimKiemTagsSreen> createState() => _TimKiemTagsSreenState();
+  State<DanhSachDocChiTietScreen> createState() =>
+      _DanhSachDocChiTietScreenState();
 }
 
-class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
-  Stream<QuerySnapshot>? truyenStream;
+class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
+  Stream<QuerySnapshot>? ListTruyen;
   @override
   void initState() {
     super.initState();
-    getAllTruyen();
+    getData();
   }
 
-  getAllTruyen() {
-    DatabaseTruyen().getALLTruyenNotBanThao().then((vale) {
+  getData() async {
+    await DatabaseTruyen().getAllTruyen().then((va) {
       setState(() {
-        truyenStream = vale;
+        ListTruyen = va;
       });
     });
   }
 
+  bool ktrTruyenTrongDs(List<dynamic> ListIdds, String idds) {
+    for (var i = 0; i < ListIdds.length; i++) {
+      if (ListIdds[i] == idds) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: truyenStream,
-        builder: (context, AsyncSnapshot snapshot) {
-          return (snapshot.hasData && snapshot.data.docs.length != 0)
-              ? Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: ColorClass.xanh3Color,
-                    title: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        // ignore: prefer_interpolation_to_compose_strings
-                        "#" + widget.value,
-                        style: GoogleFonts.roboto(
-                          //roboto
-                          // arizonia
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorClass.xanh3Color,
+        title: Text(
+          // ignore: prefer_interpolation_to_compose_strings
+          "Danh sách đọc " + widget.name,
+          style: AppTheme.lightTextTheme.titleSmall,
+        ),
+      ),
+      body: (widget.soluong == 0)
+          ? Padding(
+              padding: const EdgeInsets.only(
+                  left: 15, right: 15, bottom: 70, top: 0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Flexible(
+                      child: AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: Image.asset('assets/images/sachempty.png'),
                       ),
                     ),
-                  ),
-                  body: ListView(
+                    const Text(
+                      'Danh sách rỗng\n',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : StreamBuilder<QuerySnapshot>(
+              stream: ListTruyen,
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data.docs.length != 0 &&
+                    snapshot.data != null) {
+                  return ListView(
                       scrollDirection:
                           Axis.vertical, // true cuon doc, false cuon ngang
                       children: [
                         for (var index = 0;
                             index < snapshot.data.docs.length;
                             index++)
-                          if (ktrTruyen(snapshot.data.docs[index]['tags']) ==
+                          if (ktrTruyenTrongDs(
+                                  snapshot.data.docs[index]['danhsachdocgia'],
+                                  widget.idds) ==
                               true)
                             GestureDetector(
                               onTap: () {
@@ -77,26 +112,76 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                               edit: false,
                                             )));
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8, bottom: 8, left: 8, right: 0),
-                                child: Container(
-                                  height: 300,
-                                  width: 325,
-                                  decoration: BoxDecoration(
-                                    //   color: Color.fromARGB(255, 231, 237, 242),
-                                    color: const Color.fromARGB(
-                                        255, 239, 236, 236),
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(255, 191, 188, 188),
-                                        offset: Offset(10, 15),
-                                        blurRadius: 8.0,
-                                      )
-                                    ],
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    top: 15, bottom: 10, left: 2, right: 2),
+                                height: 300,
+                                width: 325,
+                                decoration: BoxDecoration(
+                                  //   color: Color.fromARGB(255, 231, 237, 242),
+                                  color:
+                                      const Color.fromARGB(255, 239, 236, 236),
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromARGB(255, 191, 188, 188),
+                                      offset: Offset(10, 15),
+                                      blurRadius: 8.0,
+                                    )
+                                  ],
+                                ),
+                                child: Dismissible(
+                                  key: ValueKey(snapshot.data.docs[index]
+                                      ['idtruyen']), // dinh danh widget
+                                  background: Container(
+                                    color: Theme.of(context).colorScheme.error,
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.only(right: 20),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 4),
+                                    child: const Icon(Icons.delete,
+                                        color: Colors.white, size: 40),
                                   ),
+                                  direction: DismissDirection.endToStart,
+                                  // huong vuot
+                                  confirmDismiss: (direction) {
+                                    // ham xac nhan loai bo
+                                    return MsgDialog
+                                        .showConfirmDialogDismissible(
+                                      context,
+                                      "Bạn chắc chăn muốn xoá truyện này ?",
+                                    );
+                                  },
+                                  onDismissed: (direction) async {
+                                    try {
+                                      // xoa truyen khoi danh sach
+                                      await DatabaseDSDoc().deleteTruyen(
+                                          widget.idds,
+                                          snapshot.data.docs[index]
+                                              ['idtruyen']);
+                                      await DatabaseTruyen().deleteDSDocGia(
+                                          widget.idds,
+                                          snapshot.data.docs[index]
+                                              ['idtruyen']);
+                                      setState(() {
+                                        widget.soluong = widget.soluong - 1;
+                                      });
+                                      // xoa id danh khoi truyen
+                                      // ignore: use_build_context_synchronously
+                                      MsgDialog.showSnackbar(context,
+                                          ColorClass.fiveColor, 'Đã xoá');
+                                      // ignore: use_build_context_synchronously
+                                    } catch (e) {
+                                      // ignore: use_build_context_synchronously
+
+                                      // ignore: use_build_context_synchronously
+                                      MsgDialog.showSnackbar(context,
+                                          Colors.red, "Lỗi vui lòng thử lại!!");
+                                      print("loi xoa image " + e.toString());
+                                    }
+
+                                    print('Đã xoá');
+                                  },
                                   child: Card(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -114,8 +199,10 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                         ['linkanh'] !=
                                                     null
                                                 ? Container(
-                                                    margin: EdgeInsets.all(0),
-                                                    padding: EdgeInsets.all(8),
+                                                    margin:
+                                                        const EdgeInsets.all(0),
+                                                    padding:
+                                                        const EdgeInsets.all(8),
                                                     height: 150,
                                                     width: 110,
                                                     child: Image.network(
@@ -125,8 +212,10 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                     ),
                                                   )
                                                 : Container(
-                                                    margin: EdgeInsets.all(0),
-                                                    padding: EdgeInsets.all(8),
+                                                    margin:
+                                                        const EdgeInsets.all(0),
+                                                    padding:
+                                                        const EdgeInsets.all(8),
                                                     height: 150,
                                                     width: 110,
                                                     child: Image.asset(
@@ -134,7 +223,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 5,
                                             ),
                                             Padding(
@@ -154,7 +243,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                       color: Colors.black,
                                                     ),
                                                     softWrap: true,
-                                                    maxLines: 2,
+                                                    maxLines: 3,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
@@ -186,7 +275,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                         ['tinhtrang']),
                                                     onPressed: () {},
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 10,
                                                   ),
                                                   Row(
@@ -284,76 +373,15 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                 ),
                               ),
                             )
-                      ]),
-                )
-              : Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: Image.asset('assets/images/sachempty.png'),
-                        ),
-                      ),
-                      Text('Không có truyện mà bạn muốn tìm',
-                          style: AppTheme.lightTextTheme.headlineLarge),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                );
-        });
-  }
-
-  bool ktrTruyen(List<dynamic> tags) {
-    for (var i = 0; i < tags.length; i++) {
-      if (tags[i].toLowerCase().contains(widget.value.toLowerCase())) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
-// ignore: must_be_immutable
-class RowCountChuong extends StatefulWidget {
-  String idtruyen;
-  RowCountChuong({super.key, required this.idtruyen});
-
-  @override
-  State<RowCountChuong> createState() => _RowCountChuongState();
-}
-
-class _RowCountChuongState extends State<RowCountChuong> {
-  var countChuong;
-  Stream<QuerySnapshot>? truyenStream;
-  // ignore: non_constant_identifier_names
-  Stream<QuerySnapshot>? DsDocStream;
-  @override
-  void initState() {
-    super.initState();
-    getCountChuong();
-  }
-
-  getCountChuong() async {
-    await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((value) {
-      setState(() {
-        countChuong = value.size;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Icon(Icons.format_list_bulleted),
-        Text(' ${countChuong.toString()} chuong')
-        // so chuong
-      ],
+                      ]);
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: ColorClass.fiveColor,
+                    ),
+                  );
+                }
+              }),
     );
   }
 }

@@ -12,8 +12,7 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class TimKiemScreen extends StatefulWidget {
-  String? travevalue;
-  TimKiemScreen({super.key, this.travevalue});
+  TimKiemScreen({super.key});
 
   @override
   State<TimKiemScreen> createState() => _TimKiemScreenState();
@@ -34,18 +33,6 @@ class _TimKiemScreenState extends State<TimKiemScreen>
     super.initState();
     context.read<BlocTimKiem>().getData();
     _tabController = TabController(length: 3, vsync: this);
-    getsubmit();
-  }
-
-  getsubmit() {
-    if (widget.travevalue != null) {
-      context.read<BlocTimKiem>().updataList(widget.travevalue!);
-      context.read<BlocTimKiem>().updateDStags(widget.travevalue!);
-      _nameController.text = widget.travevalue!;
-      setState(() {
-        onsubmit = true;
-      });
-    }
   }
 
   @override
@@ -269,7 +256,7 @@ class _TimKiemScreenState extends State<TimKiemScreen>
                     children: <Widget>[
                       DsTruyenTimKiem(value: _nameController.text.toString()),
                       DsNguoiDung(value: _nameController.text.toString()),
-                      DsTags()
+                      const DsTags()
                       // Nội dung của Tab 2
                     ],
                   )
@@ -284,8 +271,7 @@ class _TimKiemScreenState extends State<TimKiemScreen>
   Widget truyenGoiY(BuildContext context) {
     return Consumer<BlocTimKiem>(builder: (context, blocTimKiem, child) {
       return ListView(children: [
-        if (blocTimKiem.dstentruyen != [] &&
-            blocTimKiem.dstentruyen.length != 0)
+        if (blocTimKiem.dstentruyen != [] && blocTimKiem.dstentruyen.isNotEmpty)
           for (var i = 0; i < blocTimKiem.dstentruyen.length; i++)
             ListTile(
               onTap: () {
@@ -325,9 +311,21 @@ class _TimKiemScreenState extends State<TimKiemScreen>
                     onPressed: () {
                       // qua hien thị tat va tim kiem
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => LichSuTimKiemSreen()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => LichSuTimKiemSreen()))
+                          .then((result) {
+                        if (result != null) {
+                          // Xử lý giá trị trả về ở đây
+                          print('Giá trị trả về: $result');
+                          context.read<BlocTimKiem>().updataList(result);
+                          context.read<BlocTimKiem>().updateDStags(result);
+                          _nameController.text = result;
+                          setState(() {
+                            onsubmit = true;
+                          });
+                        }
+                      });
                     },
                     child: const Text(
                       'Xem tất cả',

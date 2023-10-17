@@ -38,27 +38,33 @@ class _HomePagesState extends State<HomePages> {
     context.read<BlocUserLogin>().getLoggedState();
   }
 
-  getAllTruyen() {
-    DatabaseTruyen().getAllTruyenDK("tinhtrang", "Hoàn thành").then((value) {
-      setState(() {
-        truyenhoanthanh = value;
+  getAllTruyen() async {
+    try {
+      await DatabaseTruyen().getALLTruyenHoanThanh().then((value) {
+        setState(() {
+          truyenhoanthanh = value;
+        });
       });
-    });
-    DatabaseTruyen().getAllTruyenSapXep("tongluotxem").then((val) {
-      setState(() {
-        truyenluotxem = val;
+
+      print(truyenhoanthanh != null);
+      await DatabaseTruyen().getAllTruyenSapXep("tongluotxem").then((val) {
+        setState(() {
+          truyenluotxem = val;
+        });
       });
-    });
-    DatabaseTruyen().getAllTruyenSapXep('ngaycapnhat').then((vali) {
-      setState(() {
-        truyenmoi = vali;
+      await DatabaseTruyen().getAllTruyenSapXep('ngaycapnhat').then((vali) {
+        setState(() {
+          truyenmoi = vali;
+        });
       });
-    });
-    DatabaseTruyen().getAllTruyen().then((vale) {
-      setState(() {
-        tatcatruyen = vale;
+      await DatabaseTruyen().getAllTruyen().then((vale) {
+        setState(() {
+          tatcatruyen = vale;
+        });
       });
-    });
+    } catch (e) {
+      print('Lỗi ' + e.toString());
+    }
   }
 
   @override
@@ -80,6 +86,7 @@ class _HomePagesState extends State<HomePages> {
           const SizedBox(
             height: 30,
           ),
+          //
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Text(
@@ -91,9 +98,11 @@ class _HomePagesState extends State<HomePages> {
             height: 15,
           ),
           HomeTruyenList(truyenmoi, false, ColorClass.xanh1Color),
+          //
           const SizedBox(
             height: 30,
           ),
+          //
           Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Text(
@@ -104,19 +113,8 @@ class _HomePagesState extends State<HomePages> {
             height: 15,
           ),
           HomeTruyenList(truyenluotxem, false, ColorClass.fouthColor),
-          const SizedBox(
-            height: 30,
-          ),
-          Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Text(
-                "Truyện đã hoàn thành",
-                style: AppTheme.lightTextTheme.bodyLarge,
-              )),
-          const SizedBox(
-            height: 15,
-          ),
-          HomeTruyenList(truyenhoanthanh, false, ColorClass.xanh1Color),
+          //
+
           const SizedBox(
             height: 30,
           ),
@@ -131,8 +129,25 @@ class _HomePagesState extends State<HomePages> {
           ),
           HomeTruyenList(tatcatruyen, false, ColorClass.fouthColor),
           const SizedBox(
-            height: 20,
+            height: 30,
           ),
+          //
+
+          //    if (truyenhoanthanh != null)
+          Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(
+                "Truyện đã hoàn thành",
+                style: AppTheme.lightTextTheme.bodyLarge,
+              )),
+
+          //    if (truyenhoanthanh != null)
+          const SizedBox(
+            height: 15,
+          ),
+
+          //  if (truyenhoanthanh != null)
+          HomeTruyenList(truyenhoanthanh, false, ColorClass.xanh1Color),
         ],
       ),
     );

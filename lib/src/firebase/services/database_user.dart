@@ -86,7 +86,23 @@ class DatabaseUser {
         .delete();
   }
 
-  getALLTruyenThuVien(String iduser, String idtruyen) async {
+  getALLTruyenThuVien(String iduser) async {
     return userCollection.doc(iduser).collection('thuvien').snapshots();
+  }
+
+  Future getALLTruyenThuVienGet(String iduser) async {
+    return userCollection.doc(iduser).collection('thuvien').get();
+  }
+
+  Future updateChuongDaDoc(String idu, String idtruyen, int chuongdadoc) async {
+    return userCollection
+        .doc(idu)
+        .collection('thuvien')
+        .doc(idtruyen)
+        .update({'chuongdadoc': chuongdadoc});
+  }
+
+  Future getOneTruyenThuVien(String idu, String idtruyen) {
+    return userCollection.doc(idu).collection('thuvien').doc(idtruyen).get();
   }
 }

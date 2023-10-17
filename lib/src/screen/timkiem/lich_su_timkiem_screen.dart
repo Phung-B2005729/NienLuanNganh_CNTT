@@ -51,13 +51,7 @@ class _LichSuTimKiemSreenState extends State<LichSuTimKiemSreen> {
               for (var i = 0; i < blocTimKiem.lichSuTimKiem.length; i++)
                 ListTile(
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => TimKiemScreen(
-                                  travevalue: blocTimKiem.lichSuTimKiem[i],
-                                )));
+                    Navigator.pop(context, blocTimKiem.lichSuTimKiem[i]);
                   },
                   leading: const Icon(Icons.search),
                   trailing: GestureDetector(

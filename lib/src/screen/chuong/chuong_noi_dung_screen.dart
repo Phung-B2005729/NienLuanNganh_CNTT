@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/firebase/services/database_user.dart';
+import 'package:apparch/src/helper/helper_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
-import 'package:apparch/src/screen/truyen/modal_insert_ds.dart';
+import 'package:apparch/src/screen/share/modal_insert_danhsachdoc.dart';
 import 'package:apparch/src/screen/truyen/tacgia_avata.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -48,11 +49,16 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
   double scrollProgress = 0.0;
   var blocUserLogin;
   Stream<QuerySnapshot>? thuvien;
+  QuerySnapshot? ListIdTruyenThuVien;
+  bool ktrthuvien = false;
+  int chuongdadoc = 0;
+  int chuongtam = 0;
   @override
   void initState() {
     super.initState();
 
     getData();
+    getChuongDaDoc();
     getIndex();
     _controller.addListener(() {
       _scrollListener();
@@ -67,17 +73,66 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     }
   }
 
-  void _scrollListener() {
+  getChuongDaDoc() async {
+    // luu lai tientrinh truoc lưu vào cục bộ
+    HelperFunctions.saveIdtruyenTienTrinh(widget.idtruyen, widget.vtChuong + 1);
+    await HelperFunctions.getIdTruyenTienTrinh(widget.idtruyen).then((value) {
+      setState(() {
+        chuongdadoc = value;
+      });
+    });
+    await DatabaseUser()
+        .getALLTruyenThuVienGet(widget.iduser)
+        .then((value) => ListIdTruyenThuVien = value);
+    setState(() {
+      // cập nhật xem có trong thư viện hay không ?
+      ktrthuvien =
+          ModelInser().ktrThuVien(ListIdTruyenThuVien!.docs, widget.idtruyen);
+      print(ktrthuvien);
+    });
+    final truyenThuVienDoc = await DatabaseUser()
+        .getOneTruyenThuVien(widget.iduser, widget.idtruyen);
+
+    if (truyenThuVienDoc != null && truyenThuVienDoc.exists) {
+      setState(() {
+        chuongtam = truyenThuVienDoc.data() != null
+            ? truyenThuVienDoc.data()['chuongdadoc'] as int
+            : 0;
+      });
+    }
+    // ignore: avoid_print, prefer_interpolation_to_compose_strings
+    print('chung tam ' + chuongtam.toString());
+  }
+
+  void _scrollListener() async {
     setState(() {
       scrollProgress =
           _controller.position.pixels / _controller.position.maxScrollExtent;
-      if (idchuong != '') {
-        if (scrollProgress == 1.00) {
-          print(scrollProgress);
-          updateLuotXem(widget.idtruyen, idchuong);
+    });
+    if (idchuong != '') {
+      if (scrollProgress == 1.00) {
+        // hoàn thành đọc xong 1 chương
+        print(scrollProgress);
+        updateLuotXem(widget.idtruyen, idchuong);
+        // up date chương đã đọc idtruyen , so chương đã đọc = vt +1
+        HelperFunctions.saveIdtruyenTienTrinh(
+            widget.idtruyen, widget.vtChuong + 1);
+        await HelperFunctions.getIdTruyenTienTrinh(widget.idtruyen)
+            .then((value) {
+          setState(() {
+            chuongdadoc = value;
+          });
+        });
+        // ignore: avoid_print, prefer_interpolation_to_compose_strings
+        print('chuongdadoc' + chuongdadoc.toString());
+        if (ktrthuvien == true) {
+          if (chuongtam <= chuongdadoc) {
+            await DatabaseUser()
+                .updateChuongDaDoc(widget.iduser, widget.idtruyen, chuongdadoc);
+          }
         }
       }
-    });
+    }
   }
 
   Future updateLuotXem(String idtruyen, String idchuong) async {
@@ -132,13 +187,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
         idchuong = value;
       });
     });
-    await DatabaseUser()
-        .getALLTruyenThuVien(widget.iduser, widget.idtruyen)
-        .then((value) {
-      setState(() {
-        thuvien = value;
-      });
-    });
+    thuvien = await DatabaseUser().getALLTruyenThuVien(widget.iduser);
   }
 
   @override
@@ -217,9 +266,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        Navigator.popUntil(context, (route) => route.isFirst);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -252,12 +299,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                         height: 40,
                         child: TextButton(
                             onPressed: () {
-                              ModelInser().ShowModal(
-                                context,
-                                DsDocStream,
-                                thuvien,
-                                widget.idtruyen,
-                              );
+                              ModelInser().ShowModal(context, DsDocStream,
+                                  thuvien, true, widget.idtruyen, chuongdadoc);
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,

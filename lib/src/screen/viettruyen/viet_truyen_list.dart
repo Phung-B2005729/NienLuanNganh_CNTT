@@ -4,7 +4,7 @@ import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
-import 'package:apparch/src/screen/share/loadingDialog.dart';
+
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
 import 'package:apparch/src/screen/viettruyen/edit/truyen_edit.dart';
@@ -90,6 +90,9 @@ class VietTruyenList extends StatelessWidget {
                               await DatabaseTruyen().deleleOneTruyen(
                                   snapshot.data.docs[index]['idtruyen']);
                               // ignore: use_build_context_synchronously
+                              MsgDialog.showSnackbar(
+                                  context, ColorClass.fiveColor, 'Đã xoá');
+                              // ignore: use_build_context_synchronously
                             } catch (e) {
                               // ignore: use_build_context_synchronously
 
@@ -123,7 +126,7 @@ class VietTruyenList extends StatelessWidget {
                                           fit: BoxFit.cover,
                                         ),
                                       ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 20,
                                 ),
                                 Padding(
@@ -340,16 +343,14 @@ class VietTruyenList extends StatelessWidget {
   }
 
   Future dangTruyen(BuildContext context, String idtruyen) async {
-    LoadingDialog.showLoadingDialog(context, 'Loading...');
     try {
       await DatabaseChuong().updateAllTinhTrangChuong(idtruyen, 'Đã đăng');
       await DatabaseTruyen().updateTinhTrangTruyen(idtruyen, "Trưởng thành");
       // ignore: use_build_context_synchronously
-      LoadingDialog.hideLoadingDialog(context);
+
       // ignore: use_build_context_synchronously
       return true;
     } catch (e) {
-      LoadingDialog.hideLoadingDialog(context);
       // ignore: use_build_context_synchronously
       print('Lỗi ' + e.toString());
       return false;
@@ -382,7 +383,7 @@ class VietTruyenList extends StatelessWidget {
   }
 
   Future<dynamic> dropTruyen(BuildContext context, String idtruyen) async {
-    LoadingDialog.showLoadingDialog(context, 'Loading...');
+    // LoadingDialog.showLoadingDialog(context, 'Loading...');
     try {
       // update tinh trang cac chuong
       await DatabaseChuong().updateAllTinhTrangChuong(idtruyen, 'Bản thảo');
@@ -390,11 +391,11 @@ class VietTruyenList extends StatelessWidget {
       // updat tinh trang truyen
       await DatabaseTruyen().updateTinhTrangTruyen(idtruyen, 'Bản thảo');
       // ignore: use_build_context_synchronously
-      LoadingDialog.hideLoadingDialog(context);
+      //  LoadingDialog.hideLoadingDialog(context);
       return true;
     } catch (e) {
       // ignore: use_build_context_synchronously
-      LoadingDialog.hideLoadingDialog(context);
+      //  LoadingDialog.hideLoadingDialog(context);
       // MsgDialog.showSnackbar(context, Colors.red, 'Lỗi vui lòng thử lại');
       return false;
     }

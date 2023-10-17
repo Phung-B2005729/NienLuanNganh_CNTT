@@ -1,3 +1,4 @@
+import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseDSDoc {
@@ -30,12 +31,13 @@ class DatabaseDSDoc {
     };
     DocumentReference dsDocument = await dsCollection.add(danhsachdoc);
     await dsDocument.update({'iddanhsach': dsDocument.id});
+    await DatabaseTruyen().insertDSDocGia(dsDocument.id, idtruyen);
     return inserTruyen(dsDocument.id, idtruyen);
   }
 
   // get danh sach doc cua nguoi dung
-  getALLDanhSachDoc(String idu) {
-    return dsCollection.where('iduser', isEqualTo: idu).snapshots();
+  getALLDanhSachDoc(String idu) async {
+    return await dsCollection.where('iduser', isEqualTo: idu).snapshots();
   }
 
   //
@@ -45,11 +47,20 @@ class DatabaseDSDoc {
     });
   }
 
+  // delte one ds
+  Future deleteOneDs(String idds) async {
+    return dsCollection.doc(idds).delete();
+  }
+
 // delete
   Future deleteTruyen(String iddanhsach, String idtruyen) async {
     return await dsCollection.doc(iddanhsach).update({
       'danhsachtruyen': FieldValue.arrayRemove([idtruyen])
     });
+  }
+
+  Future updateName(String idds, String name) async {
+    return dsCollection.doc(idds).update({'tendanhsachdoc': name});
   }
 
   // kiemtratruyen co nam danh sach hay chua
