@@ -93,7 +93,8 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                           style: AppTheme.lightTextTheme.bodySmall,
                         ),
                       ),
-                      PopupMenuItem<String>(
+                      PopupMenuItem<
+                      String>(
                         value: 'Lưu',
                         child: Text(
                           'Lưu',

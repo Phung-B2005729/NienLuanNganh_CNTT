@@ -126,6 +126,8 @@ class AppTheme {
     return ThemeData(
       // useMaterial3: true,
       colorScheme: const ColorScheme.light(),
+      dialogBackgroundColor: Colors.white,
+      primaryColor: ColorClass.primaryColor,
       brightness: Brightness.light,
       checkboxTheme: CheckboxThemeData(
         fillColor: MaterialStateColor.resolveWith(
@@ -156,6 +158,8 @@ class AppTheme {
     return ThemeData(
       colorScheme: const ColorScheme.dark(),
       brightness: Brightness.dark,
+      dialogBackgroundColor: Colors.black,
+      primaryColor: ColorClass.primaryColor,
       appBarTheme: AppBarTheme(
         foregroundColor: Colors.white,
         backgroundColor: Colors.grey[900],

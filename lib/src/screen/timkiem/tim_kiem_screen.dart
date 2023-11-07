@@ -269,6 +269,7 @@ class _TimKiemScreenState extends State<TimKiemScreen>
 
   // ignore: override_on_non_overriding_member
   Widget truyenGoiY(BuildContext context) {
+    // chỉ gợi ý tên truyện
     return Consumer<BlocTimKiem>(builder: (context, blocTimKiem, child) {
       return ListView(children: [
         if (blocTimKiem.dstentruyen != [] && blocTimKiem.dstentruyen.isNotEmpty)

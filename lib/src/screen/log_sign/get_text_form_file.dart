@@ -76,12 +76,17 @@ class GetTextFormFile extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
               borderSide: BorderSide(color: ColorClass.primaryColor),
             ),
+            focusColor: ColorClass.xanh3Color,
             errorStyle: const TextStyle(fontSize: 12),
             hintText: labeltext,
             hintStyle: TextStyle(color: Colors.grey[500], fontSize: 16),
-            prefixIcon: Icon(icon),
+            prefixIcon: Icon(
+              icon,
+              color: focus.hasFocus ? ColorClass.xanh3Color : Colors.grey[500],
+            ),
             fillColor: Colors.grey[350],
             filled: true,
+            // prefixIconColor: ColorClass.xanh3Color
           ),
         ),
       ),

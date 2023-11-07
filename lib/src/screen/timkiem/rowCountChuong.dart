@@ -2,6 +2,7 @@ import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class RowCountChuong extends StatefulWidget {
   String idtruyen;
   RowCountChuong({super.key, required this.idtruyen});

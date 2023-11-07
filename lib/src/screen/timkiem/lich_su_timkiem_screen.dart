@@ -2,7 +2,6 @@ import 'package:apparch/src/bloc/bloc_timkiem.dart';
 
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
-import 'package:apparch/src/screen/timkiem/tim_kiem_screen.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

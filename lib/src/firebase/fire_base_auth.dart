@@ -1,5 +1,3 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helper/helper_function.dart';
 import 'services/database_user.dart';
@@ -28,6 +26,7 @@ class FirAuth {
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {
+      print('Lỗi đăng ký ' + e.toString());
       onSignUpErr(e.code, onRegisterError);
     }
   }
@@ -53,7 +52,7 @@ class FirAuth {
       Function(String mgg) onLoginError) {
     firebaseAuth
         .signInWithEmailAndPassword(email: email, password: pass)
-        .then((User) {
+        .then((user) {
       onSuccess();
     }).catchError((err) {
       onLoginError("Email hoặc password không chính xác");

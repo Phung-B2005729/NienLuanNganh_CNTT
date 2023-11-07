@@ -44,9 +44,10 @@ class BlocTimKiem with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDSNguoiDung(String value) async {}
+  //void updateDSNguoiDung(String value) async {}
 
   void updateDSTruyen(String value) async {
+    // gợi ý danh sách truyện
     List<String> dstam = [];
     final querySnapshot = await FirebaseFirestore.instance
         .collection('truyen')

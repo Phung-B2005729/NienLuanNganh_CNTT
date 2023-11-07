@@ -108,6 +108,7 @@ class _LoginFormState extends State<LoginForm> {
                       controller: _EmailController,
                       labeltext: 'Email',
                       icon: Icons.email,
+                      inputType: TextInputType.emailAddress,
                       focus: emailPasswordFocusNode,
                     ),
                     const SizedBox(

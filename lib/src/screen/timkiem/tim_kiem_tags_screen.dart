@@ -134,7 +134,7 @@ class _TimKiemTagsSreenState extends State<TimKiemTagsSreen> {
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 5,
                                             ),
                                             Padding(
@@ -326,6 +326,7 @@ class RowCountChuong extends StatefulWidget {
 }
 
 class _RowCountChuongState extends State<RowCountChuong> {
+  // ignore: prefer_typing_uninitialized_variables
   var countChuong;
   Stream<QuerySnapshot>? truyenStream;
   // ignore: non_constant_identifier_names

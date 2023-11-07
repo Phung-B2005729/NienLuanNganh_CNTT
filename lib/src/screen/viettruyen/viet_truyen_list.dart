@@ -99,6 +99,7 @@ class VietTruyenList extends StatelessWidget {
                               // ignore: use_build_context_synchronously
                               MsgDialog.showSnackbar(context, Colors.red,
                                   "Lỗi vui lòng thử lại!!");
+                              // ignore: prefer_interpolation_to_compose_strings
                               print("loi xoa image " + e.toString());
                             }
 

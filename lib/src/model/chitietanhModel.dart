@@ -1,12 +1,3 @@
-// ignore: file_names
-// ignore: file_names
-// ignore: file_names
-// ignore: file_names
-// ignore: file_names
-// ignore: file_names
-// ignore: file_names
-// ignore: file_names
-// ignore: camel_case_types
 class chitietanhModel {
   // ignore: non_constant_identifier_names
   late int id_user;
