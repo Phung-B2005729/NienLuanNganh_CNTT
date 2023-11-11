@@ -283,6 +283,7 @@ class _TimKiemScreenState extends State<TimKiemScreen>
                   ontap = false;
                 });
                 context.read<BlocTimKiem>().updateDStags(_nameController.text);
+                context.read<BlocTimKiem>().updataList(_nameController.text);
                 print('gọi tile');
               },
               leading: const Icon(Icons.search),
@@ -349,6 +350,7 @@ class _TimKiemScreenState extends State<TimKiemScreen>
                     onchange = false;
                     ontap = false;
                   });
+
                   context
                       .read<BlocTimKiem>()
                       .updateDStags(_nameController.text);

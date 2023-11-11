@@ -6,11 +6,12 @@ class BlocTimKiem with ChangeNotifier {
   late List<String> lichSuTimKiem;
   late List<String> dstentruyen;
   late List<String> dstags;
-
+  late String? iduser;
   void getData() async {
     dstentruyen = [];
     dstags = [];
-    lichSuTimKiem = await HelperFunctions.getLishSuTimKiem();
+    iduser = await HelperFunctions.getUserID();
+    lichSuTimKiem = await HelperFunctions.getLishSuTimKiem(iduser!);
     notifyListeners();
   }
 
@@ -23,7 +24,7 @@ class BlocTimKiem with ChangeNotifier {
     }
     if (add == true) {
       lichSuTimKiem.add(timkiem);
-      HelperFunctions.saveLichSuTimKiem(lichSuTimKiem);
+      HelperFunctions.saveLichSuTimKiem(lichSuTimKiem, iduser!);
     }
     notifyListeners();
   }
@@ -40,7 +41,7 @@ class BlocTimKiem with ChangeNotifier {
 
   void deleteOneList(String tk) {
     lichSuTimKiem.remove(tk);
-    HelperFunctions.saveLichSuTimKiem(lichSuTimKiem);
+    HelperFunctions.saveLichSuTimKiem(lichSuTimKiem, iduser!);
     notifyListeners();
   }
 
@@ -62,7 +63,33 @@ class BlocTimKiem with ChangeNotifier {
       if (ten.contains(value.toLowerCase())) {
         dstam.add(truyenTen);
       }
+      print('gọi update tags');
+      final tags = truyenData['tags'] as List<dynamic>;
+      if (truyenData['tentruyen'].toLowerCase().contains(value.toLowerCase())) {
+        print('dk truyen đúng');
+        // lay tat cat tags ở đây thêm vào?
+        for (var i = 0; i < tags.length; i++) {
+          if (tags[i] != '') {
+            dstam.add(tags[i]);
+            print('thêm vào ' + tags[i]);
+          }
+        }
+      } else {
+        // thi loc
+        for (var i = 0; i < tags.length; i++) {
+          final tag = tags[i].toLowerCase();
+          print(tags[i]);
+          if (tag.contains(value.toLowerCase())) {
+            if (ktrItem(tags[i], dstam) == false) {
+              dstam.add(tags[i]);
+
+              print('thêm vào ' + tags[i]);
+            }
+          }
+        }
+      }
     }
+
     dstentruyen = dstam;
     notifyListeners();
   }

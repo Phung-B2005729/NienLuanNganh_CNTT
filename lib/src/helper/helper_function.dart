@@ -15,7 +15,7 @@ class HelperFunctions {
   static String ngaysinhKey = 'DATAKEY';
 
   static String anhMacDinh = 'ANHMACDINH';
-  static String LichSuTimKiem = 'LICHSUTIMKIEM';
+  //static String LichSuTimKiem = 'LICHSUTIMKIEM';
 // tien trinh doc
   static void saveIdtruyenTienTrinh(String nameIdTruyen, int value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,14 +29,14 @@ class HelperFunctions {
   }
 
 //lich su
-  static void saveLichSuTimKiem(List<String> LS) async {
+  static void saveLichSuTimKiem(List<String> LS, String iduser) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(LichSuTimKiem, LS);
+    await prefs.setStringList(iduser, LS);
   }
 
-  static Future<List<String>> getLishSuTimKiem() async {
+  static Future<List<String>> getLishSuTimKiem(String iduser) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> myList = prefs.getStringList(LichSuTimKiem) ?? [];
+    List<String> myList = prefs.getStringList(iduser) ?? [];
     return myList;
   }
 

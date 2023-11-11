@@ -301,6 +301,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                       ),
                       TextFormField(
                         style: AppTheme.lightTextTheme.bodyMedium,
+                        maxLines: null,
                         onChanged: (v) {
                           dynamic tem;
                           if (!_tagController.text.startsWith(' ') &&
