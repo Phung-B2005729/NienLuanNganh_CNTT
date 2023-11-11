@@ -75,7 +75,7 @@ class _TimKiemScreenState extends State<TimKiemScreen>
                     //  snap: false,
                     title: Container(
                       color: Colors.white,
-                      height: 55,
+                      //  height: 55,
                       child: TextField(
                         onTap: () {
                           // ignore: curly_braces_in_flow_control_structures
