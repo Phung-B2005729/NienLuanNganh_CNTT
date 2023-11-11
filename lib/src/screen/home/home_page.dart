@@ -185,24 +185,6 @@ class _HomePagesState extends State<HomePages> {
           child: ListTile(
             title: Row(
               children: [
-                const Icon(Icons.bookmark),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text('Truyện của bạn',
-                    style: AppTheme.lightTextTheme.bodyLarge),
-              ],
-            ),
-            onTap: () {
-              //
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: ListTile(
-            title: Row(
-              children: [
                 const Icon(Icons.exit_to_app),
                 const SizedBox(
                   width: 10,
