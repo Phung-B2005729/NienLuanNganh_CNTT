@@ -21,6 +21,8 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
   // ignore: non_constant_identifier_names
   Stream<QuerySnapshot>? DanhSachDoc;
   late final blocUserLogin;
+  final _formKey = new GlobalKey<FormState>();
+  final _formKey2 = new GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -251,39 +253,43 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
                               const SizedBox(
                                 width: 20,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      snapshot.data.docs[index]
-                                          ['tendanhsachdoc'],
-                                      style: GoogleFonts.arizonia(
-                                        //roboto
-                                        // arizonia
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                      softWrap: true,
-                                      maxLines: 2,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          // ignore: prefer_interpolation_to_compose_strings
-                                          snapshot
-                                                  .data
-                                                  .docs[index]['danhsachtruyen']
-                                                  .length
-                                                  .toString() +
-                                              " Truyện",
-                                          style:
-                                              AppTheme.lightTextTheme.bodySmall,
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        snapshot.data.docs[index]
+                                            ['tendanhsachdoc'],
+                                        style: GoogleFonts.arizonia(
+                                          //roboto
+                                          // arizonia
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
                                         ),
-                                      ],
-                                    )
-                                  ],
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        // maxLines: 2,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            // ignore: prefer_interpolation_to_compose_strings
+                                            snapshot
+                                                    .data
+                                                    .docs[index]
+                                                        ['danhsachtruyen']
+                                                    .length
+                                                    .toString() +
+                                                " Truyện",
+                                            style: AppTheme
+                                                .lightTextTheme.bodySmall,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                               Align(
@@ -404,22 +410,31 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
           return AlertDialog(
             title: Text('Đổi tên danh sách đọc',
                 style: AppTheme.lightTextTheme.bodyLarge),
-            content: TextFormField(
-              style: AppTheme.lightTextTheme.headlineMedium,
-              cursorColor: ColorClass.fiveColor,
-              onChanged: (value) => inputText = value,
-              decoration: InputDecoration(
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorClass.fiveColor),
-                  ),
-                  // Để chỉnh màu gạch ngang khi focus
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorClass.fiveColor),
-                  ),
-                  // ignore: unnecessary_brace_in_string_interps
-                  hintText: '${namecu}',
-                  hintStyle:
-                      const TextStyle(fontSize: 12, color: Colors.black)),
+            content: Form(
+              key: _formKey,
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isNotEmpty == false) {
+                    return 'Bạn chưa nhập tên danh sách';
+                  }
+                  return null;
+                },
+                style: AppTheme.lightTextTheme.headlineMedium,
+                cursorColor: ColorClass.fiveColor,
+                onChanged: (value) => inputText = value,
+                decoration: InputDecoration(
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: ColorClass.fiveColor),
+                    ),
+                    // Để chỉnh màu gạch ngang khi focus
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: ColorClass.fiveColor),
+                    ),
+                    // ignore: unnecessary_brace_in_string_interps
+                    hintText: '${namecu}',
+                    hintStyle:
+                        const TextStyle(fontSize: 12, color: Colors.black)),
+              ),
             ),
             actions: <Widget>[
               TextButton(
@@ -432,9 +447,11 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
                   )),
               TextButton(
                   onPressed: () async {
-                    await DatabaseDSDoc().updateName(idds, inputText);
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop();
+                    if (_formKey.currentState!.validate()) {
+                      await DatabaseDSDoc().updateName(idds, inputText);
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                    }
                   },
                   child: const Text('Đổi tên',
                       style: TextStyle(color: ColorClass.fiveColor))),
@@ -451,20 +468,29 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
           return AlertDialog(
             title: Text('Tạo danh sách đọc',
                 style: AppTheme.lightTextTheme.bodyLarge),
-            content: TextFormField(
-              style: AppTheme.lightTextTheme.headlineMedium,
-              cursorColor: ColorClass.fiveColor,
-              onChanged: (value) => inputText = value,
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorClass.fiveColor),
-                  ),
-                  // Để chỉnh màu gạch ngang khi focus
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorClass.fiveColor),
-                  ),
-                  hintText: 'Nhập vào tên danh sách',
-                  hintStyle: TextStyle(fontSize: 12, color: Colors.black)),
+            content: Form(
+              key: _formKey2,
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isNotEmpty == false) {
+                    return 'Bạn chưa nhập tên danh sách';
+                  }
+                  return null;
+                },
+                style: AppTheme.lightTextTheme.headlineMedium,
+                cursorColor: ColorClass.fiveColor,
+                onChanged: (value) => inputText = value,
+                decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: ColorClass.fiveColor),
+                    ),
+                    // Để chỉnh màu gạch ngang khi focus
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: ColorClass.fiveColor),
+                    ),
+                    hintText: 'Nhập vào tên danh sách',
+                    hintStyle: TextStyle(fontSize: 12, color: Colors.black)),
+              ),
             ),
             actions: <Widget>[
               TextButton(
@@ -477,10 +503,13 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
                   )),
               TextButton(
                   onPressed: () async {
-                    await DatabaseDSDoc().createDanhSachDoc(iduser, inputText);
+                    if (_formKey2.currentState!.validate()) {
+                      await DatabaseDSDoc()
+                          .createDanhSachDoc(iduser, inputText);
 
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop();
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                    }
                   },
                   child: const Text('Thêm',
                       style: TextStyle(color: ColorClass.fiveColor))),

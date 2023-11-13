@@ -114,6 +114,8 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                           GestureDetector(
                             onTap: () async {
                               // chuyen den noi dung chuong
+                              // ignore: prefer_interpolation_to_compose_strings
+
                               await DatabaseChuong()
                                   .getALLChuongSX(
                                       snapshot4.data.docs[i]['idtruyen'], false)
@@ -122,6 +124,8 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                                   allChuongStream = vale;
                                 });
                               });
+                              // ignore: prefer_interpolation_to_compose_strings
+
                               // ignore: use_build_context_synchronously
                               Navigator.push(
                                   context,
@@ -132,9 +136,9 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                                                       ['chuongdadoc'] ==
                                                   0
                                               ? 0
-                                              : snapshot4.data.docs[i]
+                                              : (snapshot4.data.docs[i]
                                                       ['chuongdadoc'] -
-                                                  1,
+                                                  1),
                                           idtruyen: snapshot4.data.docs[i]
                                               ['idtruyen'],
                                           iduser: blocUserLogin.id,
@@ -231,17 +235,24 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                                                 MainAxisAlignment.start,
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
-                                              Text(
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8),
+                                                child: Text(
                                                   snapshot.data.docs[index]
                                                       ['tentruyen'],
                                                   style: GoogleFonts.arizonia(
                                                     //roboto
                                                     // arizonia
-                                                    fontSize: 28,
+                                                    fontSize: 26,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.black,
                                                   ),
-                                                  softWrap: true),
+                                                  softWrap: true,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
 
                                               const SizedBox(
                                                 height: 5,

@@ -29,6 +29,8 @@ class _TruyenChiTietAmitionState extends State<ChuongAmition> {
   @override
   void initState() {
     super.initState();
+    // ignore: prefer_interpolation_to_compose_strings
+    print('vitri ' + widget.vt.toString());
     _pageController = PageController(initialPage: widget.vt);
     // Lắng nghe sự thay đổi của trang được chọn
 

@@ -299,8 +299,21 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                         height: 40,
                         child: TextButton(
                             onPressed: () {
-                              ModelInser().ShowModal(context, DsDocStream,
-                                  thuvien, true, widget.idtruyen, chuongdadoc);
+                              if (widget.edit == false) {
+                                ModelInser().ShowModal(
+                                    context,
+                                    DsDocStream,
+                                    thuvien,
+                                    true,
+                                    widget.idtruyen,
+                                    chuongdadoc);
+                              } else {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Bạn đang ở bản xem thử không thể mở sự kiện này")));
+                              }
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,

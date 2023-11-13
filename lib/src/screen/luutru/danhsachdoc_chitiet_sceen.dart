@@ -115,8 +115,6 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
                               child: Container(
                                 margin: const EdgeInsets.only(
                                     top: 15, bottom: 10, left: 2, right: 2),
-                                height: 300,
-                                width: 325,
                                 decoration: BoxDecoration(
                                   //   color: Color.fromARGB(255, 231, 237, 242),
                                   color:
@@ -226,131 +224,132 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
                                             const SizedBox(
                                               width: 5,
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    snapshot.data.docs[index]
-                                                        ['tentruyen'],
-                                                    style: GoogleFonts.arizonia(
-                                                      //roboto
-                                                      // arizonia
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      snapshot.data.docs[index]
+                                                          ['tentruyen'],
+                                                      style:
+                                                          GoogleFonts.arizonia(
+                                                        //roboto
+                                                        // arizonia
+                                                        fontSize: 30,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                      softWrap: true,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    softWrap: true,
-                                                    maxLines: 3,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  ElevatedButton(
-                                                    style: TextButton.styleFrom(
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      foregroundColor: snapshot
-                                                                          .data
-                                                                          .docs[
-                                                                      index][
-                                                                  'tinhtrang'] ==
-                                                              'Hoàn thành'
-                                                          ? const Color
-                                                              .fromARGB(
-                                                              255, 53, 180, 146)
-                                                          : const Color
-                                                              .fromARGB(255,
-                                                              136, 118, 81),
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                    ElevatedButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        foregroundColor: snapshot
+                                                                            .data
+                                                                            .docs[
+                                                                        index][
+                                                                    'tinhtrang'] ==
+                                                                'Hoàn thành'
+                                                            ? const Color
+                                                                .fromARGB(255,
+                                                                53, 180, 146)
+                                                            : const Color
+                                                                .fromARGB(255,
+                                                                136, 118, 81),
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                      child: Text(snapshot
+                                                              .data.docs[index]
+                                                          ['tinhtrang']),
+                                                      onPressed: () {},
                                                     ),
-                                                    child: Text(snapshot
-                                                            .data.docs[index]
-                                                        ['tinhtrang']),
-                                                    onPressed: () {},
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const Icon(
-                                                            Icons.visibility,
-                                                            size: 18,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          Text(
-                                                            snapshot
-                                                                .data
-                                                                .docs[index][
-                                                                    'tongluotxem']
-                                                                .toString(),
-                                                            style: AppTheme
-                                                                .lightTextTheme
-                                                                .bodySmall,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(width: 25),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const Icon(
-                                                            Icons.star,
-                                                            size: 18,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          Text(
-                                                            snapshot
-                                                                .data
-                                                                .docs[index][
-                                                                    'tongbinhchon']
-                                                                .toString(),
-                                                            style: AppTheme
-                                                                .lightTextTheme
-                                                                .bodySmall,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons.visibility,
+                                                              size: 18,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 4,
+                                                            ),
+                                                            Text(
+                                                              snapshot
+                                                                  .data
+                                                                  .docs[index][
+                                                                      'tongluotxem']
+                                                                  .toString(),
+                                                              style: AppTheme
+                                                                  .lightTextTheme
+                                                                  .bodySmall,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 25),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons.star,
+                                                              size: 18,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 4,
+                                                            ),
+                                                            Text(
+                                                              snapshot
+                                                                  .data
+                                                                  .docs[index][
+                                                                      'tongbinhchon']
+                                                                  .toString(),
+                                                              style: AppTheme
+                                                                  .lightTextTheme
+                                                                  .bodySmall,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
-                                        Expanded(
-                                          child: Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: RowCountChuong(
-                                                  idtruyen: snapshot.data
-                                                      .docs[index]['idtruyen']
-                                                      .toString())),
-                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: RowCountChuong(
+                                                idtruyen: snapshot.data
+                                                    .docs[index]['idtruyen']
+                                                    .toString())),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               left: 10,

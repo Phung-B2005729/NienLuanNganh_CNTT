@@ -218,13 +218,20 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
                                 ),
                                 FloatingActionButton(
                                   onPressed: () {
-                                    ModelInser().ShowModal(
-                                        context,
-                                        DsDocStream,
-                                        thuvien,
-                                        true,
-                                        widget.idtruyen,
-                                        chuongdadoc);
+                                    if (widget.edit == false) {
+                                      ModelInser().ShowModal(
+                                          context,
+                                          DsDocStream,
+                                          thuvien,
+                                          true,
+                                          widget.idtruyen,
+                                          chuongdadoc);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "Bạn đang ở bản xem thử không thể mở sự kiện này")));
+                                    }
                                   },
                                   backgroundColor:
                                       const Color.fromARGB(255, 229, 230, 231),

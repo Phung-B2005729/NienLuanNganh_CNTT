@@ -212,6 +212,7 @@ class ModelInser {
 
   showCreateDSDiaLog(
       BuildContext context, String iduser, String idtruyen) async {
+    final _formKey = new GlobalKey<FormState>();
     String inputText = '';
     return showDialog(
         context: context,
@@ -219,20 +220,29 @@ class ModelInser {
           return AlertDialog(
             title: Text('Tạo danh sách đọc',
                 style: AppTheme.lightTextTheme.bodyLarge),
-            content: TextFormField(
-              style: AppTheme.lightTextTheme.headlineMedium,
-              cursorColor: ColorClass.fiveColor,
-              onChanged: (value) => inputText = value,
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorClass.fiveColor),
-                  ),
-                  // Để chỉnh màu gạch ngang khi focus
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorClass.fiveColor),
-                  ),
-                  hintText: 'Nhập vào tên danh sách',
-                  hintStyle: TextStyle(fontSize: 12, color: Colors.black)),
+            content: Form(
+              key: _formKey,
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isNotEmpty == false) {
+                    return 'Bạn chưa nhập tên danh sách';
+                  }
+                  return null;
+                },
+                style: AppTheme.lightTextTheme.headlineMedium,
+                cursorColor: ColorClass.fiveColor,
+                onChanged: (value) => inputText = value,
+                decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: ColorClass.fiveColor),
+                    ),
+                    // Để chỉnh màu gạch ngang khi focus
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: ColorClass.fiveColor),
+                    ),
+                    hintText: 'Nhập vào tên danh sách',
+                    hintStyle: TextStyle(fontSize: 12, color: Colors.black)),
+              ),
             ),
             actions: <Widget>[
               TextButton(
@@ -245,11 +255,13 @@ class ModelInser {
                   )),
               TextButton(
                   onPressed: () async {
-                    await DatabaseDSDoc()
-                        .createNewInsert(iduser, idtruyen, inputText);
+                    if (_formKey.currentState!.validate()) {
+                      await DatabaseDSDoc()
+                          .createNewInsert(iduser, idtruyen, inputText);
 
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop();
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                    }
                   },
                   child: const Text('Thêm',
                       style: TextStyle(color: ColorClass.fiveColor))),

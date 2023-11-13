@@ -130,41 +130,44 @@ class VietTruyenList extends StatelessWidget {
                                 const SizedBox(
                                   width: 20,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                          snapshot.data.docs[index]
-                                              ['tentruyen'],
-                                          style: GoogleFonts.arizonia(
-                                            //roboto
-                                            // arizonia
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                          softWrap: true),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            // ignore: prefer_interpolation_to_compose_strings
-                                            "Ngày cập nhật ",
-                                            style: AppTheme
-                                                .lightTextTheme.bodySmall,
-                                          ),
-                                          Text(
-                                            DatetimeFunction
-                                                .getTimeFormatDatabase(
-                                                    snapshot.data.docs[index]
-                                                        ['ngaycapnhat']),
-                                            style: AppTheme
-                                                .lightTextTheme.bodySmall,
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                            snapshot.data.docs[index]
+                                                ['tentruyen'],
+                                            style: GoogleFonts.arizonia(
+                                              //roboto
+                                              // arizonia
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
                                             softWrap: true,
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                             overflow: TextOverflow.ellipsis,),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              // ignore: prefer_interpolation_to_compose_strings
+                                              "Ngày cập nhật ",
+                                              style: AppTheme
+                                                  .lightTextTheme.bodySmall,
+                                            ),
+                                            Text(
+                                              DatetimeFunction
+                                                  .getTimeFormatDatabase(
+                                                      snapshot.data.docs[index]
+                                                          ['ngaycapnhat']),
+                                              style: AppTheme
+                                                  .lightTextTheme.bodySmall,
+                                              softWrap: true,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Align(
