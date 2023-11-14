@@ -18,44 +18,51 @@ class LuuTruScreen extends StatelessWidget {
       initialIndex: 0,
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorClass.xanh3Color,
-          shadowColor: ColorClass.xanh1Color,
-          title: Align(
-              alignment: Alignment.topLeft,
-              child:
-                  Text("Lưu trữ", style: AppTheme.lightTextTheme.titleSmall)),
-          actions: <Widget>[UserAppbarAction()],
-          notificationPredicate: (ScrollNotification notification) {
-            return notification.depth == 1;
-          },
-          // The elevation value of the app bar when scroll view has
-          // scrolled underneath the app bar.
-          scrolledUnderElevation: 4.0,
-          bottom: TabBar(
-              indicator: const UnderlineTabIndicator(
-                  borderSide: BorderSide(
-                    width: 2,
-                  ),
-                  insets: EdgeInsets.symmetric(horizontal: 20.0)),
-              labelStyle: AppTheme.lightTextTheme.headlineLarge,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
-              tabs: const <Widget>[
-                Tab(
-                  text: 'Thư viện',
-                ),
-                Tab(
-                  text: 'Danh sách đọc',
-                ),
-              ]),
-        ),
+        appBar: BuildAppBar(),
         body: const TabBarView(children: <Widget>[
           ThuVienScreen(),
           DanhSachDocScreen(),
         ]),
       ),
     );
+  }
+
+  AppBar BuildAppBar() {
+    return AppBar(
+      backgroundColor: ColorClass.xanh3Color,
+      shadowColor: ColorClass.xanh1Color,
+      title: Align(
+          alignment: Alignment.topLeft,
+          child: Text("Lưu trữ", style: AppTheme.lightTextTheme.titleSmall)),
+      actions: <Widget>[UserAppbarAction()],
+      notificationPredicate: (ScrollNotification notification) {
+        return notification.depth == 1;
+      },
+      // The elevation value of the app bar when scroll view has
+      // scrolled underneath the app bar.
+      scrolledUnderElevation: 4.0,
+      bottom: BuildTapBar(),
+    );
+  }
+
+  TabBar BuildTapBar() {
+    return TabBar(
+        indicator: const UnderlineTabIndicator(
+            borderSide: BorderSide(
+              width: 2,
+            ),
+            insets: EdgeInsets.symmetric(horizontal: 20.0)),
+        labelStyle: AppTheme.lightTextTheme.headlineLarge,
+        labelColor: Colors.black,
+        unselectedLabelColor: Colors.black,
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+        tabs: const <Widget>[
+          Tab(
+            text: 'Thư viện',
+          ),
+          Tab(
+            text: 'Danh sách đọc',
+          ),
+        ]);
   }
 }

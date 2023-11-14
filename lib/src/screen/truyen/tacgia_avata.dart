@@ -24,11 +24,13 @@ class _TacGiaAvataState extends State<TacGiaAvata> {
 
   gettingTacGia() async {
     await DatabaseUser(uid: widget.idtacgia).gettingUserIDData().then((value) {
-      setState(() {
-        username = value.docs[0]['username'];
+      if (mounted) {
+        setState(() {
+          username = value.docs[0]['username'];
 
-        avata = value.docs[0]['avata'];
-      });
+          avata = value.docs[0]['avata'];
+        });
+      }
     });
   }
 

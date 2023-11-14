@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class CaNhan extends StatefulWidget {
-  CaNhan({Key? key}) : super(key: key);
+class CaNhanNguoiDung extends StatefulWidget {
+  CaNhanNguoiDung({Key? key}) : super(key: key);
 
   @override
-  State<CaNhan> createState() => _CaNhanState();
+  State<CaNhanNguoiDung> createState() => _CaNhanNguoiDungState();
 }
 
-class _CaNhanState extends State<CaNhan> {
+class _CaNhanNguoiDungState extends State<CaNhanNguoiDung> {
   String userName = "";
 
   String avata = "";

@@ -181,228 +181,11 @@ class _EditChuongState extends State<EditChuong> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: ColorClass.xanh3Color,
-          title: Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Viết',
-              style: AppTheme.lightTextTheme.titleMedium,
-            ),
-          ),
-          actions: [
-            PopupMenuButton(
-                onSelected: (value) async {
-                  if (value == 'Xem trước') {
-                    print(value);
-                    if (_formKey.currentState!.validate()) {
-                      if (_quillEditorcontroller.document.isEmpty() == false) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => ChuongXemTruoc(
-                                    tieude: _nameController.text,
-                                    noidung: jsonEncode(_quillEditorcontroller
-                                        .document
-                                        .toDelta()
-                                        .toJson()),
-                                    edit: true)));
-                      }
-
-                      // lay du lieu tieu de
-                    }
-                  } else if (value == 'Đăng') {
-                    print(value);
-                    bool ktrdang = false;
-                    // goi ham luu
-                    if (widget.idchuong == '') {
-                      saveCreate = await saveChuong(context);
-                      //goi dang chuong
-                      ktrdang = await dangChuong(context);
-                    } else {
-                      //update
-                      update = await updateChuong(context);
-                      // ham dang
-                      ktrdang = await dangChuong(context);
-                    }
-                    if ((saveCreate == true && ktrdang == true) ||
-                        (update == true && ktrdang == true)) {
-                      // ignore: use_build_context_synchronously
-                      MsgDialog.showSnackbar(context, ColorClass.fiveColor,
-                          'Đã đăng một chương mới!!');
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
-                    }
-                    // ignore: use_build_context_synchronously
-                  } else if (value == 'Lưu') {
-                    print(value);
-
-                    // goi ham luu
-                    if (widget.idchuong == '') {
-                      saveCreate = await saveChuong(context);
-                    } else {
-                      update = await updateChuong(context);
-                      // goi ham update;
-                    }
-                    if (saveCreate == true || update == true) {
-                      // ignore: use_build_context_synchronously
-                      MsgDialog.showSnackbar(
-                          context, ColorClass.fiveColor, 'Đã lưu');
-                      // ignore: use_build_context_synchronously
-
-                      // ignore: use_build_context_synchronously
-
-                      // ignore: use_build_context_synchronously
-                    }
-                  } else if (value == 'Xoá') {
-                    print(value);
-                    //kiem tu trang them moi hay trang chinh sua
-                    // hoi xac nhan xoa
-                    MsgDialog.showXacNhanThongTin(
-                        context,
-                        'Bạn có chắc chắn muốn xoá chương này?',
-                        ColorClass.fiveColor, () async {
-                      // goi ham xoa dau vao idchuogn idtruyen
-                      try {
-                        if (widget.idchuong != '') {
-                          LoadingDialog.showLoadingDialog(
-                              context, 'Loading...');
-                          //xoa
-                          await DatabaseChuong(idchuong: widget.idchuong)
-                              .deleteOneChuong(widget.idtruyen);
-                          // ignore: use_build_context_synchronously
-                          LoadingDialog.hideLoadingDialog(context);
-                          // ignore: use_build_context_synchronously
-                          MsgDialog.showSnackbar(
-                              context, ColorClass.fiveColor, 'Đã xoá');
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
-                        } else {
-                          _nameController.text = '';
-                          final quill.Document emptyDocument = quill.Document();
-                          // Sử dụng quill.QuillController để thiết lập nội dung của QuillEditor thành đối tượng rỗng
-                          _quillEditorcontroller.document = emptyDocument;
-                          Navigator.pop(context);
-                        }
-                        // Xóa thành công, thực hiện các thao tác tiếp theo nếu cần
-                      } catch (e) {
-                        // Xử lý lỗi nếu có bất kỳ lỗi nào xảy ra trong quá trình xóa
-                        print('Lỗi xóa chương: $e');
-                      }
-                    });
-                  } else if (value == 'Dừng đăng tải') {
-                    // gọi dropChuong;
-                    bool ktr = await dropChuong(context);
-                    if (ktr == true) {
-                      // ignore: use_build_context_synchronously
-                      MsgDialog.showSnackbar(
-                          context, ColorClass.fiveColor, 'Thành công!!');
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      MsgDialog.showSnackbar(
-                          context, Colors.red, 'Lỗi! Vui lòng thử lại');
-                    }
-                  } else if (value == 'Thoát') {
-                    if (widget.idchuong == '') {
-                      MsgDialog.showXacNhanThongTin(
-                          context,
-                          'Lưu ý! Thông tin sẽ không được lưu nếu như bạn thoát',
-                          ColorClass.fiveColor, () async {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
-                    } else {
-                      Navigator.pop(context);
-                    }
-                  }
-                },
-                color: const Color.fromARGB(255, 237, 236, 236),
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      PopupMenuItem<String>(
-                        value: 'Xem trước',
-                        child: Text(
-                          'Xem trước',
-                          style: AppTheme.lightTextTheme.bodySmall,
-                        ),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'Lưu',
-                        child: Text(
-                          'Lưu',
-                          style: AppTheme.lightTextTheme.bodySmall,
-                        ),
-                      ),
-                      if ((widget.edit == true &&
-                              widget.tinhtrang == 'Bản thảo') ||
-                          widget.edit == false)
-                        PopupMenuItem<String>(
-                          value: 'Đăng',
-                          child: Text(
-                            'Đăng',
-                            style: AppTheme.lightTextTheme.bodySmall,
-                          ),
-                        ),
-                      if ((widget.edit == true &&
-                          widget.tinhtrang == 'Đã đăng' &&
-                          widget.idchuong != ''))
-                        PopupMenuItem<String>(
-                          value: 'Dừng đăng tải',
-                          child: Text(
-                            'Dừng đăng tải',
-                            style: AppTheme.lightTextTheme.bodySmall,
-                          ),
-                        ),
-                      PopupMenuItem<String>(
-                        value: 'Xoá',
-                        child: Text('Xoá',
-                            style: AppTheme.lightTextTheme.bodySmall),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'Thoát',
-                        child: Text('Thoát',
-                            style: AppTheme.lightTextTheme.bodySmall),
-                      ),
-                    ]),
-          ]),
+      appBar: BuildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Form(
-            key: _formKey,
-            child: TextFormField(
-              autofocus: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Vui lòng nhập tiêu đề chương';
-                }
-                return null;
-              },
-              controller: _nameController,
-              style: AppTheme.lightTextTheme.headlineMedium,
-              decoration: InputDecoration(
-                errorStyle: const TextStyle(fontSize: 12),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: ColorClass.fiveColor),
-                ),
-                // Để chỉnh màu gạch ngang khi focus
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: ColorClass.fiveColor),
-                ),
-                label: const Text('Tiêu đề chương'),
-                labelStyle: AppTheme.lightTextTheme.headlineLarge,
-              ),
-            ),
-          ),
+          BuildFormTieuDe(),
           const SizedBox(
             height: 5,
           ),
@@ -410,79 +193,254 @@ class _EditChuongState extends State<EditChuong> {
             controller: _quillEditorcontroller,
             showCodeBlock: false,
             showSearchButton: false,
-            // showFontSize: false,
-            //  showFontFamily: false,
             showInlineCode: false,
             showListBullets: false,
             showListCheck: false,
             showDirection: false,
-            // showBackgroundColorButton: false,
             showSmallButton: false,
             showStrikeThrough: false,
             showSuperscript: false,
             showSubscript: false,
             showLink: false,
-            // showIndent: false,
-            // showQuote: false,
-            //  showListNumbers: false,
           ),
-          Expanded(
-            child: Container(
-              color: const Color.fromARGB(255, 237, 237, 237),
-              child: quill.QuillEditor.basic(
-                controller: _quillEditorcontroller,
-                readOnly: false,
-              ),
-            ),
-          ),
+          BuildNoiDungChuong(),
         ]),
       ),
     );
   }
+
+  Expanded BuildNoiDungChuong() {
+    return Expanded(
+      child: Container(
+        color: const Color.fromARGB(255, 237, 237, 237),
+        child: quill.QuillEditor.basic(
+          controller: _quillEditorcontroller,
+          readOnly: false,
+        ),
+      ),
+    );
+  }
+
+  Form BuildFormTieuDe() {
+    return Form(
+      key: _formKey,
+      child: TextFormField(
+        autofocus: true,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Vui lòng nhập tiêu đề chương';
+          }
+          return null;
+        },
+        controller: _nameController,
+        style: AppTheme.lightTextTheme.headlineMedium,
+        decoration: InputDecoration(
+          errorStyle: const TextStyle(fontSize: 12),
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: ColorClass.fiveColor),
+          ),
+          // Để chỉnh màu gạch ngang khi focus
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: ColorClass.fiveColor),
+          ),
+          label: const Text('Tiêu đề chương'),
+          labelStyle: AppTheme.lightTextTheme.headlineLarge,
+        ),
+      ),
+    );
+  }
+
+  AppBar BuildAppBar(BuildContext context) {
+    return AppBar(
+        backgroundColor: ColorClass.xanh3Color,
+        title: Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Viết',
+            style: AppTheme.lightTextTheme.titleMedium,
+          ),
+        ),
+        actions: [
+          BuildPopMenuBotton(context),
+        ]);
+  }
+
+  PopupMenuButton<String> BuildPopMenuBotton(BuildContext context) {
+    return PopupMenuButton(
+        onSelected: (value) async {
+          if (value == 'Xem trước') {
+            print(value);
+            if (_formKey.currentState!.validate()) {
+              if (_quillEditorcontroller.document.isEmpty() == false) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => ChuongXemTruoc(
+                            tieude: _nameController.text,
+                            noidung: jsonEncode(_quillEditorcontroller.document
+                                .toDelta()
+                                .toJson()),
+                            edit: true)));
+              }
+
+              // lay du lieu tieu de
+            }
+          } else if (value == 'Đăng') {
+            print(value);
+            bool ktrdang = false;
+            // goi ham luu
+            if (widget.idchuong == '') {
+              saveCreate = await saveChuong(context);
+              //goi dang chuong
+              ktrdang = await dangChuong(context);
+            } else {
+              //update
+              update = await updateChuong(context);
+              // ham dang
+              ktrdang = await dangChuong(context);
+            }
+            if ((saveCreate == true && ktrdang == true) ||
+                (update == true && ktrdang == true)) {
+              // ignore: use_build_context_synchronously
+              MsgDialog.showSnackbar(
+                  context, ColorClass.fiveColor, 'Đã đăng một chương mới!!');
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
+            }
+            // ignore: use_build_context_synchronously
+          } else if (value == 'Lưu') {
+            print(value);
+
+            // goi ham luu
+            if (widget.idchuong == '') {
+              saveCreate = await saveChuong(context);
+            } else {
+              update = await updateChuong(context);
+              // goi ham update;
+            }
+            if (saveCreate == true || update == true) {
+              // ignore: use_build_context_synchronously
+              MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã lưu');
+              // ignore: use_build_context_synchronously
+
+              // ignore: use_build_context_synchronously
+
+              // ignore: use_build_context_synchronously
+            }
+          } else if (value == 'Xoá') {
+            print(value);
+            //kiem tu trang them moi hay trang chinh sua
+            // hoi xac nhan xoa
+            MsgDialog.showXacNhanThongTin(
+                context,
+                'Bạn có chắc chắn muốn xoá chương này?',
+                ColorClass.fiveColor, () async {
+              // goi ham xoa dau vao idchuogn idtruyen
+              try {
+                if (widget.idchuong != '') {
+                  LoadingDialog.showLoadingDialog(context, 'Loading...');
+                  //xoa
+                  await DatabaseChuong(idchuong: widget.idchuong)
+                      .deleteOneChuong(widget.idtruyen);
+                  // ignore: use_build_context_synchronously
+                  LoadingDialog.hideLoadingDialog(context);
+                  // ignore: use_build_context_synchronously
+                  MsgDialog.showSnackbar(
+                      context, ColorClass.fiveColor, 'Đã xoá');
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                } else {
+                  _nameController.text = '';
+                  final quill.Document emptyDocument = quill.Document();
+                  // Sử dụng quill.QuillController để thiết lập nội dung của QuillEditor thành đối tượng rỗng
+                  _quillEditorcontroller.document = emptyDocument;
+                  Navigator.pop(context);
+                }
+                // Xóa thành công, thực hiện các thao tác tiếp theo nếu cần
+              } catch (e) {
+                // Xử lý lỗi nếu có bất kỳ lỗi nào xảy ra trong quá trình xóa
+                print('Lỗi xóa chương: $e');
+              }
+            });
+          } else if (value == 'Dừng đăng tải') {
+            // gọi dropChuong;
+            bool ktr = await dropChuong(context);
+            if (ktr == true) {
+              // ignore: use_build_context_synchronously
+              MsgDialog.showSnackbar(
+                  context, ColorClass.fiveColor, 'Thành công!!');
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
+            } else {
+              // ignore: use_build_context_synchronously
+              MsgDialog.showSnackbar(
+                  context, Colors.red, 'Lỗi! Vui lòng thử lại');
+            }
+          } else if (value == 'Thoát') {
+            if (widget.idchuong == '') {
+              MsgDialog.showXacNhanThongTin(
+                  context,
+                  'Lưu ý! Thông tin sẽ không được lưu nếu như bạn thoát',
+                  ColorClass.fiveColor, () async {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
+            } else {
+              Navigator.pop(context);
+            }
+          }
+        },
+        color: const Color.fromARGB(255, 237, 236, 236),
+        icon: const Icon(
+          Icons.more_vert,
+          color: Colors.black,
+        ),
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'Xem trước',
+                child: Text(
+                  'Xem trước',
+                  style: AppTheme.lightTextTheme.bodySmall,
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'Lưu',
+                child: Text(
+                  'Lưu',
+                  style: AppTheme.lightTextTheme.bodySmall,
+                ),
+              ),
+              if ((widget.edit == true && widget.tinhtrang == 'Bản thảo') ||
+                  widget.edit == false)
+                PopupMenuItem<String>(
+                  value: 'Đăng',
+                  child: Text(
+                    'Đăng',
+                    style: AppTheme.lightTextTheme.bodySmall,
+                  ),
+                ),
+              if ((widget.edit == true &&
+                  widget.tinhtrang == 'Đã đăng' &&
+                  widget.idchuong != ''))
+                PopupMenuItem<String>(
+                  value: 'Dừng đăng tải',
+                  child: Text(
+                    'Dừng đăng tải',
+                    style: AppTheme.lightTextTheme.bodySmall,
+                  ),
+                ),
+              PopupMenuItem<String>(
+                value: 'Xoá',
+                child: Text('Xoá', style: AppTheme.lightTextTheme.bodySmall),
+              ),
+              PopupMenuItem<String>(
+                value: 'Thoát',
+                child: Text('Thoát', style: AppTheme.lightTextTheme.bodySmall),
+              ),
+            ]);
+  }
 }
-
-/* Text(jsonEncode(
-                      _quillEditorcontroller.document.toDelta().toJson())),
-
-                  // hiem thi ra
-                  quill.QuillEditor.basic(
-                      controller: quill.QuillController(
-                        selection: const TextSelection.collapsed(offset: 0),
-                        document: quill.Document.fromJson(jsonDecode(
-                          jsonEncode(_quillEditorcontroller.document
-                              .toDelta()
-                              .toJson()), //// thong tin insert vào databas
-                        ) // thong tin hien thi ra
-                            ),
-                      ),
-                      readOnly: true),
-                  Container(
-                    height: 500,
-                    child: Column(
-                      children: [
-                        quill.QuillToolbar.basic(
-                          embedButtons: FlutterQuillEmbeds.buttons(),
-
-                          /*  quill.QuillCustomButton(
-                                icon: Icons.camera_alt,
-                                onTap: () {
-                                  pickImage();
-                                }), */
-
-                          controller: _quillEditorcontroller,
-                          // multiRowsDisplay: false,
-                        ),
-                        const Align(
-                            alignment: Alignment.topLeft, child: Text('Mô tả')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                            child: Container(
-                          color: Color.fromARGB(255, 224, 224, 224),
-                          padding: EdgeInsets.all(12),
-                          child: quill.QuillEditor.basic(
-                              controller: _quillEditorcontroller,
-                              embedBuilders: FlutterQuillEmbeds.builders(),
-                              readOnly: false),
-                        )),*/

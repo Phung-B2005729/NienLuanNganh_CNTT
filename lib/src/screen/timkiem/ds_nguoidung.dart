@@ -52,36 +52,7 @@ class _DsNguoiDungState extends State<DsNguoiDung> {
                           index++)
                         if (ktrUser(snapshot.data.docs[index]['username']) ==
                             true)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              onTap: () {
-                                //chuyen ve trang ca nhan cua nguoi dung
-                              },
-                              selectedColor: ColorClass.xanh1Color,
-                              leading: CircleAvatar(
-                                // ignore: unnecessary_null_comparison
-
-                                backgroundImage: NetworkImage(
-                                    snapshot.data.docs[index]['avata']),
-                                radius: 20,
-                              ),
-                              trailing: IconButton(
-                                  color: Colors.black,
-                                  onPressed: () {
-                                    setState(() {
-                                      folower = !folower;
-                                    });
-                                  },
-                                  icon: (folower == true)
-                                      ? Icon(Icons.group)
-                                      : Icon(Icons.person_add_alt_1_rounded)),
-                              title: Text(
-                                snapshot.data.docs[index]['username'],
-                                style: AppTheme.lightTextTheme.bodyMedium,
-                              ),
-                            ),
-                          )
+                          BuildNguoiDungTilte(snapshot, index)
                     ])
               // ignore: avoid_unnecessary_containers
               : Container(
@@ -93,5 +64,37 @@ class _DsNguoiDungState extends State<DsNguoiDung> {
                   ),
                 );
         });
+  }
+
+  Widget BuildNguoiDungTilte(AsyncSnapshot<dynamic> snapshot, int index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        onTap: () {
+          //chuyen ve trang thông tin cua nguoi dung
+        },
+        selectedColor: ColorClass.xanh1Color,
+        leading: CircleAvatar(
+          // ignore: unnecessary_null_comparison
+
+          backgroundImage: NetworkImage(snapshot.data.docs[index]['avata']),
+          radius: 20,
+        ),
+        trailing: IconButton(
+            color: Colors.black,
+            onPressed: () {
+              setState(() {
+                folower = !folower;
+              });
+            },
+            icon: (folower == true)
+                ? Icon(Icons.group)
+                : Icon(Icons.person_add_alt_1_rounded)),
+        title: Text(
+          snapshot.data.docs[index]['username'],
+          style: AppTheme.lightTextTheme.bodyMedium,
+        ),
+      ),
+    );
   }
 }

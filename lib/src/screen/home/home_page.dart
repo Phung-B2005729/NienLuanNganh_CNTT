@@ -1,4 +1,3 @@
-// ignore: camel_case_types
 import 'package:apparch/src/Screen/nguoidung/ca_nhan.dart';
 import 'package:apparch/src/firebase/fire_base_auth.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
@@ -14,7 +13,7 @@ import '../log_sign/login_form.dart';
 import 'home_appbaraction.dart';
 
 class HomePages extends StatefulWidget {
-  const HomePages({Key? key}) : super(key: key);
+  const HomePages({super.key});
 
   @override
   // ignore: no_logic_in_create_state
@@ -154,13 +153,13 @@ class _HomePagesState extends State<HomePages> {
   }
 
   // ignore: non_constant_identifier_names
-  Drawer UserDrawer(BuildContext context) {
+  Widget UserDrawer(BuildContext context) {
     return Drawer(
       // backgroundColor: Colors.transparent,
       shadowColor: ColorClass.fiveColor,
       //  backgroundColor: Colors.transparent,
       child: ListView(padding: EdgeInsets.zero, children: [
-        const HomeUserAccountsDrawerHeader(),
+        HomeUserAccountsDrawerHeader(),
         Padding(
           padding: const EdgeInsets.only(top: 20),
           child: ListTile(

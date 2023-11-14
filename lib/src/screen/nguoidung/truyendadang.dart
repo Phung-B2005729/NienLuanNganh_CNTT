@@ -10,24 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
-class DanhSachDocChiTietScreen extends StatefulWidget {
-  String idds;
+class TruyenDang extends StatefulWidget {
+  String iduser;
   String name;
-  int soluong;
-  bool nguoidung;
-  DanhSachDocChiTietScreen(
-      {super.key,
-      required this.idds,
-      required this.name,
-      required this.soluong,
-      required this.nguoidung});
+  TruyenDang({super.key, required this.iduser, required this.name});
 
   @override
-  State<DanhSachDocChiTietScreen> createState() =>
-      _DanhSachDocChiTietScreenState();
+  State<TruyenDang> createState() => _TruyenDangState();
 }
 
-class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
+class _TruyenDangState extends State<TruyenDang> {
   Stream<QuerySnapshot>? ListTruyen;
   @override
   void initState() {
@@ -36,11 +28,18 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
   }
 
   getData() async {
-    await DatabaseTruyen().getAllTruyen().then((va) {
-      setState(() {
-        ListTruyen = va;
+    try {
+      await DatabaseTruyen()
+          .getAllTruyenDK2(
+              'tacgia', widget.iduser, 'tinhtrang', 'Bản thảo', false)
+          .then((val) {
+        setState(() {
+          ListTruyen = val;
+        });
       });
-    });
+    } catch (e) {
+      print('Lỗi khi lấy dữ liệu: $e');
+    }
   }
 
   bool ktrTruyenTrongDs(List<dynamic> ListIdds, String idds) {
@@ -59,39 +58,29 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
         backgroundColor: ColorClass.xanh3Color,
         title: Text(
           // ignore: prefer_interpolation_to_compose_strings
-          "Danh sách đọc " + widget.name,
+          "Truyện của " + widget.name,
           style: AppTheme.lightTextTheme.titleSmall,
         ),
       ),
-      body: (widget.soluong == 0)
-          ? BuildDanhSachRong()
-          : StreamBuilder<QuerySnapshot>(
-              stream: ListTruyen,
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.data.docs.length != 0 &&
-                    snapshot.data != null) {
-                  return ListView(
-                      scrollDirection:
-                          Axis.vertical, // true cuon doc, false cuon ngang
-                      children: [
-                        for (var index = 0;
-                            index < snapshot.data.docs.length;
-                            index++)
-                          if (ktrTruyenTrongDs(
-                                  snapshot.data.docs[index]['danhsachdocgia'],
-                                  widget.idds) ==
-                              true)
-                            BuildTruyenDS(context, snapshot, index)
-                      ]);
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: ColorClass.fiveColor,
-                    ),
-                  );
-                }
-              }),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: ListTruyen,
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData &&
+                snapshot.data.docs.length != 0 &&
+                snapshot.data != null) {
+              return ListView(
+                  scrollDirection:
+                      Axis.vertical, // true cuon doc, false cuon ngang
+                  children: [
+                    for (var index = 0;
+                        index < snapshot.data.docs.length;
+                        index++)
+                      BuildTruyenDS(context, snapshot, index)
+                  ]);
+            } else {
+              return BuildDanhSachRong();
+            }
+          }),
     );
   }
 
@@ -157,54 +146,7 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
 
   Widget BuildDismissible(
       AsyncSnapshot<dynamic> snapshot, int index, BuildContext context) {
-    return (widget.nguoidung == true)
-        ? Dismissible(
-            key: ValueKey(
-                snapshot.data.docs[index]['idtruyen']), // dinh danh widget
-            background: Container(
-              color: Theme.of(context).colorScheme.error,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 20),
-              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              child: const Icon(Icons.delete, color: Colors.white, size: 40),
-            ),
-            direction: DismissDirection.endToStart,
-            // huong vuot
-            confirmDismiss: (direction) {
-              // ham xac nhan loai bo
-              return MsgDialog.showConfirmDialogDismissible(
-                context,
-                "Bạn chắc chăn muốn xoá truyện này ?",
-              );
-            },
-            onDismissed: (direction) async {
-              try {
-                // xoa truyen khoi danh sach
-                await DatabaseDSDoc().deleteTruyen(
-                    widget.idds, snapshot.data.docs[index]['idtruyen']);
-                await DatabaseTruyen().deleteDSDocGia(
-                    widget.idds, snapshot.data.docs[index]['idtruyen']);
-                setState(() {
-                  widget.soluong = widget.soluong - 1;
-                });
-                // xoa id danh khoi truyen
-                // ignore: use_build_context_synchronously
-                MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã xoá');
-                // ignore: use_build_context_synchronously
-              } catch (e) {
-                // ignore: use_build_context_synchronously
-
-                // ignore: use_build_context_synchronously
-                MsgDialog.showSnackbar(
-                    context, Colors.red, "Lỗi vui lòng thử lại!!");
-                print("loi xoa image " + e.toString());
-              }
-
-              print('Đã xoá');
-            },
-            child: BuildCardChiTiet(snapshot, index),
-          )
-        : BuildCardChiTiet(snapshot, index);
+    return BuildCardChiTiet(snapshot, index);
   }
 
   Widget BuildCardChiTiet(AsyncSnapshot<dynamic> snapshot, int index) {

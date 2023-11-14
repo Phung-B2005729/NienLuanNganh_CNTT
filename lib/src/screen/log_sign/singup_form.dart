@@ -113,107 +113,110 @@ class _SingupFromState extends State<SingupFrom> {
             key: _formKey,
             child: Stack(children: [
               const LogSingTitle('Signup Account', 20.0, 14.0),
-              Container(
-                margin: const EdgeInsets.only(top: 90),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text("ArCH App", style: AppTheme.lightTextTheme.titleLarge),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    GetTextFormFile(
-                      controller: _EmailController,
-                      labeltext: 'Email',
-                      inputType: TextInputType.emailAddress,
-                      icon: Icons.email,
-                      focus: emailPasswordFocusNode,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    GetTextFormFile(
-                      controller: _UserController,
-                      labeltext: 'User Name',
-                      icon: Icons.person,
-                      focus: usernameFocusNode,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    GetTextFormFile(
-                      controller: _PasswordController,
-                      labeltext: 'Password',
-                      icon: Icons.lock,
-                      isObscureText: true,
-                      focus: PasswordFocusNode,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    GetTextFormFile(
-                      controller: _RePasswordController,
-                      labeltext: 'Confirm Password',
-                      icon: Icons.lock,
-                      isObscureText: true,
-                      focus: confirmPasswordFocusNode,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Container(
-                      margin:
-                          const EdgeInsets.only(top: 5, left: 35, right: 35),
-                      width: double.infinity,
-                      // ignore: sort_child_properties_last
-                      child: TextButton(
-                        // ignore: sort_child_properties_last
-                        child: Text('Signup Account',
-                            style: AppTheme.lightTextTheme.displayMedium),
-                        onPressed: signUp,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorClass.primaryColor,
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Do you have account ? ',
-                            style: AppTheme.lightTextTheme.displaySmall,
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: ColorClass.primaryColor,
-                              padding: const EdgeInsets.all(16.0),
-                              textStyle: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            child: const Text('Login'),
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (_) => LoginForm()),
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              BuildListTextFormFile(context),
             ]),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget BuildListTextFormFile(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 90),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Text("ArCH App", style: AppTheme.lightTextTheme.titleLarge),
+          const SizedBox(
+            height: 30,
+          ),
+          GetTextFormFile(
+            controller: _EmailController,
+            labeltext: 'Email',
+            inputType: TextInputType.emailAddress,
+            icon: Icons.email,
+            focus: emailPasswordFocusNode,
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          GetTextFormFile(
+            controller: _UserController,
+            labeltext: 'User Name',
+            icon: Icons.person,
+            focus: usernameFocusNode,
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          GetTextFormFile(
+            controller: _PasswordController,
+            labeltext: 'Password',
+            icon: Icons.lock,
+            isObscureText: true,
+            focus: PasswordFocusNode,
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          GetTextFormFile(
+            controller: _RePasswordController,
+            labeltext: 'Confirm Password',
+            icon: Icons.lock,
+            isObscureText: true,
+            focus: confirmPasswordFocusNode,
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 5, left: 35, right: 35),
+            width: double.infinity,
+            // ignore: sort_child_properties_last
+            child: TextButton(
+              // ignore: sort_child_properties_last
+              child: Text('Signup Account',
+                  style: AppTheme.lightTextTheme.displayMedium),
+              onPressed: signUp,
+            ),
+            decoration: BoxDecoration(
+              color: ColorClass.primaryColor,
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Do you have account ? ',
+                  style: AppTheme.lightTextTheme.displaySmall,
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: ColorClass.primaryColor,
+                    padding: const EdgeInsets.all(16.0),
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  child: const Text('Login'),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginForm()),
+                    );
+                  },
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

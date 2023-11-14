@@ -68,137 +68,11 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
               SliverOverlapAbsorber(
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  forceElevated: innerBoxIsScrolled,
-                  toolbarHeight: 80,
-                  pinned: true,
-                  actions: [
-                    if (widget.edit == true)
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => EditTruyenScreen(
-                                      tinhtrang: truyenData['tinhtrang'],
-                                      linkanh: truyenData['linkanh'],
-                                      tag: truyenData['tags'],
-                                      tentruyen: truyenData['tentruyen'],
-                                      idtruyen: truyenData['idtruyen'],
-                                      theloai: truyenData['theloai'],
-                                      mota: truyenData['mota'],
-                                      ktrbanthao:
-                                          truyenData['tinhtrang'] == 'Bản thảo'
-                                              ? true
-                                              : false)));
-
-                          // chuyen qua trang edit
-                        },
-                        // ignore: prefer_const_constructors
-                        icon: Icon(Icons.edit),
-                      )
-                  ],
-                  title: Text(
-                    truyenData['tentruyen'],
-                    style: GoogleFonts.arizonia(
-                      //roboto
-                      // arizonia
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    softWrap: true,
-                  ),
-                  snap: false,
-                  floating: false,
-                  backgroundColor: const Color.fromARGB(246, 103, 161, 200),
-                  expandedHeight: 350.0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(
-                          10), // Điều này sẽ bo tròn góc dưới của SliverAppBar
-                    ),
-                  ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(
-                      // ignore: prefer_interpolation_to_compose_strings
-                      truyenData['linkanh'],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(40),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: Colors.white),
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(25),
-                              topRight: Radius.circular(25))),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          top: 5,
-                        ),
-                        child: TabBar(
-                          indicator: const UnderlineTabIndicator(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: ColorClass.fiveColor,
-                              ),
-                              insets: EdgeInsets.symmetric(horizontal: 20.0)),
-
-                          labelStyle: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                          labelColor: ColorClass.fiveColor,
-                          unselectedLabelColor: Colors.black,
-                          controller:
-                              _tabController, // Kết nối TabController với TabBar
-                          tabs: const [
-                            Tab(
-                              text: 'Chi Tiết',
-                            ),
-                            Tab(
-                              text: 'Chương',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                sliver: BuildSliverAppbar(innerBoxIsScrolled, context),
               ),
             ];
           },
-          body: TabBarView(
-            controller: _tabController, // Kết nối TabController với TabBarView
-            children: <Widget>[
-              Builder(builder: (BuildContext context) {
-                final blocUserLogin =
-                    Provider.of<BlocUserLogin>(context, listen: true);
-                return TruyenChiTietDetail1(
-                  idtruyen: widget.idtruyen,
-                  iduser: blocUserLogin.id,
-                  edit: widget.edit,
-                );
-              }),
-              Builder(builder: (BuildContext context) {
-                // ignore: unused_local_variable
-                final blocUserLogin =
-                    Provider.of<BlocUserLogin>(context, listen: true);
-                // ignore: unused_local_variable
-
-                return TruyenChiTietDetail2(
-                  idtruyen: widget.idtruyen,
-                  iduser: blocUserLogin.id,
-                  edit: widget.edit,
-                );
-              }),
-
-              // Nội dung của Tab 2
-            ],
-          ),
+          body: BuildTapBarView(),
         ),
       );
     } else {
@@ -207,5 +81,142 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
         color: ColorClass.fiveColor,
       ));
     }
+  }
+
+  SliverAppBar BuildSliverAppbar(
+      bool innerBoxIsScrolled, BuildContext context) {
+    return SliverAppBar(
+      forceElevated: innerBoxIsScrolled,
+      toolbarHeight: 80,
+      pinned: true,
+      actions: [
+        if (widget.edit == true)
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditTruyenScreen(
+                          tinhtrang: truyenData['tinhtrang'],
+                          linkanh: truyenData['linkanh'],
+                          tag: truyenData['tags'],
+                          tentruyen: truyenData['tentruyen'],
+                          idtruyen: truyenData['idtruyen'],
+                          theloai: truyenData['theloai'],
+                          mota: truyenData['mota'],
+                          ktrbanthao: truyenData['tinhtrang'] == 'Bản thảo'
+                              ? true
+                              : false)));
+
+              // chuyen qua trang edit
+            },
+            // ignore: prefer_const_constructors
+            icon: Icon(Icons.edit),
+          )
+      ],
+      title: Text(
+        truyenData['tentruyen'],
+        style: GoogleFonts.arizonia(
+          //roboto
+          // arizonia
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        softWrap: true,
+      ),
+      snap: false,
+      floating: false,
+      backgroundColor: const Color.fromARGB(246, 103, 161, 200),
+      expandedHeight: 350.0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(
+              10), // Điều này sẽ bo tròn góc dưới của SliverAppBar
+        ),
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Image.network(
+          // ignore: prefer_interpolation_to_compose_strings
+          truyenData['linkanh'],
+          fit: BoxFit.cover,
+        ),
+      ),
+      bottom: BuildTapBarBottom(),
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  PreferredSize BuildTapBarBottom() {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(40),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 2, color: Colors.white),
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            top: 5,
+          ),
+          child: TabBar(
+            indicator: const UnderlineTabIndicator(
+                borderSide: BorderSide(
+                  width: 2,
+                  color: ColorClass.fiveColor,
+                ),
+                insets: EdgeInsets.symmetric(horizontal: 20.0)),
+
+            labelStyle:
+                const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            labelColor: ColorClass.fiveColor,
+            unselectedLabelColor: Colors.black,
+            controller: _tabController, // Kết nối TabController với TabBar
+            tabs: const [
+              Tab(
+                text: 'Chi Tiết',
+              ),
+              Tab(
+                text: 'Chương',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  TabBarView BuildTapBarView() {
+    return TabBarView(
+      controller: _tabController, // Kết nối TabController với TabBarView
+      children: <Widget>[
+        Builder(builder: (BuildContext context) {
+          final blocUserLogin =
+              Provider.of<BlocUserLogin>(context, listen: true);
+          return TruyenChiTietDetail1(
+            idtruyen: widget.idtruyen,
+            iduser: blocUserLogin.id,
+            edit: widget.edit,
+          );
+        }),
+        Builder(builder: (BuildContext context) {
+          // ignore: unused_local_variable
+          final blocUserLogin =
+              Provider.of<BlocUserLogin>(context, listen: true);
+          // ignore: unused_local_variable
+
+          return TruyenChiTietDetail2(
+            idtruyen: widget.idtruyen,
+            iduser: blocUserLogin.id,
+            edit: widget.edit,
+          );
+        }),
+
+        // Nội dung của Tab 2
+      ],
+    );
   }
 }

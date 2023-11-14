@@ -56,7 +56,6 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
   @override
   void initState() {
     super.initState();
-
     getData();
     getChuongDaDoc();
     _controller.addListener(() {
@@ -203,369 +202,15 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
           if (snapshot.hasData && snapshot.data != null) {
             return SafeArea(
               child: Scaffold(
-                floatingActionButton: widget.edit == true
-                    ? Visibility(
-                        visible: tapbarbool,
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            // chinh sua chuong
-                          },
-                          child: const Icon(
-                            Icons.edit,
-                          ),
-                        ),
-                      )
-                    : null,
-                appBar: PreferredSize(
-                  preferredSize: const Size.fromHeight(
-                      kToolbarHeight), // Đặt chiều cao của AppBar bằng kToolbarHeight
-                  child: Visibility(
-                    visible:
-                        tapbarbool, // Ẩn hoặc hiển thị AppBar dựa trên giá trị của biến tapbarbool
-                    child: AppBar(
-                      backgroundColor: ColorClass.xanh2Color,
-                      title: Align(
-                        alignment: Alignment.topLeft,
-                        child: widget.edit &&
-                                snapshot.data!.docs[widget.vtChuong]
-                                        ['tinhtrang'] ==
-                                    'Bản thảo'
-                            ? Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    snapshot.data!.docs[widget.vtChuong]
-                                        ['tenchuong'],
-                                    style:
-                                        AppTheme.lightTextTheme.displayMedium,
-                                    softWrap: true,
-                                  ),
-                                  Text(
-                                    '(Bản thảo)',
-                                    style: AppTheme.lightTextTheme.bodySmall,
-                                  )
-                                ],
-                              )
-                            : Text(
-                                snapshot.data!.docs[widget.vtChuong]
-                                    ['tenchuong'],
-                                style: AppTheme.lightTextTheme.displayMedium,
-                                softWrap: true,
-                              ),
-                      ),
-                    ),
-                  ),
-                ),
-                endDrawer: Drawer(
-                    child: ListView(
-                  physics: const ScrollPhysics(),
-                  children: <Widget>[
-                    DrawerHeader(
-                      // ignore: sort_child_properties_last
-                      child: Image.network(
-                        // ignore: prefer_interpolation_to_compose_strings
-                        truyenData['linkanh'],
-                        height: 150,
-                      ),
-                      decoration: const BoxDecoration(color: Colors.white),
-                    ),
-                    ListTile(
-                      onTap: () {
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => TruyenChiTietScreen(
-                                    idtruyen: truyenData['idtruyen'] as String,
-                                    edit: widget.edit)));
-                      },
-                      title: Center(
-                        child: Text(
-                          truyenData['tentruyen'] ?? 'Tên truyện',
-                          style: AppTheme.lightTextTheme.displayMedium,
-                          softWrap: true,
-                        ),
-                      ),
-                    ),
-                    ListTile(
-                        onTap: () {
-                          // chuyen trang ca nhan
-                        },
-                        title:
-                            Center(child: TacGiaAvata(truyenData['tacgia']))),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 50, right: 50),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: ColorClass
-                                .thirdColor, // const Color.fromARGB(255, 213, 216, 218),
-                            border: Border.all(width: 1),
-                            borderRadius: BorderRadius.circular(15)),
-                        height: 40,
-                        child: TextButton(
-                            onPressed: () {
-                              if (widget.edit == false) {
-                                ModelInser().ShowModal(
-                                    context,
-                                    DsDocStream,
-                                    thuvien,
-                                    true,
-                                    widget.idtruyen,
-                                    chuongdadoc);
-                              } else {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Bạn đang ở bản xem thử không thể mở sự kiện này")));
-                              }
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                  size: 14,
-                                ),
-                                Text(
-                                  "Thêm vào danh sách đọc",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            )),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Divider(
-                      color: Color.fromARGB(255, 83, 82, 82),
-                    ),
-                    for (int i = 0;
-                        i < snapshot.data!.docs.length;
-                        i++) // Thay 10 bằng số chương thực tế của bạn
-                      ListTile(
-                        title: Text(
-                            snapshot.data!.docs[i]['tenchuong']), // Tên chương
-                        onTap: () {
-                          setState(() {
-                            widget.vtChuong = i;
-                            scrollProgress = 0.0;
-                            binhchon = false;
-                            double newScrollPosition = scrollProgress *
-                                _controller.position.maxScrollExtent;
-                            _controller.jumpTo(newScrollPosition);
-
-                            // gui du lieu noi dung
-                          });
-                        },
-                        textColor: widget.vtChuong == i
-                            ? ColorClass.fiveColor
-                            : Colors.black,
-                      ),
-                  ],
-                )),
+                floatingActionButton:
+                    widget.edit == true ? BuildFloadtingEdit() : null,
+                appBar: BuildAppBarPreferSize(snapshot),
+                endDrawer: BuildEndDrawer(context, snapshot),
                 body: Column(
                   children: <Widget>[
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            tapbarbool = !tapbarbool;
-                          });
-                        },
-                        onLongPress: () {
-                          setState(() {
-                            tapbarbool = false;
-                          });
-                        },
-                        child: SingleChildScrollView(
-                          controller: _controller,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25, right: 25, top: 30, bottom: 20),
-                            child: quill.QuillEditor.basic(
-                              controller: quill.QuillController(
-                                onSelectionChanged: (textSelection) {
-                                  setState(() {
-                                    tapbarbool = !tapbarbool;
-                                  });
-                                },
-                                document: quill.Document.fromJson(jsonDecode(
-                                    snapshot.data!.docs[widget.vtChuong]
-                                        ['noidung'])),
-                                selection:
-                                    const TextSelection.collapsed(offset: 0),
-                              ),
-                              readOnly: true,
-                              focusNode: null,
-                              autoFocus: false,
-
-                              //enableInteractiveSelection: false
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 10,
-                      width: MediaQuery.of(context).size.width,
-                      //   margin: EdgeInsets.only(bottom: 2),
-                      child: Visibility(
-                        visible: tapbarbool,
-                        child: Slider(
-                          activeColor: ColorClass
-                              .xanh3Color, // Đây là màu cho phần slider đã chọn
-                          inactiveColor: ColorClass.xanh1Color,
-                          value: scrollProgress,
-                          onChanged: (value) {
-                            print('gọi onchang');
-
-                            setState(() {
-                              scrollProgress = value;
-                              // cập nhật tiến trình đọc nội dung dựa trên giá trị của `value`.
-                              double newScrollPosition =
-                                  value * _controller.position.maxScrollExtent;
-                              _controller.jumpTo(newScrollPosition);
-                            });
-                          },
-                          min: 0.0,
-                          max: 1.0,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 5, right: 5, bottom: 5, top: 0),
-                      child: Visibility(
-                        visible: tapbarbool,
-                        child: Container(
-                          // color: ColorC,
-                          margin: const EdgeInsets.only(
-                              left: 10, right: 10, bottom: 8, top: 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (widget.vtChuong <= 0) {
-                                          } else {
-                                            widget.vtChuong =
-                                                widget.vtChuong - 1;
-                                            binhchon = false;
-
-                                            scrollProgress = 0.0;
-                                            double newScrollPosition =
-                                                scrollProgress *
-                                                    _controller.position
-                                                        .maxScrollExtent;
-                                            _controller
-                                                .jumpTo(newScrollPosition);
-                                          }
-                                        });
-                                      },
-                                      color: ColorClass.fiveColor,
-                                      icon: const Icon(
-                                        Icons.arrow_back,
-                                      )),
-                                  const Text('Trở lại',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                    color: ColorClass.fiveColor,
-                                    onPressed: () {
-                                      setState(() {
-                                        // them so luong binh chon cho chuong
-                                        binhchon = !binhchon;
-                                        print('Before update: $binhchon');
-                                        updateBinhChon(widget.idtruyen,
-                                            idchuong, binhchon);
-
-                                        print('After update: $binhchon');
-                                      });
-                                    },
-                                    icon: (binhchon)
-                                        ? const Icon(
-                                            Icons.star,
-                                            color: ColorClass.xanh3Color,
-                                          )
-                                        : const Icon(
-                                            Icons.star_border_outlined,
-                                            color: ColorClass.xanh3Color,
-                                          ),
-                                  ),
-                                  const Text('Bình chọn',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                      color: ColorClass.fiveColor,
-                                      onPressed: () {},
-                                      icon: Icon(Icons.chat_bubble_outline)),
-                                  const Text('Bình luận',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                      color: ColorClass.fiveColor,
-                                      onPressed: () {
-                                        setState(() {
-                                          if (widget.vtChuong >=
-                                              (snapshot.data!.docs.length -
-                                                  1)) {
-                                            MsgDialog.showSnackbarTextColor(
-                                                context,
-                                                ColorClass.second2Color,
-                                                Colors.black,
-                                                "Đã cập nhật đến chương hiện có");
-                                          } else {
-                                            widget.vtChuong =
-                                                widget.vtChuong + 1;
-                                            binhchon = false;
-
-                                            scrollProgress =
-                                                0.0; // chuyển chương mới cập nhật lại tiến trình
-                                            double newScrollPosition =
-                                                scrollProgress *
-                                                    _controller.position
-                                                        .maxScrollExtent;
-                                            _controller
-                                                .jumpTo(newScrollPosition);
-                                          }
-                                          // _currentIndex = 1;
-                                        });
-                                      },
-                                      icon: Icon(Icons.arrow_forward)),
-                                  const Text('Tiếp theo',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
+                    BuildNoiDung(snapshot),
+                    BuildSiderTienTrinh(context),
+                    BuildRowBottom(snapshot, context)
                   ],
                 ),
               ),
@@ -577,5 +222,385 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
             ));
           }
         });
+  }
+
+  Visibility BuildFloadtingEdit() {
+    return Visibility(
+      visible: tapbarbool,
+      child: FloatingActionButton(
+        onPressed: () {
+          // chinh sua chuong
+        },
+        child: const Icon(
+          Icons.edit,
+        ),
+      ),
+    );
+  }
+
+  Widget BuildRowBottom(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 0),
+      child: Visibility(
+        visible: tapbarbool,
+        child: Container(
+          // color: ColorC,
+          margin: const EdgeInsets.only(left: 10, right: 10, bottom: 8, top: 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              BuildTroLaiChuongSau(),
+              BuildBinhChon(),
+              BuildBinhLuan(),
+              BuildChuongTiepTheo(snapshot, context)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Column BuildChuongTiepTheo(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot, BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+            color: ColorClass.fiveColor,
+            onPressed: () {
+              setState(() {
+                if (widget.vtChuong >= (snapshot.data!.docs.length - 1)) {
+                  MsgDialog.showSnackbarTextColor(
+                      context,
+                      ColorClass.second2Color,
+                      Colors.black,
+                      "Đã cập nhật đến chương hiện có");
+                } else {
+                  widget.vtChuong = widget.vtChuong + 1;
+                  binhchon = false;
+
+                  scrollProgress =
+                      0.0; // chuyển chương mới cập nhật lại tiến trình
+                  double newScrollPosition =
+                      scrollProgress * _controller.position.maxScrollExtent;
+                  _controller.jumpTo(newScrollPosition);
+                }
+                // _currentIndex = 1;
+              });
+            },
+            icon: Icon(Icons.arrow_forward)),
+        const Text('Tiếp theo',
+            style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
+      ],
+    );
+  }
+
+  Column BuildBinhLuan() {
+    return Column(
+      children: [
+        IconButton(
+            color: ColorClass.fiveColor,
+            onPressed: () {},
+            icon: Icon(Icons.chat_bubble_outline)),
+        const Text('Bình luận',
+            style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
+      ],
+    );
+  }
+
+  Column BuildBinhChon() {
+    return Column(
+      children: [
+        IconButton(
+          color: ColorClass.fiveColor,
+          onPressed: () {
+            setState(() {
+              // them so luong binh chon cho chuong
+              binhchon = !binhchon;
+              print('Before update: $binhchon');
+              updateBinhChon(widget.idtruyen, idchuong, binhchon);
+
+              print('After update: $binhchon');
+            });
+          },
+          icon: (binhchon)
+              ? const Icon(
+                  Icons.star,
+                  color: ColorClass.xanh3Color,
+                )
+              : const Icon(
+                  Icons.star_border_outlined,
+                  color: ColorClass.xanh3Color,
+                ),
+        ),
+        const Text('Bình chọn',
+            style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
+      ],
+    );
+  }
+
+  Column BuildTroLaiChuongSau() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        IconButton(
+            onPressed: () {
+              setState(() {
+                if (widget.vtChuong <= 0) {
+                } else {
+                  widget.vtChuong = widget.vtChuong - 1;
+                  binhchon = false;
+
+                  scrollProgress = 0.0;
+                  double newScrollPosition =
+                      scrollProgress * _controller.position.maxScrollExtent;
+                  _controller.jumpTo(newScrollPosition);
+                }
+              });
+            },
+            color: ColorClass.fiveColor,
+            icon: const Icon(
+              Icons.arrow_back,
+            )),
+        const Text('Trở lại',
+            style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
+      ],
+    );
+  }
+
+  Widget BuildSiderTienTrinh(BuildContext context) {
+    return SizedBox(
+      height: 10,
+      width: MediaQuery.of(context).size.width,
+      //   margin: EdgeInsets.only(bottom: 2),
+      child: Visibility(
+        visible: tapbarbool,
+        child: Slider(
+          activeColor:
+              ColorClass.xanh3Color, // Đây là màu cho phần slider đã chọn
+          inactiveColor: ColorClass.xanh1Color,
+          value: scrollProgress,
+          onChanged: (value) {
+            print('gọi onchang');
+
+            setState(() {
+              scrollProgress = value;
+              // cập nhật tiến trình đọc nội dung dựa trên giá trị của `value`.
+              double newScrollPosition =
+                  value * _controller.position.maxScrollExtent;
+              _controller.jumpTo(newScrollPosition);
+            });
+          },
+          min: 0.0,
+          max: 1.0,
+        ),
+      ),
+    );
+  }
+
+  Expanded BuildNoiDung(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            tapbarbool = !tapbarbool;
+          });
+        },
+        onLongPress: () {
+          setState(() {
+            tapbarbool = false;
+          });
+        },
+        child: SingleChildScrollView(
+          controller: _controller,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 25, right: 25, top: 30, bottom: 20),
+            child: quill.QuillEditor.basic(
+              controller: quill.QuillController(
+                onSelectionChanged: (textSelection) {
+                  setState(() {
+                    tapbarbool = !tapbarbool;
+                  });
+                },
+                document: quill.Document.fromJson(jsonDecode(
+                    snapshot.data!.docs[widget.vtChuong]['noidung'])),
+                selection: const TextSelection.collapsed(offset: 0),
+              ),
+              readOnly: true,
+              focusNode: null,
+              autoFocus: false,
+
+              //enableInteractiveSelection: false
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Drawer BuildEndDrawer(
+      BuildContext context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+    return Drawer(
+        child: ListView(
+      physics: const ScrollPhysics(),
+      children: <Widget>[
+        BuildDrawerHeader(),
+        BuildTenTruyen(context),
+        BuildTacGia(),
+        BuildButtonThemDSDoc(context),
+        const SizedBox(height: 20),
+        const Divider(
+          color: Color.fromARGB(255, 83, 82, 82),
+        ),
+        for (int i = 0;
+            i < snapshot.data!.docs.length;
+            i++) // Thay 10 bằng số chương thực tế của bạn
+          BuildTilteTenChuong(snapshot, i),
+      ],
+    ));
+  }
+
+  ListTile BuildTilteTenChuong(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot, int i) {
+    return ListTile(
+      title: Text(snapshot.data!.docs[i]['tenchuong']), // Tên chương
+      onTap: () {
+        setState(() {
+          widget.vtChuong = i;
+          scrollProgress = 0.0;
+          binhchon = false;
+          double newScrollPosition =
+              scrollProgress * _controller.position.maxScrollExtent;
+          _controller.jumpTo(newScrollPosition);
+
+          // gui du lieu noi dung
+        });
+      },
+      textColor: widget.vtChuong == i ? ColorClass.fiveColor : Colors.black,
+    );
+  }
+
+  Padding BuildButtonThemDSDoc(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 50, right: 50),
+      child: Container(
+        decoration: BoxDecoration(
+            color: ColorClass
+                .thirdColor, // const Color.fromARGB(255, 213, 216, 218),
+            border: Border.all(width: 1),
+            borderRadius: BorderRadius.circular(15)),
+        height: 40,
+        child: TextButton(
+            onPressed: () {
+              if (widget.edit == false) {
+                ModelInser().ShowModal(context, DsDocStream, thuvien, true,
+                    widget.idtruyen, chuongdadoc);
+              } else {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text(
+                        "Bạn đang ở bản xem thử không thể mở sự kiện này")));
+              }
+            },
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.add,
+                  color: Colors.black,
+                  size: 14,
+                ),
+                Text(
+                  "Thêm vào danh sách đọc",
+                  style: TextStyle(fontSize: 14, color: Colors.black),
+                ),
+              ],
+            )),
+      ),
+    );
+  }
+
+  ListTile BuildTacGia() {
+    return ListTile(
+        onTap: () {
+          // chuyen trang ca nhan
+        },
+        title: Center(child: TacGiaAvata(truyenData['tacgia'])));
+  }
+
+  ListTile BuildTenTruyen(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (ctx) => TruyenChiTietScreen(
+                    idtruyen: truyenData['idtruyen'] as String,
+                    edit: widget.edit)));
+      },
+      title: Center(
+        child: Text(
+          truyenData['tentruyen'] ?? 'Tên truyện',
+          style: AppTheme.lightTextTheme.displayMedium,
+          softWrap: true,
+        ),
+      ),
+    );
+  }
+
+  DrawerHeader BuildDrawerHeader() {
+    return DrawerHeader(
+      // ignore: sort_child_properties_last
+      child: Image.network(
+        // ignore: prefer_interpolation_to_compose_strings
+        truyenData['linkanh'],
+        height: 150,
+      ),
+      decoration: const BoxDecoration(color: Colors.white),
+    );
+  }
+
+  PreferredSize BuildAppBarPreferSize(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(
+          kToolbarHeight), // Đặt chiều cao của AppBar bằng kToolbarHeight
+      child: Visibility(
+        visible:
+            tapbarbool, // Ẩn hoặc hiển thị AppBar dựa trên giá trị của biến tapbarbool
+        child: AppBar(
+          backgroundColor: ColorClass.xanh2Color,
+          title: Align(
+            alignment: Alignment.topLeft,
+            child: widget.edit &&
+                    snapshot.data!.docs[widget.vtChuong]['tinhtrang'] ==
+                        'Bản thảo'
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        snapshot.data!.docs[widget.vtChuong]['tenchuong'],
+                        style: AppTheme.lightTextTheme.displayMedium,
+                        softWrap: true,
+                      ),
+                      Text(
+                        '(Bản thảo)',
+                        style: AppTheme.lightTextTheme.bodySmall,
+                      )
+                    ],
+                  )
+                : Text(
+                    snapshot.data!.docs[widget.vtChuong]['tenchuong'],
+                    style: AppTheme.lightTextTheme.displayMedium,
+                    softWrap: true,
+                  ),
+          ),
+        ),
+      ),
+    );
   }
 }

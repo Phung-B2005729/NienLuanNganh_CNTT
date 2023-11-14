@@ -22,7 +22,6 @@ class DatabaseUser {
       "avata":
           "https://firebasestorage.googleapis.com/v0/b/apparch-351df.appspot.com/o/images%2F1696494580475.jpg?alt=media&token=7f48e133-6caa-45cb-807c-bfa42c46054b",
       "anhnen": "",
-      "hopchat": [],
     });
   }
 
@@ -51,7 +50,7 @@ class DatabaseUser {
   }
 
   // updata anh
-  Future<void> updateUser(String iduser, String URL) async {
+  Future<void> updateAvataUser(String iduser, String URL) async {
     return userCollection.doc(iduser).update({'avata': URL});
   }
 
