@@ -43,6 +43,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
   var tapbarbool = true;
   String idchuong = '';
   var binhchon = false;
+  int _currentIndex = 3;
   List<String> noidung = [];
   Stream<QuerySnapshot>? DsDocStream;
   final ScrollController _controller = ScrollController();
@@ -59,16 +60,18 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
 
     getData();
     getChuongDaDoc();
+    getIndex();
     _controller.addListener(() {
       _scrollListener();
     });
   }
 
-  @override
-  void dispose() {
-    // Dispose resources, timers, listeners, etc.
-    _controller.dispose();
-    super.dispose();
+  getIndex() {
+    if (widget.vtChuong > 0) {
+      _currentIndex = 0;
+    } else {
+      _currentIndex = 3;
+    }
   }
 
   getChuongDaDoc() async {
@@ -82,24 +85,24 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     await DatabaseUser()
         .getALLTruyenThuVienGet(widget.iduser)
         .then((value) => ListIdTruyenThuVien = value);
+    setState(() {
+      // cập nhật xem có trong thư viện hay không ?
+      ktrthuvien =
+          ModelInser().ktrThuVien(ListIdTruyenThuVien!.docs, widget.idtruyen);
+      print(ktrthuvien);
+    });
     final truyenThuVienDoc = await DatabaseUser()
         .getOneTruyenThuVien(widget.iduser, widget.idtruyen);
-    if (mounted) {
-      setState(() {
-        // cập nhật xem có trong thư viện hay không ?
-        ktrthuvien =
-            ModelInser().ktrThuVien(ListIdTruyenThuVien!.docs, widget.idtruyen);
-        print(ktrthuvien);
 
-        if (truyenThuVienDoc != null && truyenThuVienDoc.exists) {
-          chuongtam = truyenThuVienDoc.data() != null
-              ? truyenThuVienDoc.data()['chuongdadoc'] as int
-              : 0;
-        }
-        // ignore: avoid_print, prefer_interpolation_to_compose_strings
-        print('chung tam ' + chuongtam.toString());
+    if (truyenThuVienDoc != null && truyenThuVienDoc.exists) {
+      setState(() {
+        chuongtam = truyenThuVienDoc.data() != null
+            ? truyenThuVienDoc.data()['chuongdadoc'] as int
+            : 0;
       });
     }
+    // ignore: avoid_print, prefer_interpolation_to_compose_strings
+    print('chung tam ' + chuongtam.toString());
   }
 
   void _scrollListener() async {
@@ -151,6 +154,11 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
       print('gọi update hàm' + ktr.toString());
       await DatabaseChuong().updateBinhChon(idtruyen, idchuong, ktr);
       await DatabaseTruyen().updateBinhChon(idtruyen, ktr);
+
+      setState(() {
+        // Update the state here
+        binhchon = ktr;
+      });
     } catch (e) {
       print('Lỗi ' + e.toString());
     }
@@ -159,11 +167,9 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
   getData() async {
     // lay noi dung truyen
     await DatabaseTruyen().getTruyenId(widget.idtruyen).then((value) {
-      if (mounted) {
-        setState(() {
-          truyenData = value;
-        });
-      }
+      setState(() {
+        truyenData = value;
+      });
     });
     bool ktrbanthao = true;
     if (widget.edit == true) ktrbanthao = false;
@@ -172,11 +178,9 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
       await DatabaseChuong()
           .getALLChuongSnapshots(widget.idtruyen, sapxep, ktrbanthao)
           .then((vale) {
-        if (mounted) {
-          setState(() {
-            chuongStream = vale;
-          });
-        }
+        setState(() {
+          chuongStream = vale;
+        });
       });
     } catch (e) {
       // ignore: prefer_interpolation_to_compose_strings
@@ -186,11 +190,9 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     await DatabaseChuong()
         .getStringIdChuong(widget.idtruyen, widget.vtChuong, sapxep)
         .then((value) {
-      if (mounted) {
-        setState(() {
-          idchuong = value;
-        });
-      }
+      setState(() {
+        idchuong = value;
+      });
     });
     thuvien = await DatabaseUser().getALLTruyenThuVien(widget.iduser);
   }
@@ -352,10 +354,6 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                             widget.vtChuong = i;
                             scrollProgress = 0.0;
                             binhchon = false;
-                            double newScrollPosition = scrollProgress *
-                                _controller.position.maxScrollExtent;
-                            _controller.jumpTo(newScrollPosition);
-
                             // gui du lieu noi dung
                           });
                         },
@@ -408,9 +406,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                       ),
                     ),
                     Container(
-                      height: 10,
-                      width: MediaQuery.of(context).size.width,
-                      //   margin: EdgeInsets.only(bottom: 2),
+                      height: 18,
+                      margin: EdgeInsets.only(bottom: 2),
                       child: Visibility(
                         visible: tapbarbool,
                         child: Slider(
@@ -434,140 +431,112 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 5, right: 5, bottom: 5, top: 0),
-                      child: Visibility(
-                        visible: tapbarbool,
-                        child: Container(
-                          // color: ColorC,
-                          margin: const EdgeInsets.only(
-                              left: 10, right: 10, bottom: 8, top: 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (widget.vtChuong <= 0) {
-                                          } else {
-                                            widget.vtChuong =
-                                                widget.vtChuong - 1;
-                                            binhchon = false;
-
-                                            scrollProgress = 0.0;
-                                            double newScrollPosition =
-                                                scrollProgress *
-                                                    _controller.position
-                                                        .maxScrollExtent;
-                                            _controller
-                                                .jumpTo(newScrollPosition);
-                                          }
-                                        });
-                                      },
-                                      color: ColorClass.fiveColor,
-                                      icon: const Icon(
-                                        Icons.arrow_back,
-                                      )),
-                                  const Text('Trở lại',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                    color: ColorClass.fiveColor,
-                                    onPressed: () {
-                                      setState(() {
-                                        // them so luong binh chon cho chuong
-                                        binhchon = !binhchon;
-                                        print('Before update: $binhchon');
-                                        updateBinhChon(widget.idtruyen,
-                                            idchuong, binhchon);
-
-                                        print('After update: $binhchon');
-                                      });
-                                    },
-                                    icon: (binhchon)
-                                        ? const Icon(
-                                            Icons.star,
-                                            color: ColorClass.xanh3Color,
-                                          )
-                                        : const Icon(
-                                            Icons.star_border_outlined,
-                                            color: ColorClass.xanh3Color,
-                                          ),
-                                  ),
-                                  const Text('Bình chọn',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                      color: ColorClass.fiveColor,
-                                      onPressed: () {},
-                                      icon: Icon(Icons.chat_bubble_outline)),
-                                  const Text('Bình luận',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                      color: ColorClass.fiveColor,
-                                      onPressed: () {
-                                        setState(() {
-                                          if (widget.vtChuong >=
-                                              (snapshot.data!.docs.length -
-                                                  1)) {
-                                            MsgDialog.showSnackbarTextColor(
-                                                context,
-                                                ColorClass.second2Color,
-                                                Colors.black,
-                                                "Đã cập nhật đến chương hiện có");
-                                          } else {
-                                            widget.vtChuong =
-                                                widget.vtChuong + 1;
-                                            binhchon = false;
-
-                                            scrollProgress =
-                                                0.0; // chuyển chương mới cập nhật lại tiến trình
-                                            double newScrollPosition =
-                                                scrollProgress *
-                                                    _controller.position
-                                                        .maxScrollExtent;
-                                            _controller
-                                                .jumpTo(newScrollPosition);
-                                          }
-                                          // _currentIndex = 1;
-                                        });
-                                      },
-                                      icon: Icon(Icons.arrow_forward)),
-                                  const Text('Tiếp theo',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorClass.fiveColor))
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
+                bottomNavigationBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(
+                        kBottomNavigationBarHeight), // Đặt chiều cao của AppBar bằng kToolbarHeight
+                    child: Visibility(
+                        visible:
+                            tapbarbool, // Ẩn hoặc hiển thị AppBar dựa trên giá trị của biến tapbarbool
+                        child: BottomNavigationBar(
+                          selectedItemColor: ColorClass.xanh3Color,
+                          unselectedItemColor: ColorClass.xanh3Color,
+
+                          unselectedLabelStyle:
+                              const TextStyle(color: ColorClass.xanh3Color),
+                          selectedLabelStyle:
+                              const TextStyle(color: ColorClass.xanh3Color),
+                          backgroundColor:
+                              const Color.fromARGB(181, 213, 213, 213),
+                          //fixedColor: Colors.grey,
+                          currentIndex:
+                              _currentIndex, // Chỉ định mục được chọn bằng currentIndex
+                          onTap: (int index) {
+                            setState(() {
+                              _currentIndex =
+                                  index; // Cập nhật currentIndex khi người dùng chọn một mục khác
+                            });
+
+                            // Xử lý sự kiện tương ứng với mục được chọn
+                            switch (index) {
+                              case 0:
+                                setState(() {
+                                  if (widget.vtChuong <= 0) {
+                                  } else {
+                                    widget.vtChuong = widget.vtChuong - 1;
+                                    binhchon = false;
+
+                                    scrollProgress = 0.0;
+                                  }
+                                  //  _currentIndex = 1;
+                                });
+                                break;
+                              case 1:
+                                setState(() {
+                                  // them so luong binh chon cho chuong
+
+                                  print('Before update: $binhchon');
+                                  updateBinhChon(
+                                      widget.idtruyen, idchuong, !binhchon);
+
+                                  print('After update: $binhchon');
+                                });
+                                // ignore: prefer_interpolation_to_compose_strings
+
+                                break;
+                              case 2:
+                                // chuyen den binh luan
+                                break;
+                              case 3:
+                                setState(() {
+                                  if (widget.vtChuong >=
+                                      (snapshot.data!.docs.length - 1)) {
+                                    MsgDialog.showSnackbarTextColor(
+                                        context,
+                                        ColorClass.second2Color,
+                                        Colors.black,
+                                        "Đã cập nhật đến chương hiện có");
+                                  } else {
+                                    widget.vtChuong = widget.vtChuong + 1;
+                                    binhchon = false;
+
+                                    scrollProgress =
+                                        0.0; // chuyển chương mới cập nhật lại tiến trình
+                                  }
+                                  // _currentIndex = 1;
+                                });
+                                break;
+                            }
+                          },
+                          items: [
+                            const BottomNavigationBarItem(
+                              icon: Icon(Icons.arrow_back),
+                              label: 'Trở lại',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: (binhchon)
+                                  ? const Icon(
+                                      Icons.star,
+                                      color: ColorClass.xanh3Color,
+                                    )
+                                  : const Icon(
+                                      Icons.star_border_outlined,
+                                      color: ColorClass.xanh3Color,
+                                    ),
+                              label:
+                                  '${snapshot.data!.docs[widget.vtChuong]['binhchon']}',
+                            ),
+                            const BottomNavigationBarItem(
+                              icon: Icon(Icons.chat_bubble_outline),
+                              label: 'Bình luận',
+                            ),
+                            const BottomNavigationBarItem(
+                              icon: Icon(Icons.arrow_forward),
+                              label: 'Tiếp theo',
+                            ),
+                          ],
+                        ))),
               ),
             );
           } else {

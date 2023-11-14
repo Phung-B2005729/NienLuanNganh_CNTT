@@ -71,4 +71,62 @@ class FirAuth {
       return null;
     }
   }
+  // thay đổi email
+  void updateEmai(String newEmail, String currentEmail, String currentPassword,
+      Function onSuccess, Function(String) onUpdateError) async {
+    try {
+      User user = firebaseAuth.currentUser!;
+      AuthCredential credential = EmailAuthProvider.credential(
+          email: currentEmail, password: currentPassword); // xác thực
+      await user.reauthenticateWithCredential(credential);
+      //
+      await user.updateEmail(newEmail);
+      // onSuccess(); */
+    } on FirebaseAuthException catch (e) {
+      // ignore: prefer_interpolation_to_compose_strings, avoid_print
+      print('Lỗi cập nhật Email ' + e.toString());
+      onUpdateErr(e.code, onUpdateError);
+    }
+  }
+
+  // thay đổi pass
+  void updatePassword(String newPassword, String currentPassword, String email,
+      Function onSuccess, Function(String) onUpdateError) async {
+    try {
+      User user = firebaseAuth.currentUser!;
+      AuthCredential credential = EmailAuthProvider.credential(
+          email: email, password: currentPassword); // xác thực
+      await user.reauthenticateWithCredential(credential);
+      //
+      await user.updatePassword(newPassword);
+      //  onSuccess();
+    } on FirebaseAuthException catch (e) {
+      // ignore: prefer_interpolation_to_compose_strings
+      print('Lỗi cập nhật Password ' + e.toString());
+      onUpdateErr(e.code, onUpdateError);
+    }
+  }
+
+  // bắt lỗi update
+  void onUpdateErr(String code, Function(String) onUpdateError) {
+    // ignore: avoid_print, prefer_interpolation_to_compose_strings
+    if (code == "email-already-in-use") {
+      // ignore: avoid_print, prefer_interpolation_to_compose_strings
+      onUpdateError("Email đã tồn tại");
+      //
+    } else if (code == "invalid-email") {
+      onUpdateError("Email không hợp lệ");
+      //
+    } else if (code == 'requires-recent-login') {
+      onUpdateError('reLogin');
+      //
+    } else if (code == "weak-password") {
+      onUpdateError("Mật khẩu yếu");
+      //
+    } else if (code == 'INVALID_LOGIN_CREDENTIALS') {
+      onUpdateError("Mật khẩu xác nhận không đúng");
+    } else {
+      onUpdateError("Lỗi, thử lại");
+    }
+  }
 }
