@@ -377,9 +377,11 @@ class _TienTrinhDocState extends State<TienTrinhDoc> {
 
   getCountChuong() async {
     await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((value) {
-      setState(() {
-        countChuong = value.size;
-      });
+      if (mounted) {
+        setState(() {
+          countChuong = value.size;
+        });
+      }
     });
     // ignore: prefer_interpolation_to_compose_strings
     print('countchuong' + countChuong.toString());

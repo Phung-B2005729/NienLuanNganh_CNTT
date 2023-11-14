@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:apparch/src/helper/temple/app_theme.dart';
+import 'package:apparch/src/screen/nguoidung/nguoidung.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -38,13 +39,11 @@ class _TacGiaAvataState extends State<TacGiaAvata> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // chuyen sang thong tin tac gia
-        /*  Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CaNhan(),
-          ), //final arguments = ModalRoute.of(context)!.settings.arguments;
-        ); */
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) =>
+                    NguoiDung(iduser: widget.idtacgia!, name: username!)));
       },
       child: Padding(
         padding: EdgeInsets.only(top: 20, bottom: 10),

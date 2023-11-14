@@ -1,3 +1,4 @@
+import 'package:apparch/src/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseUser {
@@ -21,7 +22,6 @@ class DatabaseUser {
       "ngaysinh": "",
       "avata":
           "https://firebasestorage.googleapis.com/v0/b/apparch-351df.appspot.com/o/images%2F1696494580475.jpg?alt=media&token=7f48e133-6caa-45cb-807c-bfa42c46054b",
-      "anhnen": "",
     });
   }
 
@@ -103,5 +103,22 @@ class DatabaseUser {
 
   Future getOneTruyenThuVien(String idu, String idtruyen) {
     return userCollection.doc(idu).collection('thuvien').doc(idtruyen).get();
+  }
+
+  Future updateOneUser(String id, UserModel userModel) async {
+    return await userCollection.doc(id).update(userModel.tomap());
+  }
+
+  Future<UserModel?> getOneUser(String id) async {
+    // ignore: unused_local_variable
+    DocumentSnapshot userSnapshot = await userCollection.doc(id).get();
+    if (userSnapshot.exists) {
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+      return UserModel.fromJson(userData);
+    } else {
+      // Xử lý trường hợp không tìm thấy người dùng
+      return null;
+    }
   }
 }

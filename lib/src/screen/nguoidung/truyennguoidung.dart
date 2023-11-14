@@ -1,8 +1,5 @@
-import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
-import 'package:apparch/src/helper/temple/color.dart';
-import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/timkiem/tim_kiem_tags_screen.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,104 +7,63 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
-class TruyenDang extends StatefulWidget {
+class TruyenNguoiDung extends StatefulWidget {
   String iduser;
-  String name;
-  TruyenDang({super.key, required this.iduser, required this.name});
+  TruyenNguoiDung({super.key, required this.iduser});
 
   @override
-  State<TruyenDang> createState() => _TruyenDangState();
+  State<TruyenNguoiDung> createState() => _TruyenNguoiDungState();
 }
 
-class _TruyenDangState extends State<TruyenDang> {
-  Stream<QuerySnapshot>? ListTruyen;
+class _TruyenNguoiDungState extends State<TruyenNguoiDung> {
+  Stream<QuerySnapshot>? truyenStream;
   @override
   void initState() {
     super.initState();
-    getData();
+    getAllTruyen();
   }
 
-  getData() async {
+  getAllTruyen() async {
     try {
       await DatabaseTruyen()
           .getAllTruyenDK2(
               'tacgia', widget.iduser, 'tinhtrang', 'Bản thảo', false)
           .then((val) {
-        setState(() {
-          ListTruyen = val;
-        });
+        if (mounted) {
+          setState(() {
+            truyenStream = val;
+          });
+        }
       });
     } catch (e) {
       print('Lỗi khi lấy dữ liệu: $e');
     }
   }
 
-  bool ktrTruyenTrongDs(List<dynamic> ListIdds, String idds) {
-    for (var i = 0; i < ListIdds.length; i++) {
-      if (ListIdds[i] == idds) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorClass.xanh3Color,
-        title: Text(
-          // ignore: prefer_interpolation_to_compose_strings
-          "Truyện của " + widget.name,
-          style: AppTheme.lightTextTheme.titleSmall,
-        ),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: ListTruyen,
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData &&
-                snapshot.data.docs.length != 0 &&
-                snapshot.data != null) {
-              return ListView(
-                  scrollDirection:
-                      Axis.vertical, // true cuon doc, false cuon ngang
-                  children: [
-                    for (var index = 0;
-                        index < snapshot.data.docs.length;
-                        index++)
-                      BuildTruyenDS(context, snapshot, index)
-                  ]);
-            } else {
-              return BuildDanhSachRong();
-            }
-          }),
-    );
+    return StreamBuilder<QuerySnapshot>(
+        stream: truyenStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData &&
+              snapshot.data.docs.length != 0 &&
+              snapshot.data != null) {
+            return ListView(
+                scrollDirection:
+                    Axis.vertical, // true cuon doc, false cuon ngang
+                children: [
+                  for (var index = 0;
+                      index < snapshot.data.docs.length;
+                      index++)
+                    BuildTilteTruyen(context, snapshot, index)
+                ]);
+          } else {
+            return BuildTimKiemRong();
+          }
+        });
   }
 
-  Widget BuildDanhSachRong() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, bottom: 70, top: 0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Flexible(
-              child: AspectRatio(
-                aspectRatio: 1 / 1,
-                child: Image.asset('assets/images/sachempty.png'),
-              ),
-            ),
-            const Text(
-              'Danh sách rỗng\n',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget BuildTruyenDS(
+  Widget BuildTilteTruyen(
       BuildContext context, AsyncSnapshot<dynamic> snapshot, int index) {
     return GestureDetector(
       onTap: () {
@@ -120,33 +76,27 @@ class _TruyenDangState extends State<TruyenDang> {
                       edit: false,
                     )));
       },
-      child: BuildTruyen(snapshot, index, context),
-    );
-  }
-
-  Widget BuildTruyen(
-      AsyncSnapshot<dynamic> snapshot, int index, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 15, bottom: 10, left: 2, right: 2),
-      decoration: BoxDecoration(
-        //   color: Color.fromARGB(255, 231, 237, 242),
-        color: const Color.fromARGB(255, 239, 236, 236),
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(255, 191, 188, 188),
-            offset: Offset(10, 15),
-            blurRadius: 8.0,
-          )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 0),
+        child: Container(
+          height: 300,
+          width: 325,
+          decoration: BoxDecoration(
+            //   color: Color.fromARGB(255, 231, 237, 242),
+            color: const Color.fromARGB(255, 239, 236, 236),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromARGB(255, 191, 188, 188),
+                offset: Offset(10, 15),
+                blurRadius: 8.0,
+              )
+            ],
+          ),
+          child: BuildCardChiTiet(snapshot, index),
+        ),
       ),
-      child: BuildDismissible(snapshot, index, context),
     );
-  }
-
-  Widget BuildDismissible(
-      AsyncSnapshot<dynamic> snapshot, int index, BuildContext context) {
-    return BuildCardChiTiet(snapshot, index);
   }
 
   Widget BuildCardChiTiet(AsyncSnapshot<dynamic> snapshot, int index) {
@@ -184,8 +134,8 @@ class _TruyenDangState extends State<TruyenDang> {
       children: [
         snapshot.data.docs[index]['linkanh'] != null
             ? Container(
-                margin: const EdgeInsets.all(0),
-                padding: const EdgeInsets.all(8),
+                margin: EdgeInsets.all(0),
+                padding: EdgeInsets.all(8),
                 height: 150,
                 width: 110,
                 child: Image.network(
@@ -194,8 +144,8 @@ class _TruyenDangState extends State<TruyenDang> {
                 ),
               )
             : Container(
-                margin: const EdgeInsets.all(0),
-                padding: const EdgeInsets.all(8),
+                margin: EdgeInsets.all(0),
+                padding: EdgeInsets.all(8),
                 height: 150,
                 width: 110,
                 child: Image.asset(
@@ -249,7 +199,7 @@ class _TruyenDangState extends State<TruyenDang> {
             ),
           ],
         ),
-        // const SizedBox(width: 20),
+        //const SizedBox(width: 25),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -299,6 +249,25 @@ class _TruyenDangState extends State<TruyenDang> {
       ),
       softWrap: true,
       overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget BuildTimKiemRong() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 80, right: 15, bottom: 0, top: 0),
+      child: Column(
+        //  mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Flexible(
+            child: AspectRatio(
+              aspectRatio: 1 / 1,
+              child: Image.asset('assets/images/sachempty.png'),
+            ),
+          ),
+          Text('Không có truyện', style: AppTheme.lightTextTheme.headlineLarge),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

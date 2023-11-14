@@ -2,7 +2,7 @@ import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../bloc/bloc_userlogin.dart';
-import '../nguoidung/ca_nhan.dart';
+import '../thongtincanhan.dart/ca_nhan.dart';
 
 // ignore: use_key_in_widget_constructors
 class UserAppbarAction extends StatelessWidget {

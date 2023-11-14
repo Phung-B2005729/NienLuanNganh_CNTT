@@ -61,12 +61,6 @@ class HelperFunctions {
   }
   // ignore: non_constant_identifier_names
 
-  //fullname
-  static Future<bool> saveFullNameSF(String Name) async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    return await sf.setString(fullNameKey, Name);
-  }
-
 //email
   static Future<bool> saveEmailSF(String userEmail) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
@@ -83,18 +77,6 @@ class HelperFunctions {
   static Future<bool> saveAvataSF(String avata) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return await sf.setString(avataKey, avata);
-  }
-
-//anhnen
-  static Future<bool> saveAnhNenSF(String anh) async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    return await sf.setString(anhnenKey, anh);
-  }
-
-//saveData
-  static Future<bool> saveDateSF(String date) async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    return await sf.setString(ngaysinhKey, date);
   }
 
   // getting the data from SF
@@ -119,11 +101,6 @@ class HelperFunctions {
     return sf.getString(userNameKey);
   }
 
-  static Future<String?> getFullNameFromSF() async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    return sf.getString(fullNameKey);
-  }
-
   static Future<String?> getUserID() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return sf.getString(IdUserKey);
@@ -132,15 +109,5 @@ class HelperFunctions {
   static Future<String?> getAvata() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return sf.getString(avataKey);
-  }
-
-  static Future<String?> getAnhNen() async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    return sf.getString(anhnenKey);
-  }
-
-  static Future<String?> getDate() async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    return sf.getString(ngaysinhKey);
   }
 }

@@ -1,17 +1,19 @@
-import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/luutru/danhsachdoc_chitiet_sceen.dart';
+
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class DanhSachDocScreen extends StatefulWidget {
-  const DanhSachDocScreen({super.key});
+  String iduser;
+  bool nguoidung;
+  DanhSachDocScreen({super.key, required this.iduser, required this.nguoidung});
 
   @override
   State<DanhSachDocScreen> createState() => _DanhSachDocScreenState();
@@ -20,20 +22,20 @@ class DanhSachDocScreen extends StatefulWidget {
 class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
   // ignore: non_constant_identifier_names
   Stream<QuerySnapshot>? DanhSachDoc;
-  late final blocUserLogin;
+
   final _formKey = new GlobalKey<FormState>();
   final _formKey2 = new GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
-    blocUserLogin = context.read<BlocUserLogin>();
+
     getData();
   }
 
   getData() async {
-    print(blocUserLogin.id);
+    print(widget.iduser);
     try {
-      DatabaseDSDoc().getALLDanhSachDoc(blocUserLogin.id).then((vsl) {
+      DatabaseDSDoc().getALLDanhSachDoc(widget.iduser).then((vsl) {
         setState(() {
           DanhSachDoc = vsl;
         });
@@ -47,15 +49,17 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('gọi tap');
-          showCreateDSDiaLog(context, blocUserLogin.id);
-        },
-        // ignore: sort_child_properties_last
-        child: const Icon(Icons.add),
-        backgroundColor: ColorClass.fiveColor,
-      ),
+      floatingActionButton: (widget.nguoidung == true)
+          ? FloatingActionButton(
+              onPressed: () {
+                print('gọi tap');
+                showCreateDSDiaLog(context, widget.iduser);
+              },
+              // ignore: sort_child_properties_last
+              child: const Icon(Icons.add),
+              backgroundColor: ColorClass.fiveColor,
+            )
+          : null,
       body: StreamBuilder<QuerySnapshot>(
           stream: DanhSachDoc,
           builder: (context, AsyncSnapshot snapshot) {
@@ -112,7 +116,7 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
             context,
             MaterialPageRoute(
                 builder: (_) => DanhSachDocChiTietScreen(
-                    nguoidung: true,
+                    nguoidung: widget.nguoidung,
                     idds: snapshot.data.docs[index]['iddanhsach'],
                     name: snapshot.data.docs[index]['tendanhsachdoc'],
                     soluong:
@@ -134,50 +138,55 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
             )
           ],
         ),
-        child: Dismissible(
-          // loai bo bang cach luot
-          key: ValueKey(
-              snapshot.data.docs[index]['iddanhsach']), // dinh danh widget
-          background: Container(
-            color: Theme.of(context).colorScheme.error,
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20),
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            child: const Icon(Icons.delete, color: Colors.white, size: 40),
-          ),
-          direction: DismissDirection.endToStart,
-          // huong vuot
-          confirmDismiss: (direction) {
-            // ham xac nhan loai bo
-            return MsgDialog.showConfirmDialogDismissible(
-              context,
-              "Bạn chắc chăn muốn xoá truyện này ?",
-            );
-          },
-          onDismissed: (direction) async {
-            try {
-              await DatabaseDSDoc()
-                  .deleteOneDs(snapshot.data.docs[index]['iddanhsach']);
-              for (var i = 0;
-                  i < snapshot.data.docs[index]['danhsachtruyen'].length;
-                  i++) {
-                await DatabaseTruyen().deleteDSDocGia(
-                    snapshot.data.docs[index]['iddanhsach'],
-                    snapshot.data.docs[index]['danhsachtruyen'][i]);
-              }
-              // ignore: use_build_context_synchronously
-              MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã xoá');
-            } catch (e) {
-              // ignore: use_build_context_synchronously
-              MsgDialog.showSnackbar(
-                  context, Colors.red, "Lỗi vui lòng thử lại!!");
-              print('Lỗi xoá ds ' + e.toString());
-            }
-            // xoá danh sách
-            print('Đã xoá');
-          },
-          child: BuildCardDanhSach(snapshot, index, context),
-        ),
+        child: (widget.nguoidung == true)
+            ? Dismissible(
+                // loai bo bang cach luot
+                key: ValueKey(snapshot.data.docs[index]
+                    ['iddanhsach']), // dinh danh widget
+                background: Container(
+                  color: Theme.of(context).colorScheme.error,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                  child:
+                      const Icon(Icons.delete, color: Colors.white, size: 40),
+                ),
+                direction: DismissDirection.endToStart,
+                // huong vuot
+                confirmDismiss: (direction) {
+                  // ham xac nhan loai bo
+                  return MsgDialog.showConfirmDialogDismissible(
+                    context,
+                    "Bạn chắc chăn muốn xoá truyện này ?",
+                  );
+                },
+                onDismissed: (direction) async {
+                  try {
+                    await DatabaseDSDoc()
+                        .deleteOneDs(snapshot.data.docs[index]['iddanhsach']);
+                    for (var i = 0;
+                        i < snapshot.data.docs[index]['danhsachtruyen'].length;
+                        i++) {
+                      await DatabaseTruyen().deleteDSDocGia(
+                          snapshot.data.docs[index]['iddanhsach'],
+                          snapshot.data.docs[index]['danhsachtruyen'][i]);
+                    }
+                    // ignore: use_build_context_synchronously
+                    MsgDialog.showSnackbar(
+                        context, ColorClass.fiveColor, 'Đã xoá');
+                  } catch (e) {
+                    // ignore: use_build_context_synchronously
+                    MsgDialog.showSnackbar(
+                        context, Colors.red, "Lỗi vui lòng thử lại!!");
+                    print('Lỗi xoá ds ' + e.toString());
+                  }
+                  // xoá danh sách
+                  print('Đã xoá');
+                },
+                child: BuildCardDanhSach(snapshot, index, context),
+              )
+            : BuildCardDanhSach(snapshot, index, context),
       ),
     );
   }
@@ -194,7 +203,8 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
             width: 20,
           ),
           BuildTenDS(snapshot, index),
-          BuildPopMeduButton(context, snapshot, index)
+          if (widget.nguoidung == true)
+            BuildPopMeduButton(context, snapshot, index)
         ],
       ),
     );

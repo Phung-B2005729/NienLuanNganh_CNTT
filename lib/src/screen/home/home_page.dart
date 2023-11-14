@@ -1,9 +1,9 @@
-import 'package:apparch/src/Screen/nguoidung/ca_nhan.dart';
 import 'package:apparch/src/firebase/fire_base_auth.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/screen/home/home_useraccountdrawer.dart';
 import 'package:apparch/src/screen/home/home_truyen_list.dart';
+import 'package:apparch/src/screen/thongtincanhan.dart/ca_nhan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

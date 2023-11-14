@@ -16,6 +16,15 @@ class DatetimeFunction {
     return DateFormat('dd-MM-yyyy').format(timeDate);
   }
 
+  static String getStringFormDateTime(DateTime timeDate) {
+    return DateFormat('dd/MM/yyyy').format(timeDate);
+  }
+
+  static DateTime getDateTimeFormString(String time) {
+    DateFormat format = DateFormat('dd/MM/yyyy');
+    return format.parse(time);
+  }
+
   static String getTimeFormatDatabase(int timeint) {
     DateTime time = getTimeToDateTime(timeint);
     return getTimeFormat(time);

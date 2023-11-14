@@ -28,6 +28,7 @@ class DanhSachDocChiTietScreen extends StatefulWidget {
 }
 
 class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
+  // ignore: non_constant_identifier_names
   Stream<QuerySnapshot>? ListTruyen;
   @override
   void initState() {
@@ -95,6 +96,7 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget BuildDanhSachRong() {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 70, top: 0),

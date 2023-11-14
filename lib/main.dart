@@ -32,14 +32,19 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    context.read<BlocUserLogin>().getLoggedState();
+    getUser();
     //  getLoggedState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    getUser();
+  }
+
+  void getUser() {
     context.read<BlocUserLogin>().getLoggedState();
+    context.read<BlocUserLogin>().getUserLogin();
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/screen/nguoidung/nguoidung.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +72,12 @@ class _DsNguoiDungState extends State<DsNguoiDung> {
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
         onTap: () {
-          //chuyen ve trang thông tin cua nguoi dung
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => NguoiDung(
+                      iduser: snapshot.data.docs[index]['uid'],
+                      name: snapshot.data.docs[index]['username'])));
         },
         selectedColor: ColorClass.xanh1Color,
         leading: CircleAvatar(

@@ -19,9 +19,12 @@ class LuuTruScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: BuildAppBar(),
-        body: const TabBarView(children: <Widget>[
-          ThuVienScreen(),
-          DanhSachDocScreen(),
+        body: TabBarView(children: <Widget>[
+          const ThuVienScreen(),
+          DanhSachDocScreen(
+            nguoidung: true,
+            iduser: blocUserLogin.id,
+          ),
         ]),
       ),
     );
@@ -55,7 +58,7 @@ class LuuTruScreen extends StatelessWidget {
         labelStyle: AppTheme.lightTextTheme.headlineLarge,
         labelColor: Colors.black,
         unselectedLabelColor: Colors.black,
-        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
         tabs: const <Widget>[
           Tab(
             text: 'Thư viện',
