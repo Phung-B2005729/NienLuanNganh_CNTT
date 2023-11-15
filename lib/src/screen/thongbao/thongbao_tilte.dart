@@ -83,7 +83,7 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
             color:
                 kiemTraIdUser(widget.thongBaoModel.danhsachiduserdadoc, user.id)
                     ? Colors.white
-                    : Color.fromARGB(255, 239, 198, 156),
+                    : const Color.fromARGB(255, 239, 198, 156),
             border: Border(
               bottom: BorderSide(
                 color: kiemTraIdUser(
@@ -128,9 +128,12 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
               style: AppTheme.lightTextTheme.bodySmall,
             ),
             subtitle: Text("Cập nhật " + widget.thongBaoModel.ngaycapnhat,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.normal)),
+            // ignore: sized_box_for_whitespace
             trailing: Container(
                 height: 50,
+                color: Colors.white,
                 child: (linkanh != '') ? Image.network(linkanh) : Text('')),
           )),
     );

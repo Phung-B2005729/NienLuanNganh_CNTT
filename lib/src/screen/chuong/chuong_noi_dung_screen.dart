@@ -5,6 +5,7 @@ import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/helper_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/screen/chuong/chuong_edit.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/share/modal_insert_danhsachdoc.dart';
 import 'package:apparch/src/screen/truyen/tacgia_avata.dart';
@@ -203,7 +204,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
             return SafeArea(
               child: Scaffold(
                 floatingActionButton:
-                    widget.edit == true ? BuildFloadtingEdit() : null,
+                    widget.edit == true ? BuildFloadtingEdit(snapshot) : null,
                 appBar: BuildAppBarPreferSize(snapshot),
                 endDrawer: BuildEndDrawer(context, snapshot),
                 body: Column(
@@ -224,12 +225,25 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
         });
   }
 
-  Visibility BuildFloadtingEdit() {
+  // ignore: non_constant_identifier_names
+  Visibility BuildFloadtingEdit(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
     return Visibility(
       visible: tapbarbool,
       child: FloatingActionButton(
         onPressed: () {
-          // chinh sua chuong
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => EditChuong(
+                      idtruyen: widget.idtruyen,
+                      idchuong: idchuong,
+                      tchuong: snapshot.data!.docs[widget.vtChuong]
+                          ['tenchuong'],
+                      nd: snapshot.data!.docs[widget.vtChuong]['noidung'],
+                      tinhtrang: snapshot.data!.docs[widget.vtChuong]
+                          ['tinhtrang'],
+                      edit: true)));
         },
         child: const Icon(
           Icons.edit,
