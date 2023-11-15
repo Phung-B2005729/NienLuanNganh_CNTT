@@ -107,6 +107,16 @@ class DatabaseTruyen {
     return false;
   }
 
+  Future<bool> kiemTraDocGia(String idtruyen, String iduser) async {
+    var ds = await truyenColection.doc(idtruyen).get();
+    for (var i = 0; i < ds['docgia'].length; i++) {
+      if (iduser == ds['docgia'][i].toString()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Future deleleOneTruyen(String idtruyen) async {
     var documentReference = await truyenColection.doc(idtruyen).get();
     await FireStorage()
@@ -133,6 +143,24 @@ class DatabaseTruyen {
     }
   }
 
+  Future insertDocGia(String iduser, String idtruyen) async {
+    var ktr = await kiemTraDocGia(idtruyen, iduser);
+    if (ktr == false) {
+      return await truyenColection.doc(idtruyen).update({
+        'docgia': FieldValue.arrayUnion([iduser])
+      });
+    }
+  }
+
+  Future deleteDocGia(String iduser, String idtruyen) async {
+    var ktr = await kiemTraDocGia(idtruyen, iduser);
+    if (ktr == true) {
+      return await truyenColection.doc(idtruyen).update({
+        'docgia': FieldValue.arrayRemove([iduser])
+      });
+    }
+  }
+
   Future timKiemTruyen(String value) async {
     return await truyenColection
         .where("tentruyen", isGreaterThanOrEqualTo: value)
@@ -154,5 +182,16 @@ class DatabaseTruyen {
           ? tongluotxem['tongbinhchon'] + 1
           : tongluotxem['tongbinhchon'] - 1
     });
+  }
+
+  Future<List<dynamic>?> getDocGiaList(String idtruyen) async {
+    // Assuming that the 'docgia' field is a List<String> in the document
+    var document = await truyenColection.doc(idtruyen).get();
+    TruyenModel truyenModel =
+        TruyenModel.fromJson(document.data() as Map<String, dynamic>);
+
+    // Access the 'docgia' field in the TruyenModel
+    List<dynamic>? docGiaList = truyenModel.docgia!;
+    return docGiaList;
   }
 }

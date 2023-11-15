@@ -1,15 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
+import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/model/chuong_model.dart';
+import 'package:apparch/src/model/thongbao_model.dart';
 import 'package:apparch/src/screen/chuong/xem_truoc_chuong.dart';
 import 'package:apparch/src/screen/share/loadingDialog.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class EditChuong extends StatefulWidget {
@@ -78,18 +84,34 @@ class _EditChuongState extends State<EditChuong> {
   Future dangChuong(BuildContext context) async {
     LoadingDialog.showLoadingDialog(context, 'Loading...');
     try {
+      //
+      // lấy đọc giả
+
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Đã đăng');
+      // update thông báo
+      String idtacgia = context.read<BlocUserLogin>().id;
+      List<dynamic>? listdocgia =
+          await DatabaseTruyen().getDocGiaList(widget.idtruyen);
+      ThongBaoModel thongBaoModel = ThongBaoModel(
+          idchuong: widget.idchuong,
+          idtacgia: idtacgia,
+          danhsachiduser: listdocgia ?? [],
+          idtruyen: widget.idtruyen,
+          ngaycapnhat: DatetimeFunction.getGioFormDateTime(DateTime.now()));
+      // nếu đăng thì mới có thông báo
+      // tạo thông báo
+      await context.read<BlocThongBao>().addThongBao(thongBaoModel);
       await DatabaseTruyen()
           .updateTinhTrangTruyen(widget.idtruyen, "Trưởng thành");
-      // ignore: use_build_context_synchronously
+      // ignore:
       LoadingDialog.hideLoadingDialog(context);
-      // ignore: use_build_context_synchronously
+      // ignore:
       return true;
     } catch (e) {
-      // ignore: use_build_context_synchronously
+      // ignore:
       LoadingDialog.hideLoadingDialog(context);
-      // ignore: use_build_context_synchronously
+      // ignore:
       print('Lỗi ' + e.toString());
       return false;
     }

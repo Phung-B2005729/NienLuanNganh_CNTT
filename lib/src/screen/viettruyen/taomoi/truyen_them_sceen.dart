@@ -93,8 +93,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                           style: AppTheme.lightTextTheme.bodySmall,
                         ),
                       ),
-                      PopupMenuItem<
-                      String>(
+                      PopupMenuItem<String>(
                         value: 'Lưu',
                         child: Text(
                           'Lưu',
@@ -427,6 +426,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
               tinhtrang: 'Trưởng thành',
               ngaycapnhat: DateTime.now(),
               danhsachdocgia: [],
+              docgia: [],
               tags: hashtags);
 
           String id = '';

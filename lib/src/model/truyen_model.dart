@@ -11,6 +11,7 @@ class TruyenModel {
   String? tinhtrang;
   String? linkanh;
   List<dynamic>? danhsachdocgia;
+  List<dynamic>? docgia;
   List<dynamic>? tags;
   String? theloai;
   TruyenModel(
@@ -24,6 +25,7 @@ class TruyenModel {
       required this.linkanh,
       required this.tinhtrang,
       required this.danhsachdocgia,
+      required this.docgia,
       required this.tags,
       required this.theloai});
   TruyenModel copyWith({
@@ -37,6 +39,7 @@ class TruyenModel {
     String? tinhtrang,
     String? linkanh,
     List<dynamic>? danhsachdocgia,
+    List<dynamic>? docgia,
     List<dynamic>? tags,
     String? theloai,
   }) {
@@ -51,25 +54,29 @@ class TruyenModel {
         linkanh: linkanh ?? this.linkanh,
         tinhtrang: tinhtrang ?? this.tinhtrang,
         danhsachdocgia: danhsachdocgia ?? this.danhsachdocgia,
+        docgia: danhsachdocgia ?? this.docgia,
         tags: tags ?? this.tags,
         theloai: theloai ?? this.theloai);
   }
 
-  TruyenModel.fromMap(Map<String, dynamic> map) {
-    idtruyen = map['idtruyen'];
-    tacgia = map['tacgia'];
-    tentruyen = map['tentruyen'];
-    mota = map['mota'];
-    ngaycapnhat = map['ngaycapnhat'] != null
-        ? DatetimeFunction.getTimeToDateTime(map['ngaycapnhat'])
-        : DateTime.now();
-    tongbinhchon = map['tongbinhchon'];
-    tongluotxem = map['tongluotxem'];
-    linkanh = map['linkanh'];
-    tinhtrang = map['tinhtrang'];
-    danhsachdocgia = map['danhsachdoc'];
-    tags = map['tags'];
-    theloai = map['theloai'];
+  static TruyenModel fromJson(Map<String, dynamic> map) {
+    return TruyenModel(
+      idtruyen: map['idtruyen'],
+      tacgia: map['tacgia'],
+      tentruyen: map['tentruyen'],
+      mota: map['mota'],
+      ngaycapnhat: map['ngaycapnhat'] != null
+          ? DatetimeFunction.getTimeToDateTime(map['ngaycapnhat'])
+          : DateTime.now(),
+      tongbinhchon: map['tongbinhchon'],
+      tongluotxem: map['tongluotxem'],
+      linkanh: map['linkanh'],
+      tinhtrang: map['tinhtrang'],
+      danhsachdocgia: map['danhsachdocgia'],
+      docgia: map['docgia'],
+      tags: map['tags'],
+      theloai: map['theloai'],
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -84,6 +91,7 @@ class TruyenModel {
       'linkanh': linkanh,
       'tinhtrang': tinhtrang,
       'danhsachdocgia': danhsachdocgia,
+      'docgia': docgia,
       'tags': tags,
       'theloai': theloai
     };

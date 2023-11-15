@@ -10,7 +10,7 @@ class DatabaseChuong {
       FirebaseFirestore.instance.collection('truyen');
   //
 // chuong
-  Future createChuong(ChuongModel chuongModel, String idtruyen) async {
+  Future<String> createChuong(ChuongModel chuongModel, String idtruyen) async {
     DocumentReference chuongDocument = await truyenColection
         .doc(idtruyen)
         .collection('chuong')

@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/model/thongbao_model.dart';
 
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
@@ -11,6 +13,7 @@ import 'package:apparch/src/screen/viettruyen/edit/truyen_edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../helper/date_time_function.dart';
 
 // ignore: must_be_immutable
@@ -353,7 +356,8 @@ class VietTruyenList extends StatelessWidget {
       try {
         await DatabaseTruyen().deleleOneTruyen(idtruyen);
         // ignore: use_build_context_synchronously
-
+        // xoá các thông báo có idtruyen
+        await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
         // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(
             context, ColorClass.fiveColor, "Đã xoá thành công!!");
@@ -364,6 +368,7 @@ class VietTruyenList extends StatelessWidget {
 
         // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(context, Colors.red, "Lỗi vui lòng thử lại!!");
+        // ignore: prefer_interpolation_to_compose_strings
         print("loi xoa image " + e.toString());
         // ignore: use_build_context_synchronously
         // Navigator.pop(context);
@@ -379,6 +384,8 @@ class VietTruyenList extends StatelessWidget {
 
       // updat tinh trang truyen
       await DatabaseTruyen().updateTinhTrangTruyen(idtruyen, 'Bản thảo');
+      // ignore: use_build_context_synchronously
+      await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
       // ignore: use_build_context_synchronously
       //  LoadingDialog.hideLoadingDialog(context);
       return true;

@@ -1,15 +1,20 @@
 import 'dart:convert';
 
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
+import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
+import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/model/chuong_model.dart';
+import 'package:apparch/src/model/thongbao_model.dart';
 import 'package:apparch/src/screen/chuong/xem_truoc_chuong.dart';
 import 'package:apparch/src/screen/share/loadingDialog.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class InsertChuong extends StatefulWidget {
@@ -37,14 +42,21 @@ class _InsertChuongState extends State<InsertChuong> {
     bool tam,
   ) async {
     String idchuong = '';
+    // ignore: unused_local_variable
+    List<dynamic>? listdocgia;
+
     print('gọi hàm lưu');
     if (_formKey.currentState!.validate()) {
       if (_quillEditorcontroller.document.isEmpty() == false) {
         // lay du lieu tieu de
         LoadingDialog.showLoadingDialog(context, 'Loading...');
         try {
-          tenchuong = _nameController.text;
+          // tác gia
+          String idtacgia = context.read<BlocUserLogin>().id;
+          // lấy đọc giả
+          listdocgia = await DatabaseTruyen().getDocGiaList(widget.idtruyen);
           // lay du lieu noi dung
+          tenchuong = _nameController.text;
           noidung =
               jsonEncode(_quillEditorcontroller.document.toDelta().toJson());
           // goi ham tao lay ra idchuong
@@ -61,6 +73,18 @@ class _InsertChuongState extends State<InsertChuong> {
               tinhtrang: tinhtrang);
           idchuong =
               await DatabaseChuong().createChuong(chuongModel, widget.idtruyen);
+          if (tinhtrang == 'Đã đăng') {
+            ThongBaoModel thongBaoModel = ThongBaoModel(
+                idchuong: idchuong,
+                idtacgia: idtacgia,
+                danhsachiduser: listdocgia ?? [],
+                idtruyen: widget.idtruyen,
+                ngaycapnhat:
+                    DatetimeFunction.getGioFormDateTime(DateTime.now()));
+            // nếu đăng thì mới có thông báo
+            // tạo thông báo
+            await context.read<BlocThongBao>().addThongBao(thongBaoModel);
+          }
           if (tam == false) {
             print('update truyện');
             await DatabaseTruyen()

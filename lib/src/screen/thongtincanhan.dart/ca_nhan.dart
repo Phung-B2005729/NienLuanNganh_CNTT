@@ -238,6 +238,26 @@ class _CaNhanState extends State<CaNhan> {
                       const Divider(
                         color: Colors.black,
                       ),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ListTile(
+                            title: Text(
+                              'Đăng xuất',
+                              style: AppTheme.lightTextTheme.headlineMedium,
+                            ),
+                            subtitle: Text(
+                              user.email,
+                              style: AppTheme.lightTextTheme.bodySmall,
+                            ),
+                            onTap: () async {
+                              firAuth.logOut();
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginForm()),
+                                  (Route<dynamic> route) => false);
+                            },
+                          )),
                     ],
                   );
                 });

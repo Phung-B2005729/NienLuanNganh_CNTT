@@ -1,4 +1,6 @@
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_timkiem.dart';
+import 'package:apparch/src/bloc/bloc_user.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/screen/home_screen.dart';
 import 'package:apparch/src/screen/log_sign/login_form.dart';
@@ -16,6 +18,8 @@ Future main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => BlocUserLogin()),
+      ChangeNotifierProvider(create: (context) => BlocUser()),
+      ChangeNotifierProvider(create: (context) => BlocThongBao()),
       ChangeNotifierProvider(create: (context) => BlocTimKiem())
     ], child: const MyApp()));
   });
@@ -45,6 +49,8 @@ class _MyAppState extends State<MyApp> {
   void getUser() {
     context.read<BlocUserLogin>().getLoggedState();
     context.read<BlocUserLogin>().getUserLogin();
+    context.read<BlocThongBao>().getAllThongBao();
+    context.read<BlocUser>().getAllUser();
   }
 
   @override

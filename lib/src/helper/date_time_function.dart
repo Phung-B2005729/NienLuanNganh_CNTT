@@ -20,6 +20,10 @@ class DatetimeFunction {
     return DateFormat('dd/MM/yyyy').format(timeDate);
   }
 
+  static String getGioFormDateTime(DateTime timeDate) {
+    return DateFormat('dd/MM/yyyy HH:mm').format(timeDate);
+  }
+
   static DateTime getDateTimeFormString(String time) {
     DateFormat format = DateFormat('dd/MM/yyyy');
     return format.parse(time);

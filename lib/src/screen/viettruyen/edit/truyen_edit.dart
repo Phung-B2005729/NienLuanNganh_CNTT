@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
@@ -834,10 +835,12 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
     try {
       LoadingDialog.showLoadingDialog(context, 'Loading...');
       // update tinh trang cac chuong
-      DatabaseChuong().updateAllTinhTrangChuong(widget.idtruyen, 'Bản thảo');
+      await DatabaseChuong()
+          .updateAllTinhTrangChuong(widget.idtruyen, 'Bản thảo');
 
       // updat tinh trang truyen
-      DatabaseTruyen().updateTinhTrangTruyen(widget.idtruyen, 'Bản thảo');
+      await DatabaseTruyen().updateTinhTrangTruyen(widget.idtruyen, 'Bản thảo');
+      await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
       return true;
     } catch (e) {
       LoadingDialog.hideLoadingDialog(context);

@@ -144,12 +144,19 @@ class ModelInser {
                 'Thư viện (Riêng tư)',
                 style: TextStyle(fontSize: 16),
               ),
-              onTap: () {
+              onTap: () async {
                 print(ktrThuVien(snapshot.data.docs, idtruyen));
-                ktrThuVien(snapshot.data.docs, idtruyen) == true
-                    ? DatabaseUser()
-                        .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen)
-                    : DatabaseUser().createThuVien(blocUserLogin.id, idtruyen);
+                if (ktrThuVien(snapshot.data.docs, idtruyen) == true) {
+                  await DatabaseUser()
+                      .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen);
+                  await DatabaseTruyen()
+                      .deleteDocGia(blocUserLogin.id, idtruyen);
+                } else {
+                  await DatabaseUser()
+                      .createThuVien(blocUserLogin.id, idtruyen);
+                  await DatabaseTruyen()
+                      .insertDocGia(blocUserLogin.id, idtruyen);
+                }
               },
             );
           } else {
@@ -173,14 +180,18 @@ class ModelInser {
               onTap: () async {
                 print(ktrThuVien([], idtruyen));
                 if (ktrThuVien([], idtruyen)) {
-                  DatabaseUser()
+                  await DatabaseUser()
                       .deleteOneTruyenOnThuVien(blocUserLogin.id, idtruyen);
+                  await DatabaseTruyen()
+                      .deleteDocGia(blocUserLogin.id, idtruyen);
                 } else {
                   await DatabaseUser()
                       .createThuVien(blocUserLogin.id, idtruyen);
                   //update tiến trình
                   await DatabaseUser().updateChuongDaDoc(
                       blocUserLogin.id, idtruyen, chuongdadoc);
+                  await DatabaseTruyen()
+                      .insertDocGia(blocUserLogin.id, idtruyen);
                 }
               },
             );

@@ -5,6 +5,7 @@ class UserModel {
   final String userName;
   final String? ngaysinh;
   final String avata;
+  // final List<dynamic> danhsachthongbao;
 
   UserModel(
       {this.id,
@@ -13,6 +14,9 @@ class UserModel {
       required this.email,
       required this.userName,
       this.ngaysinh});
+  //  List<dynamic>? danhsachthongbao
+
+  //  : danhsachthongbao = danhsachthongbao ?? [];
 
   UserModel copyWith({
     String? id,
@@ -21,6 +25,7 @@ class UserModel {
     String? userName,
     String? avata,
     String? ngaysinh,
+    // List<dynamic>? danhsachthongbao,
     // String? lichsutimkiem
   }) {
     return UserModel(
@@ -29,7 +34,9 @@ class UserModel {
         email: email ?? this.email,
         userName: userName ?? this.userName,
         avata: avata ?? this.avata,
-        ngaysinh: ngaysinh ?? this.ngaysinh);
+        ngaysinh: ngaysinh ?? this.ngaysinh
+        // danhsachthongbao: danhsachthongbao ?? this.danhsachthongbao
+        );
   }
 
   Map<String, dynamic> tomap() {
@@ -40,6 +47,7 @@ class UserModel {
       "email": email,
       "avata": avata,
       "ngaysinh": ngaysinh,
+      // "danhsachthongbao": danhsachthongbao
     };
   }
 
@@ -50,6 +58,7 @@ class UserModel {
         fullName: map['fullname'],
         userName: map['username'],
         avata: map['avata'],
+        //danhsachthongbao: map['danhsachthongbao'],
         ngaysinh: map['ngaysinh']);
   }
 }

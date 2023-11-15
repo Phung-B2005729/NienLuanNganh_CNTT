@@ -29,6 +29,21 @@ class DatabaseUser {
     return userCollection.snapshots();
   }
 
+  Future<List<UserModel>> getAllUserModel() async {
+    QuerySnapshot userQuery = await userCollection.get();
+    // ignore: unused_local_variable
+    List<UserModel> userList = [];
+    for (QueryDocumentSnapshot userSnapshot in userQuery.docs) {
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        UserModel userModel = UserModel.fromJson(userData);
+        userList.add(userModel);
+      }
+    }
+    return userList;
+  }
+
   // getting user data
   Future gettingUserData(String email) async {
     QuerySnapshot snapshot =
@@ -120,5 +135,17 @@ class DatabaseUser {
       // Xử lý trường hợp không tìm thấy người dùng
       return null;
     }
+  }
+
+  Future insertDSThongBao(String idthongbao, String iduser) async {
+    return await userCollection.doc(iduser).update({
+      'danhsachthongbao': FieldValue.arrayUnion([idthongbao])
+    });
+  }
+
+  Future deleteDSThongBao(String idthongbao, String iduser) async {
+    return await userCollection.doc(iduser).update({
+      'danhsachthongbao': FieldValue.arrayRemove([idthongbao])
+    });
   }
 }

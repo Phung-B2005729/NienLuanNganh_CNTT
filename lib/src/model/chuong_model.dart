@@ -20,14 +20,16 @@ class ChuongModel {
       required this.ngaycapnhat,
       required this.tinhtrang});
 
-  ChuongModel.fromMap(Map<String, dynamic> map) {
-    idchuong = map['id_chuong'];
-    tenchuong = map['tenchuong'];
-    noidung = map['noidung'];
-    ngaycapnhat = DatetimeFunction.getTimeToDateTime(map['ngaycapnhat']);
-    luotxem = map['luotxem'];
-    binhchon = map['binhchon'];
-    tinhtrang = map['tinhtrang'];
+  static ChuongModel fromJson(Map<String, dynamic> map) {
+    return ChuongModel(
+      idchuong: map['idchuong'],
+      tenchuong: map['tenchuong'],
+      noidung: map['noidung'],
+      ngaycapnhat: DatetimeFunction.getTimeToDateTime(map['ngaycapnhat']),
+      luotxem: map['luotxem'],
+      binhchon: map['binhchon'],
+      tinhtrang: map['tinhtrang'],
+    );
   }
 
   Map<String, dynamic> toMap() {
