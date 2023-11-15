@@ -267,7 +267,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
             children: [
               BuildTroLaiChuongSau(),
               BuildBinhChon(),
-              BuildBinhLuan(),
+              // BuildBinhLuan(),
               BuildChuongTiepTheo(snapshot, context)
             ],
           ),
