@@ -75,6 +75,7 @@ class _InsertChuongState extends State<InsertChuong> {
               await DatabaseChuong().createChuong(chuongModel, widget.idtruyen);
           if (tinhtrang == 'Đã đăng') {
             ThongBaoModel thongBaoModel = ThongBaoModel(
+                tenchuong: tenchuong,
                 idchuong: idchuong,
                 idtacgia: idtacgia,
                 danhsachiduser: listdocgia ?? [],
@@ -195,6 +196,9 @@ class _InsertChuongState extends State<InsertChuong> {
                           LoadingDialog.showLoadingDialog(
                               context, 'Loading...');
                           //xoa
+                          await context
+                              .read<BlocThongBao>()
+                              .deleteAllThongBaoIdChuong(idchuong);
                           await DatabaseChuong(idchuong: idchuong)
                               .deleteOneChuong(widget.idtruyen);
                           // ignore: use_build_context_synchronously

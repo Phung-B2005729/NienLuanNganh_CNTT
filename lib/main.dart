@@ -1,5 +1,6 @@
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_timkiem.dart';
+import 'package:apparch/src/bloc/bloc_truyen.dart';
 import 'package:apparch/src/bloc/bloc_user.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/screen/home_screen.dart';
@@ -20,7 +21,8 @@ Future main() async {
       ChangeNotifierProvider(create: (context) => BlocUserLogin()),
       ChangeNotifierProvider(create: (context) => BlocUser()),
       ChangeNotifierProvider(create: (context) => BlocThongBao()),
-      ChangeNotifierProvider(create: (context) => BlocTimKiem())
+      ChangeNotifierProvider(create: (context) => BlocTimKiem()),
+      ChangeNotifierProvider(create: (context) => BlocTruyen())
     ], child: const MyApp()));
   });
 }
@@ -51,6 +53,7 @@ class _MyAppState extends State<MyApp> {
     context.read<BlocUserLogin>().getUserLogin();
     context.read<BlocThongBao>().getAllThongBao();
     context.read<BlocUser>().getAllUser();
+    context.read<BlocTruyen>().getAllTruyen();
   }
 
   @override

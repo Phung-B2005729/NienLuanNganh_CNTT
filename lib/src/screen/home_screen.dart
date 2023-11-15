@@ -1,3 +1,5 @@
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
+import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/screen/home/home_page.dart';
 import 'package:apparch/src/screen/luutru/luu_tru_screen.dart';
@@ -6,6 +8,7 @@ import 'package:apparch/src/screen/timkiem/tim_kiem_screen.dart';
 import 'package:apparch/src/screen/viettruyen/viet_truyen_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 // ignore: camel_case_types
 class HomeScreen extends StatefulWidget {
@@ -27,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<BlocUserLogin>(context);
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -40,15 +44,45 @@ class _HomeScreenState extends State<HomeScreen> {
         //selectedIconTheme: const IconThemeData(size: 24.0),
         unselectedItemColor: const Color.fromARGB(255, 63, 63, 63),
         //   selectedItemColor: ColorClass.fiveColor,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Tìm kiếm'),
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.search), label: 'Tìm kiếm'),
+          const BottomNavigationBarItem(
               icon: Icon(Icons.library_books_rounded), label: 'Lưu trữ'),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.pencil), label: 'Viết truyện'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.notifications), label: 'Thông báo'),
+              icon: (context.read<BlocThongBao>().getConutThongBaoMoi(user.id) >
+                      0)
+                  ? Stack(
+                      children: [
+                        const Icon(Icons.notifications),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: Text(
+                              context
+                                  .read<BlocThongBao>()
+                                  .getConutThongBaoMoi(user.id)
+                                  .toString(), // You can replace this with the actual notification count
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Icon(Icons.notifications),
+              label: 'Thông báo'),
         ],
         currentIndex: _selectedIndex,
         onTap: (value) {

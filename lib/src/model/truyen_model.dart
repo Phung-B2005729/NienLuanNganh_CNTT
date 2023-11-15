@@ -2,10 +2,10 @@ import '../helper/date_time_function.dart';
 
 class TruyenModel {
   String? idtruyen;
-  String? tacgia;
-  String? tentruyen;
-  String? mota;
-  DateTime? ngaycapnhat;
+  String tacgia;
+  String tentruyen;
+  String mota;
+  DateTime ngaycapnhat;
   int? tongluotxem;
   int? tongbinhchon;
   String? tinhtrang;

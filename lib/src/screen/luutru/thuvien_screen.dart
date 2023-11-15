@@ -110,7 +110,9 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                           index < snapshot.data.docs.length;
                           index++)
                         if (snapshot.data.docs[index]['idtruyen'] ==
-                            snapshot4.data.docs[i]['idtruyen'])
+                                snapshot4.data.docs[i]['idtruyen'] &&
+                            snapshot.data.docs[index]['tinhtrang'] !=
+                                'Bản thảo')
                           GestureDetector(
                             onTap: () async {
                               // chuyen den noi dung chuong

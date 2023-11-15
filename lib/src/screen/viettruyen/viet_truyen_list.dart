@@ -2,6 +2,7 @@
 
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
+import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
@@ -357,7 +358,9 @@ class VietTruyenList extends StatelessWidget {
         await DatabaseTruyen().deleleOneTruyen(idtruyen);
         // ignore: use_build_context_synchronously
         // xoá các thông báo có idtruyen
+        // ignore: use_build_context_synchronously
         await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
+        await DatabaseDSDoc().deleteTruyenTrongDSDoc(idtruyen);
         // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(
             context, ColorClass.fiveColor, "Đã xoá thành công!!");

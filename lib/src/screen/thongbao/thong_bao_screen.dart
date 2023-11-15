@@ -1,12 +1,33 @@
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
+import 'package:apparch/src/bloc/bloc_truyen.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/share/user_appbar_action.dart';
+import 'package:apparch/src/screen/thongbao/thongbao_list.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class ThongBaoScreen extends StatelessWidget {
+class ThongBaoScreen extends StatefulWidget {
   const ThongBaoScreen({super.key});
+
+  @override
+  State<ThongBaoScreen> createState() => _ThongBaoScreenState();
+}
+
+class _ThongBaoScreenState extends State<ThongBaoScreen> {
+  late Future<void> allthongbao;
+  @override
+  void initState() {
+    super.initState();
+    allthongbao = getData();
+  }
+
+  Future<void> getData() async {
+    await context.read<BlocTruyen>().getAllTruyen();
+    // ignore: use_build_context_synchronously
+    return await context.read<BlocThongBao>().getAllThongBao();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +57,17 @@ class ThongBaoScreen extends StatelessWidget {
           // scrolled underneath the app bar.
           scrolledUnderElevation: 4.0,
         ),
-        body: const Text('Các Thông báo'));
+        body: FutureBuilder(
+            future: allthongbao,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return ThongBaoList();
+              }
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: ColorClass.xanh2Color,
+                ),
+              );
+            }));
   }
 }

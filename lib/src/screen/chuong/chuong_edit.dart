@@ -94,6 +94,7 @@ class _EditChuongState extends State<EditChuong> {
       List<dynamic>? listdocgia =
           await DatabaseTruyen().getDocGiaList(widget.idtruyen);
       ThongBaoModel thongBaoModel = ThongBaoModel(
+          tenchuong: widget.tchuong,
           idchuong: widget.idchuong,
           idtacgia: idtacgia,
           danhsachiduser: listdocgia ?? [],
@@ -363,7 +364,10 @@ class _EditChuongState extends State<EditChuong> {
               try {
                 if (widget.idchuong != '') {
                   LoadingDialog.showLoadingDialog(context, 'Loading...');
-                  //xoa
+                  //xoa thông báo của chương
+                  await context
+                      .read<BlocThongBao>()
+                      .deleteAllThongBaoIdChuong(widget.idchuong);
                   await DatabaseChuong(idchuong: widget.idchuong)
                       .deleteOneChuong(widget.idtruyen);
                   // ignore: use_build_context_synchronously

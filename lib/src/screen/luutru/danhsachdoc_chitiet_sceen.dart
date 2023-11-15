@@ -80,9 +80,12 @@ class _DanhSachDocChiTietScreenState extends State<DanhSachDocChiTietScreen> {
                             index < snapshot.data.docs.length;
                             index++)
                           if (ktrTruyenTrongDs(
-                                  snapshot.data.docs[index]['danhsachdocgia'],
-                                  widget.idds) ==
-                              true)
+                                      snapshot.data.docs[index]
+                                          ['danhsachdocgia'],
+                                      widget.idds) ==
+                                  true &&
+                              snapshot.data.docs[index]['tinhtrang'] !=
+                                  'Bản thảo')
                             BuildTruyenDS(context, snapshot, index)
                       ]);
                 } else {

@@ -464,6 +464,10 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                               },
                               onDismissed: (direction) async {
                                 try {
+                                  await context
+                                      .read<BlocThongBao>()
+                                      .deleteAllThongBaoIdChuong(
+                                          snapshot.data.docs[i]['idchuong']);
                                   await DatabaseChuong(
                                           idchuong: snapshot.data.docs[i]
                                               ['idchuong'])
@@ -840,6 +844,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
 
       // updat tinh trang truyen
       await DatabaseTruyen().updateTinhTrangTruyen(widget.idtruyen, 'Bản thảo');
+      // ignore: use_build_context_synchronously
       await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
       return true;
     } catch (e) {

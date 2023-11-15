@@ -241,13 +241,16 @@ class _CaNhanState extends State<CaNhan> {
                       Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: ListTile(
-                            title: Text(
-                              'Đăng xuất',
-                              style: AppTheme.lightTextTheme.headlineMedium,
-                            ),
-                            subtitle: Text(
-                              user.email,
-                              style: AppTheme.lightTextTheme.bodySmall,
+                            title: Row(
+                              children: [
+                                const Icon(Icons.exit_to_app),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text('Đăng xuất',
+                                    style:
+                                        AppTheme.lightTextTheme.headlineLarge),
+                              ],
                             ),
                             onTap: () async {
                               firAuth.logOut();

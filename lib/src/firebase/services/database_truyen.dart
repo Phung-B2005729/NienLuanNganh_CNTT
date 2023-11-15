@@ -26,6 +26,22 @@ class DatabaseTruyen {
     return await truyenColection.doc(idtruyen).get();
   }
 
+  Future<List<TruyenModel>> getALLTruyenModel() async {
+    // ignore: unused_local_variable
+    QuerySnapshot thongbaoQuery = await truyenColection.get();
+    List<TruyenModel> thongbaoList = [];
+
+    for (QueryDocumentSnapshot thongbaoSnapshot in thongbaoQuery.docs) {
+      if (thongbaoSnapshot.exists) {
+        Map<String, dynamic> thongbaoData =
+            thongbaoSnapshot.data() as Map<String, dynamic>;
+        TruyenModel truyenModel = TruyenModel.fromJson(thongbaoData);
+        thongbaoList.add(truyenModel);
+      }
+    }
+    return thongbaoList;
+  }
+
   // lay danh sach tat ca truyen theo dieukien
   getAllTruyenDK(String filequery, dynamic value) async {
     return truyenColection.where(filequery, isEqualTo: value).snapshots();

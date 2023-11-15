@@ -73,4 +73,11 @@ class DatabaseDSDoc {
     }
     return false;
   }
+
+  Future<void> deleteTruyenTrongDSDoc(String idtruyen) async {
+    var danhSachDocs = await dsCollection.get();
+    for (var doc in danhSachDocs.docs) {
+      await deleteTruyen(doc.id, idtruyen);
+    }
+  }
 }

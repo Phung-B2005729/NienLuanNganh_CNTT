@@ -45,6 +45,15 @@ class BlocThongBao with ChangeNotifier {
         .toList();
   }
 
+  int getConutThongBaoMoi(String iduser) {
+    List<ThongBaoModel> list = _allThongBao
+        .where((thongBao) =>
+            kiemTraIdUser(thongBao.danhsachiduser, iduser) == true &&
+            kiemTraIdUser(thongBao.danhsachiduserdadoc, iduser) == false)
+        .toList();
+    return list.length;
+  }
+
   Future<void> addIduserDanhSachUser(
       // ignore: non_constant_identifier_names
       String idThongBao,
@@ -137,10 +146,30 @@ class BlocThongBao with ChangeNotifier {
     }
   }
 
-  Future<void> deleteAllThongBaoIdTruyen(String idtruyen) async {
+  Future<void> deleteAllThongBaoIdTruyen(String idchuong) async {
     // ignore: unused_local_variable
     List<ThongBaoModel> list =
-        _allThongBao.where((item) => item.idtruyen == idtruyen).toList();
+        _allThongBao.where((item) => item.idchuong == idchuong).toList();
+    // ignore: unused_local_variable
+    if (list != [] && list.isNotEmpty) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          await DatabaseThongBao().deleteOnethongbao(list[i].id!);
+          print('Đã xoá trong database');
+          _allThongBao.remove(list[i]);
+          notifyListeners();
+        } catch (e) {
+          // ignore: prefer_interpolation_to_compose_strings
+          print('Lỗi ' + e.toString());
+        }
+      }
+    }
+  }
+
+  Future<void> deleteAllThongBaoIdChuong(String idchuong) async {
+    // ignore: unused_local_variable
+    List<ThongBaoModel> list =
+        _allThongBao.where((item) => item.idchuong == idchuong).toList();
     // ignore: unused_local_variable
     if (list != [] && list.isNotEmpty) {
       for (var i = 0; i < list.length; i++) {

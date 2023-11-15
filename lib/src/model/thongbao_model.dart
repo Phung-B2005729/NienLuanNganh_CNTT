@@ -4,6 +4,7 @@ class ThongBaoModel {
   String idchuong;
   String idtacgia;
   String idtruyen;
+  String tenchuong;
   List<dynamic> danhsachiduser;
   List<dynamic> danhsachiduserdadoc;
   String ngaycapnhat;
@@ -13,6 +14,7 @@ class ThongBaoModel {
       required this.idtacgia,
       required this.danhsachiduser,
       required this.idtruyen,
+      required this.tenchuong,
       required this.ngaycapnhat,
       List<dynamic>? danhsachiduserdadoc})
       : danhsachiduserdadoc = danhsachiduserdadoc ?? [];
@@ -31,6 +33,7 @@ class ThongBaoModel {
         idchuong: idchuong ?? this.idchuong,
         idtacgia: idtacgia ?? this.idtacgia,
         idtruyen: idtruyen ?? this.idtruyen,
+        tenchuong: tenchuong ?? this.tenchuong,
         ngaycapnhat: ngaycapnhat ?? this.ngaycapnhat,
         danhsachiduser: danhsachiduser ?? this.danhsachiduser,
         danhsachiduserdadoc: danhsachiduserdadoc ?? this.danhsachiduserdadoc);
@@ -42,6 +45,7 @@ class ThongBaoModel {
       idchuong: map['idchuong'],
       danhsachiduser: map['danhsachiduser'],
       ngaycapnhat: map['ngaycapnhat'],
+      tenchuong: map['tenchuong'],
       idtruyen: map['idtruyen'],
       idtacgia: map['idtacgia'],
       danhsachiduserdadoc: map['danhsachiduserdadoc'],
@@ -55,6 +59,7 @@ class ThongBaoModel {
       'danhsachiduser': danhsachiduser,
       'ngaycapnhat': ngaycapnhat,
       'idtruyen': idtruyen,
+      'tenchuong': tenchuong,
       'idtacgia': idtacgia,
       'danhsachiduserdadoc': danhsachiduserdadoc
     };
