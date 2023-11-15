@@ -54,6 +54,16 @@ class BlocThongBao with ChangeNotifier {
     return list.length;
   }
 
+  int getConutThongBaoMoiIdTruyen(String iduser, String idtruyen) {
+    List<ThongBaoModel> list = _allThongBao
+        .where((thongBao) =>
+            kiemTraIdUser(thongBao.danhsachiduser, iduser) == true &&
+            kiemTraIdUser(thongBao.danhsachiduserdadoc, iduser) == false &&
+            thongBao.idtruyen == idtruyen)
+        .toList();
+    return list.length;
+  }
+
   Future<void> addIduserDanhSachUser(
       // ignore: non_constant_identifier_names
       String idThongBao,

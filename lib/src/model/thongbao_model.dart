@@ -23,6 +23,7 @@ class ThongBaoModel {
     String? idchuong,
     String? idtacgia,
     String? idtruyen,
+    String? tenchuong,
     String? ngaycapnhat,
     List<dynamic>? danhsachiduser,
     List<dynamic>? danhsachiduserdadoc,

@@ -18,15 +18,18 @@ class ThongBaoList extends StatelessWidget {
         List<ThongBaoModel> listthongbao =
             blocThongBao.getDSThongBaoIdUser(user.id);
 
-        return ListView.separated(
-          separatorBuilder: (context, index) {
-            return const SizedBox(width: 5);
-          },
-          scrollDirection: Axis.vertical,
-          itemCount: listthongbao.length,
-          itemBuilder: (context, index) {
-            return ThongBaoTilte(listthongbao[index]);
-          },
+        return Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: ListView.separated(
+            separatorBuilder: (context, index) {
+              return const SizedBox(width: 5);
+            },
+            scrollDirection: Axis.vertical,
+            itemCount: listthongbao.length,
+            itemBuilder: (context, index) {
+              return ThongBaoTilte(listthongbao[index]);
+            },
+          ),
         );
       },
     );

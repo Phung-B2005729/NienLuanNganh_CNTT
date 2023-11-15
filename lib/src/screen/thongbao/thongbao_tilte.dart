@@ -71,9 +71,9 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
     print(widget.thongBaoModel.idtruyen);
     print('lengt' + truyen.allTruyenCount.toString());
     final tentruyen =
-        truyen?.findById(widget.thongBaoModel.idtruyen)?.tentruyen ?? '';
+        truyen.findById(widget.thongBaoModel.idtruyen)?.tentruyen ?? '';
     final linkanh =
-        truyen?.findById(widget.thongBaoModel.idtruyen)?.linkanh ?? '';
+        truyen.findById(widget.thongBaoModel.idtruyen)?.linkanh ?? '';
     print('linh anh' + linkanh);
     return Padding(
       padding: const EdgeInsets.only(top: 8),
@@ -147,24 +147,3 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
     }
   }
 }
-/*ListTile(
-      onTap: () {
-        // chuyển chuongamition
-      },
-      title: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Text(widget.ThongBaoModel.name,
-            style: AppTheme.lightTextTheme.headlineMedium),
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Text(
-          // ignore: prefer_interpolation_to_compose_strings
-          "Mở đề: " +
-              widget.ThongBaoModel.thoigianmode +
-              "\nĐóng đề: " +
-              widget.ThongBaoModel.thoigiandongde,
-          style: AppTheme.lightTextTheme.bodySmall,
-        ),
-      ),
-    );*/

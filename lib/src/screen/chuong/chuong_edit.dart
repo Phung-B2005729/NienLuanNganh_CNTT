@@ -70,11 +70,11 @@ class _EditChuongState extends State<EditChuong> {
       // update tinh trang cac chuong
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Bản thảo');
-      // ignore: use_build_context_synchronously
+      // ignore:
       LoadingDialog.hideLoadingDialog(context);
       return true;
     } catch (e) {
-      // ignore: use_build_context_synchronously
+      // ignore:
       LoadingDialog.hideLoadingDialog(context);
       // MsgDialog.showSnackbar(context, Colors.red, 'Lỗi vui lòng thử lại');
       return false;

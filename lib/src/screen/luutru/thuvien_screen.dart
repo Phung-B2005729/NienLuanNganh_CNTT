@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
@@ -404,32 +405,44 @@ class _TienTrinhDocState extends State<TienTrinhDoc> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<BlocUserLogin>(context);
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(right: 40),
-        child: Align(
-          alignment: Alignment.topRight,
-          child: Container(
-            //  padding: const EdgeInsets.all(2.0),
-            //  margin: const EdgeInsets.only(left: ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: ColorClass.xanh2Color,
-            ),
-            constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
-            child: const Text(
-              'Mới', // so chuong gan day 3 ngay ma chưa doc
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
+      if (context
+              .read<BlocThongBao>()
+              .getConutThongBaoMoiIdTruyen(user.id, widget.idtruyen) >
+          0)
+        const Padding(
+          padding: EdgeInsets.only(right: 30),
+          child: Align(
+              alignment: Alignment.bottomRight,
+              child: Stack(
+                children: [
+                  Icon(
+                    Icons.chat_bubble_outline,
+                    color: ColorClass
+                        .fiveColor, // Color.fromARGB(255, 206, 129, 88),
+                    size: 30,
+                  ),
+                  Positioned(
+                    right: 5,
+                    top: 4,
+                    child: Text(
+                      'Mới', // You can replace this with the actual notification count
+                      style: TextStyle(
+                          color: ColorClass
+                              .fiveColor, //Color.fromARGB(255, 206, 129, 88),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ],
+              )),
         ),
-      ),
       Padding(
         padding: const EdgeInsets.only(left: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
+          //  mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
               child: LinearProgressIndicator(

@@ -6,8 +6,6 @@ import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
-import 'package:apparch/src/model/thongbao_model.dart';
-
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/truyen/truyen_chi_tiet_amition.dart';
 import 'package:apparch/src/screen/viettruyen/edit/truyen_edit.dart';

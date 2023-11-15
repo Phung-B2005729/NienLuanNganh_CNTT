@@ -5,7 +5,6 @@ import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_auth.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
 import 'package:apparch/src/helper/date_time_function.dart';
-import 'package:apparch/src/helper/helper_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/model/user_model.dart';
