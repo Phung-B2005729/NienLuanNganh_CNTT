@@ -575,6 +575,9 @@ class _CaNhanState extends State<CaNhan> {
                         if (value == null || value.isEmpty) {
                           return 'Bạn chưa nhập vào mật khẩu xác nhận';
                         }
+                        if (value.length < 8) {
+                          return 'Mật khẩu phải có ít nhất 8 kí tự';
+                        }
                         return null;
                       },
                       style: AppTheme.lightTextTheme.bodySmall,
