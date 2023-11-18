@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file:
 
 import 'dart:convert';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
@@ -70,11 +70,11 @@ class _EditChuongState extends State<EditChuong> {
       // update tinh trang cac chuong
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Bản thảo');
-      // ignore:
+      // ignore:, use_build_context_synchronously
       LoadingDialog.hideLoadingDialog(context);
       return true;
     } catch (e) {
-      // ignore:
+      // ignore:, use_build_context_synchronously
       LoadingDialog.hideLoadingDialog(context);
       // MsgDialog.showSnackbar(context, Colors.red, 'Lỗi vui lòng thử lại');
       return false;
@@ -140,6 +140,7 @@ class _EditChuongState extends State<EditChuong> {
           };
           await DatabaseChuong()
               .updateOneChuong(widget.idtruyen, widget.idchuong, chuong);
+          // ignore: use_build_context_synchronously
           LoadingDialog.hideLoadingDialog(context);
           return true;
         } catch (e) {
@@ -180,16 +181,16 @@ class _EditChuongState extends State<EditChuong> {
               tinhtrang: widget.tinhtrang);
           widget.idchuong =
               await DatabaseChuong().createChuong(chuongModel, widget.idtruyen);
-          // ignore: use_build_context_synchronously
+          // ignore:
           LoadingDialog.hideLoadingDialog(context);
           widget.edit = true;
           return true;
         } catch (e) {
           // ignore: prefer_interpolation_to_compose_strings
           print('Lỗi dữ liệu ' + e.toString());
-          // ignore: use_build_context_synchronously
+          // ignore:
           LoadingDialog.hideLoadingDialog(context);
-          // ignore: use_build_context_synchronously
+          // ignore:
           MsgDialog.showLoadingDialog(context, 'Lỗi vui lòng thử lại!!');
         }
       } else {
@@ -324,15 +325,15 @@ class _EditChuongState extends State<EditChuong> {
             }
             if ((saveCreate == true && ktrdang == true) ||
                 (update == true && ktrdang == true)) {
-              // ignore: use_build_context_synchronously
+              // ignore:, use_build_context_synchronously
               MsgDialog.showSnackbar(
                   context, ColorClass.fiveColor, 'Đã đăng một chương mới!!');
-              // ignore: use_build_context_synchronously
+              // ignore:, use_build_context_synchronously
               Navigator.pop(context);
-              // ignore: use_build_context_synchronously
+              // ignore:
               Navigator.pop(context);
             }
-            // ignore: use_build_context_synchronously
+            // ignore:
           } else if (value == 'Lưu') {
             print(value);
 
@@ -344,13 +345,13 @@ class _EditChuongState extends State<EditChuong> {
               // goi ham update;
             }
             if (saveCreate == true || update == true) {
-              // ignore: use_build_context_synchronously
+              // ignore:
               MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã lưu');
-              // ignore: use_build_context_synchronously
+              // ignore:
 
-              // ignore: use_build_context_synchronously
+              // ignore:
 
-              // ignore: use_build_context_synchronously
+              // ignore:
             }
           } else if (value == 'Xoá') {
             print(value);
@@ -370,14 +371,14 @@ class _EditChuongState extends State<EditChuong> {
                       .deleteAllThongBaoIdChuong(widget.idchuong);
                   await DatabaseChuong(idchuong: widget.idchuong)
                       .deleteOneChuong(widget.idtruyen);
-                  // ignore: use_build_context_synchronously
+                  // ignore:
                   LoadingDialog.hideLoadingDialog(context);
-                  // ignore: use_build_context_synchronously
+                  // ignore:
                   MsgDialog.showSnackbar(
                       context, ColorClass.fiveColor, 'Đã xoá');
-                  // ignore: use_build_context_synchronously
+                  // ignore:
                   Navigator.pop(context);
-                  // ignore: use_build_context_synchronously
+                  // ignore:
                   Navigator.pop(context);
                 } else {
                   _nameController.text = '';
@@ -396,13 +397,13 @@ class _EditChuongState extends State<EditChuong> {
             // gọi dropChuong;
             bool ktr = await dropChuong(context);
             if (ktr == true) {
-              // ignore: use_build_context_synchronously
+              // ignore:
               MsgDialog.showSnackbar(
                   context, ColorClass.fiveColor, 'Thành công!!');
-              // ignore: use_build_context_synchronously
+              // ignore:
               Navigator.pop(context);
             } else {
-              // ignore: use_build_context_synchronously
+              // ignore:
               MsgDialog.showSnackbar(
                   context, Colors.red, 'Lỗi! Vui lòng thử lại');
             }

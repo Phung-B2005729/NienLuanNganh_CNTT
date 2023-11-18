@@ -1,4 +1,3 @@
-import 'package:apparch/src/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helper/helper_function.dart';
 import 'services/database_user.dart';
@@ -27,6 +26,7 @@ class FirAuth {
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {
+      // ignore: prefer_interpolation_to_compose_strings
       print('Lỗi đăng ký ' + e.toString());
       onSignUpErr(e.code, onRegisterError);
     }

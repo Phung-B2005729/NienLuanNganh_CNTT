@@ -120,7 +120,7 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
               radius: 20,
             ),
             title: Text(
-              tacgia!.userName +
+              tacgia.userName +
                   " đã cập nhật " +
                   tentruyen +
                   "-" +
@@ -134,7 +134,8 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
             trailing: Container(
                 height: 50,
                 color: Colors.white,
-                child: (linkanh != '') ? Image.network(linkanh) : Text('')),
+                child:
+                    (linkanh != '') ? Image.network(linkanh) : const Text('')),
           )),
     );
   }

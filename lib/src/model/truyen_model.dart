@@ -85,7 +85,7 @@ class TruyenModel {
       'tacgia': tacgia,
       'tentruyen': tentruyen,
       'mota': mota,
-      'ngaycapnhat': DatetimeFunction.getTimeToInt(ngaycapnhat!),
+      'ngaycapnhat': DatetimeFunction.getTimeToInt(ngaycapnhat),
       'tongbinhchon': tongbinhchon,
       'tongluotxem': tongluotxem,
       'linkanh': linkanh,
