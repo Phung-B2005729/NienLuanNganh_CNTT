@@ -58,12 +58,17 @@ class _TruyenChiTietDetail1State extends State<TruyenChiTietDetail1> {
     });
     truyenStream =
         await DatabaseTruyen().getAllTruyenDK("idtruyen", widget.idtruyen);
-    await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((vale) {
+    //
+    await DatabaseChuong()
+        .getALLChuongSX(widget.idtruyen, false, widget.edit)
+        .then((vale) {
       setState(() {
         allChuongStream = vale;
       });
     });
-    await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((value) {
+    await DatabaseChuong()
+        .getALLChuongSX(widget.idtruyen, false, widget.edit)
+        .then((value) {
       setState(() {
         countChuong = value.size;
       });

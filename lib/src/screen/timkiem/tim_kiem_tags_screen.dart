@@ -313,7 +313,9 @@ class _RowCountChuongState extends State<RowCountChuong> {
   }
 
   getCountChuong() async {
-    await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((value) {
+    await DatabaseChuong()
+        .getALLChuongSX(widget.idtruyen, false, false)
+        .then((value) {
       setState(() {
         countChuong = value.size;
       });

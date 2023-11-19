@@ -41,12 +41,21 @@ class DatabaseChuong {
   }
 
 //
-  Future getALLChuongSX(String idtruyen, bool des) async {
-    return truyenColection
-        .doc(idtruyen)
-        .collection("chuong")
-        .orderBy('ngaycapnhat', descending: des)
-        .get();
+  Future getALLChuongSX(String idtruyen, bool des, bool kiemtraedit) async {
+    if (kiemtraedit == false) {
+      return truyenColection
+          .doc(idtruyen)
+          .collection("chuong")
+          .where('tinhtrang', isEqualTo: 'Đã đăng')
+          .orderBy('ngaycapnhat', descending: des)
+          .get();
+    } else {
+      return truyenColection
+          .doc(idtruyen)
+          .collection("chuong")
+          .orderBy('ngaycapnhat', descending: des)
+          .get();
+    }
   }
 
   // lay 5 chuong cuoi cung

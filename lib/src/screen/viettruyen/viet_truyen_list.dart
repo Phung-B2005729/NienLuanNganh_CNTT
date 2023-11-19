@@ -216,8 +216,8 @@ class VietTruyenList extends StatelessWidget {
                 context, snapshot.data.docs[index]['idtruyen']);
             if (ktr == true) {
               // ignore: use_build_context_synchronously
-              MsgDialog.showSnackbar(
-                  context, ColorClass.fiveColor, 'Đăng truyện thành công!!');
+              // MsgDialog.showSnackbar(
+              //    context, ColorClass.fiveColor, 'Đăng truyện thành công!!');
               // ignore: use_build_context_synchronously
             } else {
               // ignore: use_build_context_synchronously

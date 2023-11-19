@@ -179,11 +179,6 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                           style: AppTheme.lightTextTheme.bodySmall,
                         ),
                       ),
-                      PopupMenuItem<String>(
-                        value: 'Thoát',
-                        child: Text('Thoát',
-                            style: AppTheme.lightTextTheme.bodySmall),
-                      ),
                     ]),
           ],
           title: Align(
@@ -956,9 +951,6 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
         // ignore: use_build_context_synchronously
         MsgDialog.showSnackbar(context, Colors.red, 'Lỗi! Vui lòng thử lại');
       }
-    } else if (value == 'Thoát') {
-      // khong luu
-      Navigator.pop(context);
     }
   }
 }

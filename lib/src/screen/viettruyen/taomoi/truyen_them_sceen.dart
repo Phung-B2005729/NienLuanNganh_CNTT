@@ -114,11 +114,6 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                           style: AppTheme.lightTextTheme.bodySmall,
                         ),
                       ),
-                      PopupMenuItem<String>(
-                        value: 'Thoát',
-                        child: Text('Thoát',
-                            style: AppTheme.lightTextTheme.bodySmall),
-                      ),
                     ]),
           ],
           title: Align(
@@ -454,25 +449,31 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
             id = await DatabaseTruyen().createTruyen(truyen);
             // ignore: curly_braces_in_flow_control_structures, use_build_context_synchronously
             if (id != '') {
+              // ignore: use_build_context_synchronously
               LoadingDialog.hideLoadingDialog(context);
+              // ignore: use_build_context_synchronously
               MsgDialog.showSnackbar(
                   context, ColorClass.fiveColor, "Đã đăng một truyện!");
               return id;
             } else {
+              // ignore: use_build_context_synchronously
               LoadingDialog.hideLoadingDialog(context);
+              // ignore: use_build_context_synchronously
               MsgDialog.showLoadingDialog(context, "Lỗi vui lòng thử lại!");
               return '';
             }
           }
         } catch (e) {
+          // ignore: prefer_interpolation_to_compose_strings
           print('Lỗi ' + e.toString());
         }
       } else {
-        LoadingDialog.hideLoadingDialog(context);
         MsgDialog.showLoadingDialog(
             context, "Bạn chưa thêm ảnh bìa của truyện");
         return '';
       }
+    } else {
+      return '';
     }
   }
 
@@ -493,6 +494,7 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
                     TruyenChiTietScreen(idtruyen: idtruyen, edit: true)));
       }
     } else if (value == 'Lưu') {
+      print('Gọi lưu');
       print(value);
       // goi ham luu => kiem tra du lieu
       if (idtruyen == '')
@@ -506,8 +508,11 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
       print('idtruyen thu duoc ' + idtruyen);
       // chuyen về trang viettruyen
       if (idtruyen != '') {
+        print('Gọi thoát');
+        print(idtruyen);
         // ignore: use_build_context_synchronously
 
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       }
     } else if (value == 'Đăng') {
@@ -527,28 +532,6 @@ class _InsertTruyenScreenState extends State<InsertTruyenScreen> {
       }
       // chuyen về trang viettruyen
       // ignore: use_build_context_synchronously
-    } else if (value == 'Thoát') {
-      if (idtruyen == '')
-      // chua luu
-      {
-        MsgDialog.showXacNhanThongTin(
-            context,
-            'Lưu ý sau khi thoát nội dung của truyện sẽ không được lưu!',
-            ColorClass.fiveColor, () async {
-          // xoa truyne
-          if (idtruyen != '') {
-            // xoa truyen
-            await DatabaseTruyen().deleleOneTruyen(idtruyen);
-          }
-          Navigator.pop(context);
-          Navigator.pop(context);
-        });
-
-        print(value);
-      } else {
-        // da luu
-        Navigator.pop(context);
-      }
     } else if (value == 'Thêm chương') {
       print(value);
       // goi ham luu //    // lay idtruyen

@@ -36,7 +36,7 @@ class _ThongBaoTilteState extends State<ThongBaoTilte> {
     // ignore: unnecessary_null_comparison
     if (widget.thongBaoModel != null) {
       await DatabaseChuong()
-          .getALLChuongSX(widget.thongBaoModel.idtruyen, false)
+          .getALLChuongSX(widget.thongBaoModel.idtruyen, false, false)
           .then((vale) {
         if (mounted) {
           setState(() {

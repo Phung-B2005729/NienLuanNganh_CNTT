@@ -42,7 +42,7 @@ class _TruyenChiTietScreenState extends State<TruyenChiTietScreen>
         });
       });
       await DatabaseChuong()
-          .getALLChuongSX(widget.idtruyen, false)
+          .getALLChuongSX(widget.idtruyen, false, widget.edit)
           .then((value) {
         setState(() {
           countChuong = value.size;

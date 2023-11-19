@@ -28,6 +28,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
   Stream<QuerySnapshot>? allChuongStream;
   // ignore: prefer_typing_uninitialized_variables
   var countChuong;
+  var countChuongNotBanThao;
   @override
   void initState() {
     super.initState();
@@ -44,7 +45,9 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
         allChuongStream = vale;
       });
     });
-    await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((value) {
+    await DatabaseChuong()
+        .getALLChuongSX(widget.idtruyen, false, widget.edit)
+        .then((value) {
       setState(() {
         countChuong = value.size;
       });
@@ -68,7 +71,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
                 child: Column(children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 4, right: 4, top: 140),
-                    child: BuildCardSapXepChuong(),
+                    child: BuildCardSapXepChuong(snapshot),
                   ),
                   if (snapshot.data.docs.length > 0)
                     Expanded(
@@ -196,7 +199,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
     );
   }
 
-  Widget BuildCardSapXepChuong() {
+  Widget BuildCardSapXepChuong(AsyncSnapshot<dynamic> snapshot) {
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,7 +211,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
                 width: 4,
               ),
               Text(
-                '${countChuong.toString()} chuong',
+                '${snapshot.data.docs.length} chuong',
                 style: AppTheme.lightTextTheme.bodyLarge,
               ),
             ],

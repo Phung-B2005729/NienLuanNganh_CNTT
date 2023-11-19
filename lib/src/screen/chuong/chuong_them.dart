@@ -222,19 +222,6 @@ class _InsertChuongState extends State<InsertChuong> {
                         print('Lỗi xóa chương: $e');
                       }
                     });
-                  } else if (value == 'Thoát') {
-                    print(value);
-                    if (idchuong == '') {
-                      MsgDialog.showXacNhanThongTin(
-                          context,
-                          'Lưu ý! Thông tin sẽ không được lưu nếu như bạn thoát',
-                          ColorClass.fiveColor, () async {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
-                    } else {
-                      Navigator.pop(context);
-                    }
                   }
                 },
                 color: const Color.fromARGB(255, 237, 236, 236),
@@ -267,11 +254,6 @@ class _InsertChuongState extends State<InsertChuong> {
                       PopupMenuItem<String>(
                         value: 'Xoá',
                         child: Text('Xoá',
-                            style: AppTheme.lightTextTheme.bodySmall),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'Thoát',
-                        child: Text('Thoát',
                             style: AppTheme.lightTextTheme.bodySmall),
                       ),
                     ]),

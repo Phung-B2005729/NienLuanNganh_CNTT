@@ -29,7 +29,6 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
   Stream<QuerySnapshot>? listtruyenThuVien;
   Stream<QuerySnapshot>? truyenData;
   QuerySnapshot? allChuongStream;
-  var valuetinhtrinh;
   late final blocUserLogin;
   @override
   void initState() {
@@ -121,37 +120,49 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
 
                               await DatabaseChuong()
                                   .getALLChuongSX(
-                                      snapshot4.data.docs[i]['idtruyen'], false)
+                                      snapshot4.data.docs[i]['idtruyen'],
+                                      false,
+                                      false)
                                   .then((vale) {
                                 setState(() {
                                   allChuongStream = vale;
                                 });
                               });
                               // ignore: prefer_interpolation_to_compose_strings
-
-                              // ignore: use_build_context_synchronously
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => ChuongAmition(
-                                          listchuong: allChuongStream!.docs,
-                                          vt: snapshot4.data.docs[i]
-                                                      ['chuongdadoc'] ==
-                                                  0
-                                              ? 0
-                                              : (snapshot4.data.docs[i]
-                                                          ['chuongdadoc']) ==
-                                                      allChuongStream!
-                                                          .docs.length
-                                                  ? (snapshot4.data.docs[i]
-                                                          ['chuongdadoc']) -
-                                                      1
-                                                  : (snapshot4.data.docs[i]
-                                                      ['chuongdadoc']),
-                                          idtruyen: snapshot4.data.docs[i]
-                                              ['idtruyen'],
-                                          iduser: blocUserLogin.id,
-                                          edit: false)));
+                              if (allChuongStream!.docs.isNotEmpty) {
+                                // ignore: prefer_interpolation_to_compose_strings
+                                print('lengt' +
+                                    allChuongStream!.docs.length.toString());
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => ChuongAmition(
+                                            listchuong: allChuongStream!.docs,
+                                            vt: snapshot4.data.docs[i]
+                                                        ['chuongdadoc'] ==
+                                                    0
+                                                ? 0
+                                                : (snapshot4.data.docs[i]
+                                                            ['chuongdadoc']) ==
+                                                        allChuongStream!
+                                                            .docs.length
+                                                    ? (snapshot4.data.docs[i]
+                                                            ['chuongdadoc']) -
+                                                        1
+                                                    : (snapshot4.data.docs[i]
+                                                        ['chuongdadoc']),
+                                            idtruyen: snapshot4.data.docs[i]
+                                                ['idtruyen'],
+                                            iduser: blocUserLogin.id,
+                                            edit: false)));
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                MsgDialog.showSnackbar(
+                                    context,
+                                    ColorClass.fiveColor,
+                                    "Chưa có chương được cập nhật");
+                              }
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -385,7 +396,9 @@ class _TienTrinhDocState extends State<TienTrinhDoc> {
   }
 
   getCountChuong() async {
-    await DatabaseChuong().getALLChuongSX(widget.idtruyen, false).then((value) {
+    await DatabaseChuong()
+        .getALLChuongSX(widget.idtruyen, false, false)
+        .then((value) {
       if (mounted) {
         setState(() {
           countChuong = value.size;
@@ -402,6 +415,12 @@ class _TienTrinhDocState extends State<TienTrinhDoc> {
         if (valuetientrinh == 0.0) valuetientrinh = 0.01;
         // ignore: prefer_interpolation_to_compose_strings
         print("Tien trinh  " + valuetientrinh.toString());
+      });
+    }
+    if (countChuong == 0) {
+      print('set count = 0');
+      setState(() {
+        valuetientrinh == 1.00;
       });
     }
     DsDocStream = await DatabaseDSDoc().getALLDanhSachDoc(widget.idu);
