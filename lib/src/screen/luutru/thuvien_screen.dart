@@ -140,8 +140,14 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                                                   0
                                               ? 0
                                               : (snapshot4.data.docs[i]
-                                                      ['chuongdadoc'] -
-                                                  1),
+                                                          ['chuongdadoc']) ==
+                                                      allChuongStream!
+                                                          .docs.length
+                                                  ? (snapshot4.data.docs[i]
+                                                          ['chuongdadoc']) -
+                                                      1
+                                                  : (snapshot4.data.docs[i]
+                                                      ['chuongdadoc']),
                                           idtruyen: snapshot4.data.docs[i]
                                               ['idtruyen'],
                                           iduser: blocUserLogin.id,

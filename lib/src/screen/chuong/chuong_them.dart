@@ -312,8 +312,8 @@ class _InsertChuongState extends State<InsertChuong> {
             controller: _quillEditorcontroller,
             showCodeBlock: false,
             showSearchButton: false,
-            showFontSize: false,
-            showFontFamily: false,
+            //  showFontSize: false,
+            // showFontFamily: false,
             showInlineCode: false,
             showListBullets: false,
             showListCheck: false,
@@ -330,9 +330,12 @@ class _InsertChuongState extends State<InsertChuong> {
           ),
           Expanded(
             child: Container(
-              color: Color.fromARGB(255, 237, 237, 237),
-              child: quill.QuillEditor.basic(
-                  controller: _quillEditorcontroller, readOnly: false),
+              color: ColorClass.fouthColor,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: quill.QuillEditor.basic(
+                    controller: _quillEditorcontroller, readOnly: false),
+              ),
             ),
           ),
         ]),

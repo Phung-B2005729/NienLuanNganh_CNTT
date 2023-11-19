@@ -267,7 +267,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
             children: [
               BuildTroLaiChuongSau(),
               BuildBinhChon(),
-              // BuildBinhLuan(),
+              BuildBinhLuan(),
               BuildChuongTiepTheo(snapshot, context)
             ],
           ),
@@ -276,6 +276,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Column BuildChuongTiepTheo(
       AsyncSnapshot<QuerySnapshot<Object?>> snapshot, BuildContext context) {
     return Column(
@@ -303,7 +304,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                 // _currentIndex = 1;
               });
             },
-            icon: Icon(Icons.arrow_forward)),
+            icon: const Icon(Icons.arrow_forward)),
         const Text('Tiếp theo',
             style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
       ],
