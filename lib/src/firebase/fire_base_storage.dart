@@ -20,15 +20,18 @@ class FireStorage {
     return imageUrl;
   }
 
-// xoa dua vao imageURL;
   Future<void> deleteImageFromStorage(String imageURL) async {
-    Uri uri = Uri.parse(imageURL);
+    Uri uri = Uri.parse(Uri.decodeFull(imageURL));
     String path = uri.path;
-    String fileName = path.split('F').last; // Extract the file name
+    List<String> pathSegments = path.split('/');
+    // Extract the file name from the last segment of the path
+    String fileName = pathSegments.last;
     print('filename ' + fileName);
+
     // Construct the full reference to the image
     Reference reference =
         _storageRef.ref().child(collectionName).child(fileName);
+
     // Delete the image from Firebase Storage
     await reference.delete();
   }

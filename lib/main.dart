@@ -14,7 +14,11 @@ import 'package:flutter/material.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    print('Error initializing Firebase: $e');
+  }
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(MultiProvider(providers: [
@@ -45,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     super.dispose();
-    getUser();
+    // getUser();
   }
 
   void getUser() {

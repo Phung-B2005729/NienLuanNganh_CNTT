@@ -17,6 +17,7 @@ import '../../helper/date_time_function.dart';
 
 // ignore: must_be_immutable
 class VietTruyenList extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   Stream<QuerySnapshot>? truyenStream;
   bool ktrbanthao;
   Color tcolor;
@@ -99,15 +100,9 @@ class VietTruyenList extends StatelessWidget {
                 await DatabaseTruyen()
                     .deleleOneTruyen(snapshot.data.docs[index]['idtruyen']);
                 // ignore: use_build_context_synchronously
-                MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã xoá');
-                // ignore: use_build_context_synchronously
-              } catch (e) {
-                // ignore: use_build_context_synchronously
 
                 // ignore: use_build_context_synchronously
-                MsgDialog.showSnackbar(
-                    context, Colors.red, "Lỗi vui lòng thử lại!!");
-                // ignore: prefer_interpolation_to_compose_strings
+              } catch (e) {
                 print("loi xoa image " + e.toString());
               }
 
@@ -198,32 +193,11 @@ class VietTruyenList extends StatelessWidget {
                           edit: true,
                         )));
           } else if (value == 'Dừng đăng tải') {
-            bool ktr = await dropTruyen(
-                context, snapshot.data.docs[index]['idtruyen']);
-            if (ktr == true) {
-              // ignore: use_build_context_synchronously
-
-              // ignore: use_build_context_synchronously
-            } else {
-              // ignore: use_build_context_synchronously
-              MsgDialog.showSnackbar(
-                  context, Colors.red, 'Lỗi! Vui lòng thử lại');
-            }
+            await dropTruyen(context, snapshot.data.docs[index]['idtruyen']);
           } else if (value == 'Đăng') {
             //update tinh trang
             print(value);
-            bool ktr = await dangTruyen(
-                context, snapshot.data.docs[index]['idtruyen']);
-            if (ktr == true) {
-              // ignore: use_build_context_synchronously
-              // MsgDialog.showSnackbar(
-              //    context, ColorClass.fiveColor, 'Đăng truyện thành công!!');
-              // ignore: use_build_context_synchronously
-            } else {
-              // ignore: use_build_context_synchronously
-              MsgDialog.showSnackbar(
-                  context, Colors.red, 'Lỗi! Vui lòng thử lại');
-            }
+            await dangTruyen(context, snapshot.data.docs[index]['idtruyen']);
           } else if (value == 'chỉnh sửa') {
             print(value);
             // Xử lý khi chọn "Chỉnh sửa"
@@ -353,47 +327,33 @@ class VietTruyenList extends StatelessWidget {
         context, 'Bạn có chắc chắn muốn xoá truyện này ?', ColorClass.fiveColor,
         () async {
       try {
+        await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
         await DatabaseTruyen().deleleOneTruyen(idtruyen);
         // ignore: use_build_context_synchronously
         // xoá các thông báo có idtruyen
         // ignore: use_build_context_synchronously
-        await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
-        await DatabaseDSDoc().deleteTruyenTrongDSDoc(idtruyen);
-        // ignore: use_build_context_synchronously
-        MsgDialog.showSnackbar(
-            context, ColorClass.fiveColor, "Đã xoá thành công!!");
-        // ignore: use_build_context_synchronously
-        //Navigator.pop(context);
-      } catch (e) {
-        // ignore: use_build_context_synchronously
 
-        // ignore: use_build_context_synchronously
-        MsgDialog.showSnackbar(context, Colors.red, "Lỗi vui lòng thử lại!!");
-        // ignore: prefer_interpolation_to_compose_strings
+        await DatabaseDSDoc().deleteTruyenTrongDSDoc(idtruyen);
+      } catch (e) {
         print("loi xoa image " + e.toString());
-        // ignore: use_build_context_synchronously
-        // Navigator.pop(context);
       }
     });
   }
 
   Future<dynamic> dropTruyen(BuildContext context, String idtruyen) async {
-    // LoadingDialog.showLoadingDialog(context, 'Loading...');
     try {
       // update tinh trang cac chuong
+      await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
       await DatabaseChuong().updateAllTinhTrangChuong(idtruyen, 'Bản thảo');
 
       // updat tinh trang truyen
       await DatabaseTruyen().updateTinhTrangTruyen(idtruyen, 'Bản thảo');
-      // ignore: use_build_context_synchronously
-      await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
-      // ignore: use_build_context_synchronously
-      //  LoadingDialog.hideLoadingDialog(context);
+
       return true;
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      //  LoadingDialog.hideLoadingDialog(context);
-      // MsgDialog.showSnackbar(context, Colors.red, 'Lỗi vui lòng thử lại');
+      // ignore: prefer_interpolation_to_compose_strings
+      print('Lỗi ' + e.toString());
+
       return false;
     }
   }

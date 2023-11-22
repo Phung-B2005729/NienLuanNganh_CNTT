@@ -78,43 +78,47 @@ class MsgDialog {
 
   // ignore: avoid_types_as_parameter_names
   static void showSnackbar(context, color, message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 1),
-          content: Text(
-            message,
-            style: const TextStyle(fontSize: 18),
-          ),
-          backgroundColor: color,
-          /*  action: SnackBarAction(
+    if (context != null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 1),
+            content: Text(
+              message,
+              style: const TextStyle(fontSize: 18),
+            ),
+            backgroundColor: color,
+            /*  action: SnackBarAction(
           label: "OK",
           onPressed: () {},
           textColor: Colors.white,
         ), */
-        ),
-      );
+          ),
+        );
+    }
   }
 
   static void showSnackbarTextColor(context, color, tcolor, message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-            duration: const Duration(seconds: 1),
-            content: Text(
-              message,
-              style: TextStyle(fontSize: 16, color: tcolor),
-            ),
-            backgroundColor: color
-            /*  action: SnackBarAction(
+    if (context != null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+              duration: const Duration(seconds: 1),
+              content: Text(
+                message,
+                style: TextStyle(fontSize: 16, color: tcolor),
+              ),
+              backgroundColor: color
+              /*  action: SnackBarAction(
           label: "OK",
           onPressed: () {},
           textColor: tcolor,
         ), */
-            ),
-      );
+              ),
+        );
+    }
   }
 
   static Future<bool?> showConfirmDialogDismissible(
