@@ -45,16 +45,15 @@ class BlocBinhLuan with ChangeNotifier {
 
   List<BinhLuanModel> getDSBinhLuanIdChuong(String idchuong) {
     return _allBinhLuan
-        .where((binhLuan) => binhLuan.idchuong == idchuong)
+        .where((binhLuan) =>
+            binhLuan.idchuong == idchuong && binhLuan.idreply == '0')
         .toList();
   }
 
-  bool kiemTraIdUser(List<dynamic> danhsachiduser, String iduser) {
-    if (danhsachiduser.contains(iduser)) {
-      return true;
-    } else {
-      return false;
-    }
+  List<BinhLuanModel> getDSBinhLuanIdReply(String idreply) {
+    return _allBinhLuan
+        .where((binhLuan) => binhLuan.idreply == idreply)
+        .toList();
   }
 
   Future<void> updateBinhLuan(BinhLuanModel binhLuanModel) async {
@@ -88,6 +87,14 @@ class BlocBinhLuan with ChangeNotifier {
         // ignore: prefer_interpolation_to_compose_strings
         print('Lỗi ' + e.toString());
       }
+    }
+  }
+
+  Future<void> deleteBinhLuanidreply(String idreply) async {
+    List<BinhLuanModel> listbinhluan = getDSBinhLuanIdReply(idreply);
+
+    for (var i = 0; i < listbinhluan.length; i++) {
+      deleteBinhLuan(listbinhluan[i].id!);
     }
   }
 

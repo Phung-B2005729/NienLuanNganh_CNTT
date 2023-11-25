@@ -33,8 +33,9 @@ class DatabaseBinhLuan {
 
   Future<List<BinhLuanModel>> getALLBinhLuan() async {
     // ignore: unused_local_variable, non_constant_identifier_names
-    QuerySnapshot BinhLuanQuery =
-        await binhluanCollection.orderBy('ngaycapnhat', descending: true).get();
+    QuerySnapshot BinhLuanQuery = await binhluanCollection
+        .orderBy('ngaycapnhat', descending: false)
+        .get();
     List<BinhLuanModel> BinhLuanList = [];
 
     for (QueryDocumentSnapshot BinhLuanSnapshot in BinhLuanQuery.docs) {

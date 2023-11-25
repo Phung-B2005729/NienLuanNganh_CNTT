@@ -1,3 +1,4 @@
+import 'package:apparch/src/bloc/bloc_binhluan.dart';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_timkiem.dart';
 import 'package:apparch/src/bloc/bloc_truyen.dart';
@@ -26,7 +27,8 @@ Future main() async {
       ChangeNotifierProvider(create: (context) => BlocUser()),
       ChangeNotifierProvider(create: (context) => BlocThongBao()),
       ChangeNotifierProvider(create: (context) => BlocTimKiem()),
-      ChangeNotifierProvider(create: (context) => BlocTruyen())
+      ChangeNotifierProvider(create: (context) => BlocTruyen()),
+      ChangeNotifierProvider(create: (context) => BlocBinhLuan())
     ], child: const MyApp()));
   });
 }

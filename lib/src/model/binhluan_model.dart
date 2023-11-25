@@ -7,16 +7,18 @@ class BinhLuanModel {
   String noidung;
   String ngaycapnhat;
   String idreply;
+  bool xemthem;
 
-  BinhLuanModel({
-    this.id,
-    required this.idchuong,
-    required this.iduser,
-    required this.idtruyen,
-    required this.noidung,
-    required this.idreply,
-    required this.ngaycapnhat,
-  });
+  BinhLuanModel(
+      {this.id,
+      required this.idchuong,
+      required this.iduser,
+      required this.idtruyen,
+      required this.noidung,
+      required this.idreply,
+      required this.ngaycapnhat,
+      bool? xemthem})
+      : xemthem = xemthem ?? false;
 
   BinhLuanModel copyWith({
     String? id,
@@ -26,17 +28,18 @@ class BinhLuanModel {
     String? ngaycapnhat,
     String? noidung,
     String? idreply,
+    bool? xemthem,
     // String? lichsutimkiem
   }) {
     return BinhLuanModel(
-      id: id ?? this.id,
-      idchuong: idchuong ?? this.idchuong,
-      iduser: iduser ?? this.iduser,
-      idtruyen: idtruyen ?? this.idtruyen,
-      noidung: noidung ?? this.noidung,
-      ngaycapnhat: ngaycapnhat ?? this.ngaycapnhat,
-      idreply: idreply ?? this.idreply,
-    );
+        id: id ?? this.id,
+        idchuong: idchuong ?? this.idchuong,
+        iduser: iduser ?? this.iduser,
+        idtruyen: idtruyen ?? this.idtruyen,
+        noidung: noidung ?? this.noidung,
+        ngaycapnhat: ngaycapnhat ?? this.ngaycapnhat,
+        idreply: idreply ?? this.idreply,
+        xemthem: xemthem ?? this.xemthem);
   }
 
   static BinhLuanModel fromJson(Map<String, dynamic> map) {
