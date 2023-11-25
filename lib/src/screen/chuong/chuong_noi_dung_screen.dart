@@ -323,6 +323,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (_) => BinhLuanScreen(
+                          tenchuong: snapshot.data!.docs[widget.vtChuong]
+                              ['tenchuong'],
                           idtacgia: truyenData['tacgia'],
                           idtruyen: widget.idtruyen,
                           idchuong: snapshot.data!.docs[widget.vtChuong]

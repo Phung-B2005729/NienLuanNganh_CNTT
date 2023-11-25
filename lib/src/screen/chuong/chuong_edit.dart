@@ -1,6 +1,7 @@
 // ignore_for_file:
 
 import 'dart:convert';
+import 'package:apparch/src/bloc/bloc_binhluan.dart';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
@@ -71,6 +72,9 @@ class _EditChuongState extends State<EditChuong> {
       await context
           .read<BlocThongBao>()
           .deleteAllThongBaoIdChuong(widget.idchuong);
+      await context
+          .read<BlocBinhLuan>()
+          .deleteAllBinhLuanIdChuong(widget.idchuong);
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Bản thảo');
       // ignore:, use_build_context_synchronously
@@ -372,6 +376,9 @@ class _EditChuongState extends State<EditChuong> {
                   await context
                       .read<BlocThongBao>()
                       .deleteAllThongBaoIdChuong(widget.idchuong);
+                  await context
+                      .read<BlocBinhLuan>()
+                      .deleteAllBinhLuanIdChuong(widget.idchuong);
                   await DatabaseChuong(idchuong: widget.idchuong)
                       .deleteOneChuong(widget.idtruyen);
                   // ignore:

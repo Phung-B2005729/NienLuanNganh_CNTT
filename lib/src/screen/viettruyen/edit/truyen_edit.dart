@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apparch/src/bloc/bloc_binhluan.dart';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
@@ -463,6 +464,11 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
                                       .read<BlocThongBao>()
                                       .deleteAllThongBaoIdChuong(
                                           snapshot.data.docs[i]['idchuong']);
+                                  // ignore: use_build_context_synchronously
+                                  await context
+                                      .read<BlocBinhLuan>()
+                                      .deleteAllBinhLuanIdChuong(
+                                          snapshot.data.docs[i]['idchuong']);
                                   await DatabaseChuong(
                                           idchuong: snapshot.data.docs[i]
                                               ['idchuong'])
@@ -841,6 +847,7 @@ class _EditTruyenScreenState extends State<EditTruyenScreen> {
       await DatabaseTruyen().updateTinhTrangTruyen(widget.idtruyen, 'Bản thảo');
       // ignore: use_build_context_synchronously
       await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
+      await context.read<BlocBinhLuan>().deleteAllBinhLuanIdTruyen(idtruyen);
       return true;
     } catch (e) {
       LoadingDialog.hideLoadingDialog(context);

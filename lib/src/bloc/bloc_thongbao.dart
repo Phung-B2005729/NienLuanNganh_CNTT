@@ -156,10 +156,10 @@ class BlocThongBao with ChangeNotifier {
     }
   }
 
-  Future<void> deleteAllThongBaoIdTruyen(String idchuong) async {
+  Future<void> deleteAllThongBaoIdTruyen(String idtruyen) async {
     // ignore: unused_local_variable
     List<ThongBaoModel> list =
-        _allThongBao.where((item) => item.idchuong == idchuong).toList();
+        _allThongBao.where((item) => item.idtruyen == idtruyen).toList();
     // ignore: unused_local_variable
     if (list != [] && list.isNotEmpty) {
       for (var i = 0; i < list.length; i++) {

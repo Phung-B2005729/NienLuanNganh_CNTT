@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:apparch/src/bloc/bloc_binhluan.dart';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
@@ -97,6 +98,10 @@ class VietTruyenList extends StatelessWidget {
             },
             onDismissed: (direction) async {
               try {
+                await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(
+                    snapshot.data.docs[index]['idtruyen']);
+                await context.read<BlocBinhLuan>().deleteAllBinhLuanIdTruyen(
+                    snapshot.data.docs[index]['idtruyen']);
                 await DatabaseTruyen()
                     .deleleOneTruyen(snapshot.data.docs[index]['idtruyen']);
                 // ignore: use_build_context_synchronously
@@ -328,6 +333,7 @@ class VietTruyenList extends StatelessWidget {
         () async {
       try {
         await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
+        await context.read<BlocBinhLuan>().deleteAllBinhLuanIdTruyen(idtruyen);
         await DatabaseTruyen().deleleOneTruyen(idtruyen);
         // ignore: use_build_context_synchronously
         // xoá các thông báo có idtruyen
@@ -344,6 +350,7 @@ class VietTruyenList extends StatelessWidget {
     try {
       // update tinh trang cac chuong
       await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
+      await context.read<BlocBinhLuan>().deleteAllBinhLuanIdTruyen(idtruyen);
       await DatabaseChuong().updateAllTinhTrangChuong(idtruyen, 'Bản thảo');
 
       // updat tinh trang truyen

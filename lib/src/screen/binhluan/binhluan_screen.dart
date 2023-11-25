@@ -9,11 +9,13 @@ class BinhLuanScreen extends StatefulWidget {
   final String idtruyen;
   final String idchuong;
   final String idtacgia;
+  final String tenchuong;
   const BinhLuanScreen({
     Key? key,
     required this.idtruyen,
     required this.idchuong,
     required this.idtacgia,
+    required this.tenchuong,
   }) : super(key: key);
 
   @override
@@ -39,14 +41,16 @@ class _BinhLuanScreenState extends State<BinhLuanScreen> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: ColorClass.xanh3Color,
+          backgroundColor: ColorClass.xanh2Color,
           shadowColor: ColorClass.xanh1Color,
-          title: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Bình luận',
-                style: AppTheme.lightTextTheme.bodyLarge,
-              )),
+          leading: IconButton(
+            icon: const Icon(Icons.close), // Sử dụng icon close ở đây
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title:
+              Text(widget.tenchuong, style: AppTheme.lightTextTheme.bodyLarge),
         ),
         body: FutureBuilder(
             future: allBinhLuan,

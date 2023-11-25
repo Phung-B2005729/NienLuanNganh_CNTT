@@ -72,8 +72,10 @@ class _BinhLuanListState extends State<BinhLuanList> {
       children: [
         binhluantilte(binhLuanModel, context, giatri),
         if (binhLuanModel.xemthem)
-          ...listphanhoi.map((phanhoi) =>
-              buildbinhluan(phanhoi, context, (giatri + 3).toDouble())),
+          ...listphanhoi.map(
+            (phanhoi) =>
+                buildbinhluan(phanhoi, context, (giatri + 1).toDouble()),
+          ),
       ],
     );
   }
@@ -84,6 +86,7 @@ class _BinhLuanListState extends State<BinhLuanList> {
     final nguoigui = context.read<BlocUser>().findById(binhLuanModel.iduser);
     List<BinhLuanModel> listphanhoi =
         context.read<BlocBinhLuan>().getDSBinhLuanIdReply(binhLuanModel.id!);
+    print('giá trị ' + giatri.toString());
     return Container(
       padding: EdgeInsets.only(
           top: 8,
@@ -92,36 +95,40 @@ class _BinhLuanListState extends State<BinhLuanList> {
           right: (24 - giatri).toDouble()),
       alignment: Alignment.topLeft,
       child: Container(
-        margin: EdgeInsets.only(
-            left: (giatri == 0)
-                ? 0
-                : (giatri >= 10)
-                    ? (25 + 10)
-                    : (25 + giatri).toDouble()),
+        margin:
+            EdgeInsets.only(left: (giatri == 0) ? 0 : (giatri * 25).toDouble()),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: binhLuanModel.iduser == user.id
-              ? Color.fromARGB(255, 147, 171, 185) // ColorClass.xanh3Color
+              ? const Color.fromARGB(
+                  255, 147, 171, 185) // ColorClass.xanh3Color
               : ColorClass.fouthColor,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 8, left: 8),
+              padding: (listphanhoi.isEmpty)
+                  ? const EdgeInsets.only(left: 8, top: 8)
+                  : const EdgeInsets.only(left: 0, top: 0),
               child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: (listphanhoi.length > 0)
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     backgroundImage: NetworkImage(nguoigui!.avata),
-                    radius: 15,
+                    radius: 13,
                   ),
-                  const SizedBox(width: 10),
+                  if (listphanhoi.isEmpty) const SizedBox(width: 15),
+                  // if (listphanhoi.isNotEmpty) const SizedBox(width: 0),
                   Text(
                     (widget.idtacgia == nguoigui.id)
-                        ? 'Tác giả - ' + nguoigui.userName
+                        ? 'Tác giả - ${nguoigui.userName}'
                         : nguoigui.userName,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: (widget.idtacgia == nguoigui.id)
                           ? const Color.fromARGB(255, 215, 113, 58)
@@ -129,10 +136,36 @@ class _BinhLuanListState extends State<BinhLuanList> {
                       letterSpacing: -0.5,
                     ),
                   ),
+                  if (listphanhoi.length > 0)
+                    const SizedBox(
+                      width: 90,
+                    ),
+                  if (listphanhoi.length > 0)
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            binhLuanModel = binhLuanModel.copyWith(
+                                xemthem: !binhLuanModel.xemthem);
+                            context
+                                .read<BlocBinhLuan>()
+                                .updateBinhLuan(binhLuanModel);
+                          });
+                        },
+                        icon: Icon((binhLuanModel.xemthem == false)
+                            ? Icons.expand_less
+                            : Icons.expand_more),
+                        // iconSize: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+
+                  // có phản hồi
                 ],
               ),
             ),
-            const SizedBox(height: 4),
+
             Padding(
               padding: const EdgeInsets.only(left: 35),
               child: Text(
@@ -146,137 +179,84 @@ class _BinhLuanListState extends State<BinhLuanList> {
               ),
             ),
             // Reply button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: (10 - giatri).toDouble() <= 0
-                          ? 0
-                          : (10 - giatri).toDouble()),
-                  child: Text(
-                    binhLuanModel.ngaycapnhat,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // Handle reply logic
-                    setState(() {
-                      idreply = binhLuanModel.id!;
-                      labelt = 'Đang trả lời @' + nguoigui.userName;
-                      binhluanFocus.requestFocus();
-                    });
-                  },
-                  child: Padding(
+            Padding(
+              padding: const EdgeInsets.only(top: 3, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical: 8,
+                        vertical: 3,
                         horizontal: (10 - giatri).toDouble() <= 0
                             ? 0
                             : (10 - giatri).toDouble()),
-                    child: const Text(
-                      'Trả lời',
-                      style: TextStyle(
-                        fontSize: 16,
+                    child: Text(
+                      binhLuanModel.ngaycapnhat,
+                      style: const TextStyle(
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
+                        letterSpacing: -0.5,
                       ),
                     ),
                   ),
-                ),
-                if (binhLuanModel.iduser == user.id)
                   InkWell(
                     onTap: () {
                       // Handle reply logic
-                      // xoá bình luận
-                      context
-                          .read<BlocBinhLuan>()
-                          .deleteBinhLuan(binhLuanModel.id!);
-                      context
-                          .read<BlocBinhLuan>()
-                          .deleteBinhLuanidreply(binhLuanModel.id!);
+                      setState(() {
+                        idreply = binhLuanModel.id!;
+                        labelt = 'Đang trả lời @${nguoigui.userName}';
+                        binhluanFocus.requestFocus();
+                      });
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: 8,
+                          vertical: 3,
                           horizontal: (10 - giatri).toDouble() <= 0
                               ? 0
                               : (10 - giatri).toDouble()),
                       child: const Text(
-                        'Thu hồi',
+                        'Trả lời',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
                       ),
                     ),
                   ),
-              ],
+                  if (binhLuanModel.iduser == user.id)
+                    InkWell(
+                      onTap: () {
+                        // Handle reply logic
+                        // xoá bình luận
+                        context
+                            .read<BlocBinhLuan>()
+                            .deleteBinhLuan(binhLuanModel.id!);
+                        context
+                            .read<BlocBinhLuan>()
+                            .deleteBinhLuanidreply(binhLuanModel.id!);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 3,
+                            horizontal: (10 - giatri).toDouble() <= 0
+                                ? 0
+                                : (10 - giatri).toDouble()),
+                        child: const Text(
+                          'Thu hồi',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-            if (giatri == 0)
-              if (listphanhoi.length > 0) // có phản hồi
-                (binhLuanModel.xemthem == false) //  chưa hiện danh sách
-                    ? Padding(
-                        padding: const EdgeInsets.only(bottom: 10, right: 20),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: InkWell(
-                            onTap: () {
-                              // Handle reply logic
-                              setState(() {
-                                // thay đổi
-                                binhLuanModel =
-                                    binhLuanModel.copyWith(xemthem: true);
-                                context
-                                    .read<BlocBinhLuan>()
-                                    .updateBinhLuan(binhLuanModel);
-                              });
-                            },
-                            child: const Text(
-                              'xem thêm',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(bottom: 10, right: 20),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: InkWell(
-                            onTap: () {
-                              // Handle reply logic
-                              setState(() {
-                                binhLuanModel =
-                                    binhLuanModel.copyWith(xemthem: false);
-                                context
-                                    .read<BlocBinhLuan>()
-                                    .updateBinhLuan(binhLuanModel);
-                              });
-                            },
-                            child: const Text(
-                              'thu gọn',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
           ],
         ),
       ),
@@ -289,78 +269,70 @@ class _BinhLuanListState extends State<BinhLuanList> {
     return Container(
       alignment: Alignment.bottomCenter,
       width: MediaQuery.of(context).size.width,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        margin: const EdgeInsets.only(bottom: 20),
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 203, 203, 203),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Expanded(
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: TextFormField(
-                          focusNode: binhluanFocus,
-                          maxLines: null,
-                          maxLength: null,
-                          controller: binhluanController,
-                          cursorColor: const Color.fromARGB(255, 95, 95, 95),
-                          style: AppTheme.lightTextTheme.bodyMedium,
-                          decoration: InputDecoration(
-                            hintText: "viết bình luận ......",
-                            labelText: labelt != ''
-                                ? labelt
-                                : null, // Use labelText instead of label
-                            hintStyle: const TextStyle(
-                                color: Colors.grey, fontSize: 16),
-                            labelStyle: const TextStyle(
-                                color: Colors.black, fontSize: 18),
-                            border: InputBorder.none,
-                          ),
-                        ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      margin: const EdgeInsets.only(bottom: 20),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 203, 203, 203),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      focusNode: binhluanFocus,
+                      maxLines: null,
+                      maxLength: null,
+                      controller: binhluanController,
+                      cursorColor: const Color.fromARGB(255, 95, 95, 95),
+                      style: AppTheme.lightTextTheme.bodyMedium,
+                      decoration: InputDecoration(
+                        hintText: "viết bình luận ......",
+                        labelText: labelt != '' ? labelt : null,
+                        hintStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 16),
+                        labelStyle:
+                            const TextStyle(color: Colors.black, fontSize: 18),
+                        border: InputBorder.none,
                       ),
-                      const SizedBox(width: 15),
-                    ],
+                    ),
                   ),
+                  const SizedBox(width: 15),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () async {
+              print('gọi gửi');
+              await guiBinhLuan(context, user.id);
+              setState(() {
+                binhluanController.clear();
+                binhluanFocus.unfocus();
+                labelt = '';
+              });
+            },
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.send,
+                  color: Colors.white,
                 ),
               ),
             ),
-            const SizedBox(width: 12),
-            GestureDetector(
-              onTap: () async {
-                print('gọi gửi');
-                await guiBinhLuan(context, user.id);
-                // Send message logic
-                setState(() {
-                  binhluanController.clear();
-                  binhluanFocus.unfocus();
-                  labelt = '';
-                });
-              },
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.send,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

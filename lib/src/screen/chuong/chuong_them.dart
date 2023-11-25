@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:apparch/src/bloc/bloc_binhluan.dart';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
@@ -163,7 +164,7 @@ class _InsertChuongState extends State<InsertChuong> {
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                     }
                     // ignore: use_build_context_synchronously
                   } else if (value == 'Lưu') {
@@ -199,6 +200,9 @@ class _InsertChuongState extends State<InsertChuong> {
                           await context
                               .read<BlocThongBao>()
                               .deleteAllThongBaoIdChuong(idchuong);
+                          await context
+                              .read<BlocBinhLuan>()
+                              .deleteAllBinhLuanIdChuong(idchuong);
                           await DatabaseChuong(idchuong: idchuong)
                               .deleteOneChuong(widget.idtruyen);
                           // ignore: use_build_context_synchronously
