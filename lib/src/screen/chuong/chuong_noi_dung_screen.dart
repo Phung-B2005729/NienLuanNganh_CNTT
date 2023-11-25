@@ -5,6 +5,7 @@ import 'package:apparch/src/firebase/services/database_user.dart';
 import 'package:apparch/src/helper/helper_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
+import 'package:apparch/src/screen/binhluan/binhluan_screen.dart';
 import 'package:apparch/src/screen/chuong/chuong_edit.dart';
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:apparch/src/screen/share/modal_insert_danhsachdoc.dart';
@@ -266,8 +267,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
             mainAxisSize: MainAxisSize.max,
             children: [
               BuildTroLaiChuongSau(),
-              BuildBinhChon(),
-              BuildBinhLuan(),
+              BuildBinhChon(snapshot, context),
+              BuildBinhLuan(snapshot, context),
               BuildChuongTiepTheo(snapshot, context)
             ],
           ),
@@ -311,12 +312,22 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     );
   }
 
-  Column BuildBinhLuan() {
+  Column BuildBinhLuan(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot, BuildContext context) {
     return Column(
       children: [
         IconButton(
             color: ColorClass.fiveColor,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BinhLuanScreen(
+                          idtacgia: truyenData['tacgia'],
+                          idtruyen: widget.idtruyen,
+                          idchuong: snapshot.data!.docs[widget.vtChuong]
+                              ['idchuong'])));
+            },
             icon: Icon(Icons.chat_bubble_outline)),
         const Text('Bình luận',
             style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
@@ -324,7 +335,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
     );
   }
 
-  Column BuildBinhChon() {
+  Column BuildBinhChon(
+      AsyncSnapshot<QuerySnapshot<Object?>> snapshot, BuildContext context) {
     return Column(
       children: [
         IconButton(
@@ -334,7 +346,8 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
               // them so luong binh chon cho chuong
               binhchon = !binhchon;
               print('Before update: $binhchon');
-              updateBinhChon(widget.idtruyen, idchuong, binhchon);
+              updateBinhChon(widget.idtruyen,
+                  snapshot.data!.docs[widget.vtChuong]['idchuong'], binhchon);
 
               print('After update: $binhchon');
             });
@@ -349,7 +362,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                   color: ColorClass.xanh3Color,
                 ),
         ),
-        const Text('Bình chọn',
+        Text(snapshot.data!.docs[widget.vtChuong]['binhchon'].toString(),
             style: TextStyle(fontSize: 12, color: ColorClass.fiveColor))
       ],
     );
@@ -539,11 +552,7 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
   }
 
   ListTile BuildTacGia() {
-    return ListTile(
-        onTap: () {
-          // chuyen trang ca nhan
-        },
-        title: Center(child: TacGiaAvata(truyenData['tacgia'])));
+    return ListTile(title: Center(child: TacGiaAvata(truyenData['tacgia'])));
   }
 
   ListTile BuildTenTruyen(BuildContext context) {
