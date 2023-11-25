@@ -68,6 +68,9 @@ class _EditChuongState extends State<EditChuong> {
     LoadingDialog.showLoadingDialog(context, 'Loading...');
     try {
       // update tinh trang cac chuong
+      await context
+          .read<BlocThongBao>()
+          .deleteAllThongBaoIdChuong(widget.idchuong);
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Bản thảo');
       // ignore:, use_build_context_synchronously
