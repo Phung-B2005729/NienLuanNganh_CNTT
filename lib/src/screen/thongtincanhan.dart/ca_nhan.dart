@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, unused_field
 import 'dart:io';
 
+import 'package:apparch/src/bloc/bloc_user.dart';
 import 'package:apparch/src/bloc/bloc_userlogin.dart';
 import 'package:apparch/src/firebase/fire_base_auth.dart';
 import 'package:apparch/src/firebase/fire_base_storage.dart';
@@ -41,6 +42,7 @@ class _CaNhanState extends State<CaNhan> {
 
   Future<void> getData() async {
     await context.read<BlocUserLogin>().getUserLogin();
+    await context.read<BlocUser>().getAllUser();
   }
 
   Future pickImage(UserModel userModel) async {
@@ -70,6 +72,7 @@ class _CaNhanState extends State<CaNhan> {
         // Check if the widget is still mounted
         UserModel user = userModel.copyWith(avata: imageURL);
         await context.read<BlocUserLogin>().updateUser(user);
+        await context.read<BlocUser>().updateUser(user);
         // ignore: use_build_context_synchronously
         LoadingDialog.hideLoadingDialog(context);
       }
@@ -330,6 +333,7 @@ class _CaNhanState extends State<CaNhan> {
                           await context
                               .read<BlocUserLogin>()
                               .updateUser(userModel);
+                          await context.read<BlocUser>().updateUser(userModel);
                         }
                         if (label == 'UserName') {
                           UserModel userModel =
@@ -338,6 +342,7 @@ class _CaNhanState extends State<CaNhan> {
                           await context
                               .read<BlocUserLogin>()
                               .updateUser(userModel);
+                          await context.read<BlocUser>().updateUser(userModel);
                         }
                         // ignore: use_build_context_synchronously
                         LoadingDialog.hideLoadingDialog(context);
@@ -394,6 +399,7 @@ class _CaNhanState extends State<CaNhan> {
       // gọi update
       UserModel userModel = user.copyWith(ngaysinh: ngay);
       await context.read<BlocUserLogin>().updateUser(userModel);
+      await context.read<BlocUser>().updateUser(userModel);
     }
   }
 
@@ -497,6 +503,7 @@ class _CaNhanState extends State<CaNhan> {
                       () async {
                         // gọi update
                         context.read<BlocUserLogin>().updateUser(userModel);
+                        await context.read<BlocUser>().updateUser(userModel);
                         print('Gọi xong');
                         Navigator.of(currentContext).pop();
                       },

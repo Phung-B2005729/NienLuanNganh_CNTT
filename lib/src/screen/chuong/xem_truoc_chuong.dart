@@ -24,7 +24,6 @@ class ChuongXemTruoc extends StatefulWidget {
 class _ChuongXemTruocState extends State<ChuongXemTruoc> {
   var tapbarbool = true;
   var binhchon = false;
-  int _currentIndex = 1;
   @override
   void initState() {
     super.initState();

@@ -33,4 +33,20 @@ class BlocUser with ChangeNotifier {
       return null;
     }
   }
+
+  Future<void> updateUser(UserModel userModel) async {
+    final index = _user.indexWhere((item) =>
+        item.id ==
+        userModel.id); // tìm lớp có trong danh sách list<Lop> hay không ?
+    if (index >= 0) {
+      try {
+        await DatabaseUser().updateOneUser(userModel.id!, userModel);
+        _user[index] = userModel; // update trong danh sách
+        notifyListeners();
+      } catch (e) {
+        // ignore: prefer_interpolation_to_compose_strings
+        print('Lỗi ' + e.toString());
+      }
+    }
+  }
 }

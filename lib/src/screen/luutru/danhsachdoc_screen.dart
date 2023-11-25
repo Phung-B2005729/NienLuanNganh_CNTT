@@ -1,13 +1,14 @@
+import 'package:apparch/src/bloc/bloc_truyen.dart';
 import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/screen/luutru/danhsachdoc_chitiet_sceen.dart';
-
 import 'package:apparch/src/screen/share/mgsDiaLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DanhSachDocScreen extends StatefulWidget {
@@ -28,7 +29,6 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
   @override
   void initState() {
     super.initState();
-
     getData();
   }
 
@@ -40,6 +40,7 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
           DanhSachDoc = vsl;
         });
       });
+      context.read<BlocTruyen>().getAllTruyen();
     } catch (e) {
       print('Looi ' + e.toString());
     }
@@ -250,7 +251,9 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
               width: 140,
             ),
           ),
-          (snapshot.data.docs[index]['danhsachtruyen'].length == 0)
+          (danhsachdocnotbanthao(
+                      context, snapshot.data.docs[index]['danhsachtruyen']) ==
+                  0)
               ? Positioned(
                   right: 20,
                   child: Container(
@@ -313,8 +316,11 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
               children: [
                 Text(
                   // ignore: prefer_interpolation_to_compose_strings
-                  snapshot.data.docs[index]['danhsachtruyen'].length
-                          .toString() +
+                  danhsachdocnotbanthao(context,
+                              snapshot.data.docs[index]['danhsachtruyen'])
+                          .toString()
+                      // ignore: prefer_interpolation_to_compose_strings
+                      +
                       " Truyện",
                   style: AppTheme.lightTextTheme.bodySmall,
                 ),
@@ -500,6 +506,18 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
             ],
           );
         });
+  }
+
+  int danhsachdocnotbanthao(BuildContext context, List<dynamic> lisTruyen) {
+    late List<dynamic> lisTruyennotbanthao = [];
+    for (var i = 0; i < lisTruyen.length; i++) {
+      final truyen = context.read<BlocTruyen>().findById(lisTruyen[i]);
+      // ignore: unnecessary_null_comparison
+      if (truyen!.tinhtrang != 'Bản thảo' && truyen != null) {
+        lisTruyennotbanthao.add(lisTruyen[i]);
+      }
+    }
+    return lisTruyennotbanthao.length;
   }
 }
 
