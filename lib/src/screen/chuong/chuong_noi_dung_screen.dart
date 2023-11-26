@@ -212,7 +212,10 @@ class _ChuongNoiDungScreenState extends State<ChuongNoiDungScreen> {
                   children: <Widget>[
                     BuildNoiDung(snapshot),
                     BuildSiderTienTrinh(context),
-                    BuildRowBottom(snapshot, context)
+                    (widget.edit == true)
+                        ? Visibility(
+                            visible: tapbarbool, child: SizedBox(height: 80))
+                        : BuildRowBottom(snapshot, context)
                   ],
                 ),
               ),

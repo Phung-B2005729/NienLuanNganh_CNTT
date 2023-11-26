@@ -212,6 +212,11 @@ class _ThuVienScreenState extends State<ThuVienScreen> {
                                               blocUserLogin.id,
                                               snapshot.data.docs[index]
                                                   ['idtruyen']);
+                                      // xoá đọc giả truyện danh sách đọc giả
+                                      await DatabaseTruyen().deleteDocGia(
+                                          blocUserLogin.id,
+                                          snapshot.data.docs[index]
+                                              ['idtruyen']);
                                       // ignore: use_build_context_synchronously
                                     } catch (e) {
                                       // ignore: use_build_context_synchronously
@@ -381,6 +386,7 @@ class _TienTrinhDocState extends State<TienTrinhDoc> {
         () async {
       try {
         await DatabaseUser().deleteOneTruyenOnThuVien(idu, idtruyen);
+        await DatabaseTruyen().deleteDocGia(idu, idtruyen);
         // ignore: use_build_context_synchronously
       } catch (e) {
         // ignore: use_build_context_synchronously

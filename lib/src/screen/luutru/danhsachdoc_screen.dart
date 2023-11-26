@@ -360,11 +360,11 @@ class _DanhSachDocScreenState extends State<DanhSachDocScreen> {
                       snapshot.data.docs[index]['danhsachtruyen'][i]);
                 }
                 // ignore: use_build_context_synchronously
-                MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã xoá');
+                // MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã xoá');
               } catch (e) {
                 // ignore: use_build_context_synchronously
-                MsgDialog.showSnackbar(
-                    context, Colors.red, "Lỗi vui lòng thử lại!!");
+                //  MsgDialog.showSnackbar(
+                //      context, Colors.red, "Lỗi vui lòng thử lại!!");
                 print('Lỗi xoá ds ' + e.toString());
               }
             });

@@ -68,7 +68,7 @@ class _TruyenChiTietDetail2State extends State<TruyenChiTietDetail2> {
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: Card(
                 color: Colors.white,
-                child: Column(children: [
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 4, right: 4, top: 140),
                     child: BuildCardSapXepChuong(snapshot),
