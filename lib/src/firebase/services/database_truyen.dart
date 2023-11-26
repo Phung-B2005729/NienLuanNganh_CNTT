@@ -133,10 +133,21 @@ class DatabaseTruyen {
     return false;
   }
 
-  Future deleleOneTruyen(String idtruyen) async {
+  Future deleteOneTruyen(String idtruyen) async {
+    // Xoá tất cả các documents trong collection 'chuong' của truyện
+    var chuongCollection = truyenColection.doc(idtruyen).collection('chuong');
+    var chuongQuery = await chuongCollection.get();
+    for (var document in chuongQuery.docs) {
+      // Xoá mỗi document trong collection 'chuong'
+      await document.reference.delete();
+    }
+
+    // Xoá ảnh từ storage
     var documentReference = await truyenColection.doc(idtruyen).get();
     await FireStorage()
         .deleteImageFromStorage(documentReference['linkanh'].toString());
+
+    // Xoá collection 'truyen'
     return await truyenColection.doc(idtruyen).delete();
   }
 
