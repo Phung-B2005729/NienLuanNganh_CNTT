@@ -24,6 +24,8 @@ class _TruyenChiTietAmitionState extends State<TruyenChiTietAmition> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.edit == false) getData();
     _pageController = PageController(initialPage: widget.vttruyen);
     // Lắng nghe sự thay đổi của trang được chọn
 
@@ -32,7 +34,6 @@ class _TruyenChiTietAmitionState extends State<TruyenChiTietAmition> {
         currentPage = _pageController.page!.toInt();
       });
     });
-    getData();
   }
 
   getData() {
@@ -41,16 +42,30 @@ class _TruyenChiTietAmitionState extends State<TruyenChiTietAmition> {
         lisTruyennotbanthao.add(widget.lisTruyen[i]);
       }
     }
+    int tam = widget.vttruyen;
+    for (var i = 0; i < lisTruyennotbanthao.length; i++) {
+      if (widget.lisTruyen[tam]['idtruyen'] ==
+          lisTruyennotbanthao[i]['idtruyen']) {
+        setState(() {
+          widget.vttruyen = i;
+        });
+        break;
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
       controller: _pageController,
-      itemCount: lisTruyennotbanthao.length,
+      itemCount: (widget.edit == false)
+          ? lisTruyennotbanthao.length
+          : widget.lisTruyen.length,
       itemBuilder: (BuildContext context, int index) {
         return TruyenChiTietScreen(
-          idtruyen: lisTruyennotbanthao[index]['idtruyen'],
+          idtruyen: (widget.edit == false)
+              ? lisTruyennotbanthao[index]['idtruyen']
+              : widget.lisTruyen[index]['idtruyen'],
           edit: widget.edit,
         );
       },
