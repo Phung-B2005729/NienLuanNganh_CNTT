@@ -49,4 +49,11 @@ class BlocUser with ChangeNotifier {
       }
     }
   }
+
+  Future<void> deleteOneTruyenThuVienAllUser(String idtruyen) async {
+    for (var i = 0; i < _user.length; i++) {
+      await DatabaseUser().deleteOneTruyenOnThuVien(_user[i].id!, idtruyen);
+    }
+    notifyListeners();
+  }
 }
