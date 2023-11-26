@@ -2,6 +2,7 @@
 
 import 'package:apparch/src/bloc/bloc_binhluan.dart';
 import 'package:apparch/src/bloc/bloc_thongbao.dart';
+import 'package:apparch/src/bloc/bloc_user.dart';
 import 'package:apparch/src/firebase/services/database_chuong.dart';
 import 'package:apparch/src/firebase/services/database_danhsachdoc.dart';
 import 'package:apparch/src/firebase/services/database_truyen.dart';
@@ -102,12 +103,20 @@ class VietTruyenList extends StatelessWidget {
                     snapshot.data.docs[index]['idtruyen']);
                 await context.read<BlocBinhLuan>().deleteAllBinhLuanIdTruyen(
                     snapshot.data.docs[index]['idtruyen']);
+                // xoá truyện trong thư viện
+                // ignore: use_build_context_synchronously
+                await context.read<BlocUser>().deleteOneTruyenThuVienAllUser(
+                    snapshot.data.docs[index]['idtruyen']);
+                // xoá truỵen trong danh sách đọc
+                await DatabaseDSDoc().deleteTruyenTrongDSDoc(
+                    snapshot.data.docs[index]['idtruyen']);
                 await DatabaseTruyen()
-                    .deleleOneTruyen(snapshot.data.docs[index]['idtruyen']);
+                    .deleteOneTruyen(snapshot.data.docs[index]['idtruyen']);
                 // ignore: use_build_context_synchronously
 
                 // ignore: use_build_context_synchronously
               } catch (e) {
+                // ignore: prefer_interpolation_to_compose_strings
                 print("loi xoa image " + e.toString());
               }
 
@@ -334,7 +343,8 @@ class VietTruyenList extends StatelessWidget {
       try {
         await context.read<BlocThongBao>().deleteAllThongBaoIdTruyen(idtruyen);
         await context.read<BlocBinhLuan>().deleteAllBinhLuanIdTruyen(idtruyen);
-        await DatabaseTruyen().deleleOneTruyen(idtruyen);
+        await context.read<BlocUser>().deleteOneTruyenThuVienAllUser(idtruyen);
+        await DatabaseTruyen().deleteOneTruyen(idtruyen);
         // ignore: use_build_context_synchronously
         // xoá các thông báo có idtruyen
         // ignore: use_build_context_synchronously

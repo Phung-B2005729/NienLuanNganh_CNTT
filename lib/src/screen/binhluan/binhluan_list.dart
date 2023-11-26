@@ -5,7 +5,6 @@ import 'package:apparch/src/helper/date_time_function.dart';
 import 'package:apparch/src/helper/temple/app_theme.dart';
 import 'package:apparch/src/helper/temple/color.dart';
 import 'package:apparch/src/model/binhluan_model.dart';
-import 'package:apparch/src/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
