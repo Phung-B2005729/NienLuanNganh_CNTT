@@ -33,45 +33,27 @@ class _TacGiaState extends State<TacGia> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // chuyen sang thong tin tac gia
-        /*  Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CaNhan(),
-          ), //final arguments = ModalRoute.of(context)!.settings.arguments;
-        ); */
-      },
-      child: /*Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            // ignore: unnecessary_null_comparison
+
+            backgroundImage: (avata != null && avata!.isNotEmpty)
+                ? NetworkImage(avata!)
+                : null,
+            radius: 13,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
             username != null ? username! : '',
             style: AppTheme.lightTextTheme.bodyMedium,
-          ) */
-
-          Padding(
-        padding: const EdgeInsets.only(bottom: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              // ignore: unnecessary_null_comparison
-
-              backgroundImage: (avata != null && avata!.isNotEmpty)
-                  ? NetworkImage(avata!)
-                  : null,
-              radius: 13,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              username != null ? username! : '',
-              style: AppTheme.lightTextTheme.bodyMedium,
-            ) // ten tac gia
-          ],
-        ),
+          ) // ten tac gia
+        ],
       ),
     );
   }

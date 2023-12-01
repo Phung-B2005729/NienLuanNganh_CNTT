@@ -33,8 +33,9 @@ class DatabaseThongBao {
 
   Future<List<ThongBaoModel>> getALLthongbao() async {
     // ignore: unused_local_variable
-    QuerySnapshot thongbaoQuery =
-        await thongbaoCollection.orderBy('ngaycapnhat', descending: true).get();
+    QuerySnapshot thongbaoQuery = await thongbaoCollection
+        .orderBy('ngaycapnhat', descending: false)
+        .get();
     List<ThongBaoModel> thongbaoList = [];
 
     for (QueryDocumentSnapshot thongbaoSnapshot in thongbaoQuery.docs) {

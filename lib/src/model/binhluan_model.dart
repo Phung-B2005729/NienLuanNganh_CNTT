@@ -29,7 +29,6 @@ class BinhLuanModel {
     String? noidung,
     String? idreply,
     bool? xemthem,
-    // String? lichsutimkiem
   }) {
     return BinhLuanModel(
         id: id ?? this.id,

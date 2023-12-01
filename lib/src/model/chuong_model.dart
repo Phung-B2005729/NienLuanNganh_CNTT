@@ -3,7 +3,6 @@
 import '../helper/date_time_function.dart';
 
 class ChuongModel {
-  // ignore: non_constant_identifier_names
   String? idchuong;
   String? tenchuong;
   dynamic noidung;

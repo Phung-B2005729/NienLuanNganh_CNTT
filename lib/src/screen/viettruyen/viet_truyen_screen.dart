@@ -29,8 +29,6 @@ class VietTruyenScreen extends StatelessWidget {
             notificationPredicate: (ScrollNotification notification) {
               return notification.depth == 1;
             },
-            // The elevation value of the app bar when scroll view has
-            // scrolled underneath the app bar.
             scrolledUnderElevation: 4.0,
             bottom: TabBar(
                 indicator: const UnderlineTabIndicator(

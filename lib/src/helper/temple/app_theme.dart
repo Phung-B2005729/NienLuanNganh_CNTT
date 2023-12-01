@@ -71,57 +71,7 @@ class AppTheme {
       color: Colors.black,
     ),
   );
-  // 2
-  static TextTheme darkTextTheme = TextTheme(
-    bodyLarge: GoogleFonts.openSans(
-      fontSize: 18.0, //22
-      fontWeight: FontWeight.normal,
-      color: Colors.white,
-    ),
-    bodyMedium: GoogleFonts.openSans(
-      fontSize: 16.0, //20
-      fontWeight: FontWeight.w700,
-      color: Colors.white,
-    ),
-    bodySmall: GoogleFonts.openSans(
-      fontSize: 14.0, //16
-      fontWeight: FontWeight.w700,
-      color: Colors.white,
-    ),
-    displayLarge: GoogleFonts.openSans(
-      fontSize: 32.0, //28
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    displayMedium: GoogleFonts.openSans(
-      fontSize: 21.0, //26
-      fontWeight: FontWeight.w700,
-      color: Colors.white,
-    ),
-    displaySmall: GoogleFonts.openSans(
-      fontSize: 16.0,
-      fontWeight: FontWeight.w600,
-      color: Colors.white,
-    ),
-    titleLarge: GoogleFonts.openSans(
-      fontSize: 40.0, //30.0
-      fontWeight: FontWeight.bold,
-      color: ColorClass.fiveColor,
-    ),
-    titleMedium: GoogleFonts.openSans(
-      fontSize: 26,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    titleSmall: GoogleFonts.arizonia(
-      //roboto
-      // arizonia
-      fontSize: 40,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-  );
-  // 3
+
   static ThemeData light() {
     return ThemeData(
       // useMaterial3: true,
@@ -150,29 +100,6 @@ class AppTheme {
         selectedItemColor: ColorClass.fiveColor,
       ),
       textTheme: lightTextTheme,
-    );
-  }
-
-  // 4
-  static ThemeData dark() {
-    return ThemeData(
-      colorScheme: const ColorScheme.dark(),
-      brightness: Brightness.dark,
-      dialogBackgroundColor: Colors.black,
-      primaryColor: ColorClass.primaryColor,
-      appBarTheme: AppBarTheme(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.grey[900],
-        centerTitle: true,
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        foregroundColor: Colors.white,
-        backgroundColor: ColorClass.fiveColor,
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        selectedItemColor: ColorClass.fiveColor,
-      ),
-      //  textTheme: darkTextTheme,
     );
   }
 }

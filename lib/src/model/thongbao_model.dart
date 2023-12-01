@@ -27,7 +27,6 @@ class ThongBaoModel {
     String? ngaycapnhat,
     List<dynamic>? danhsachiduser,
     List<dynamic>? danhsachiduserdadoc,
-    // String? lichsutimkiem
   }) {
     return ThongBaoModel(
         id: id ?? this.id,

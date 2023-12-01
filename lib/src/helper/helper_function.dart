@@ -5,17 +5,10 @@ class HelperFunctions {
   // ignore: non_constant_identifier_names
   static String LoggedInKey = "LOGGEDINKEY";
   static String userNameKey = "USERNAMEKEY";
-  static String fullNameKey = "FULLNAMEKEY";
-  // ignore: non_constant_identifier_names
   static String EmailKey = "USEREMAILKEY";
-  // ignore: non_constant_identifier_names
   static String IdUserKey = "IDUSER";
   static String avataKey = 'AVATAKEY';
-  static String anhnenKey = 'ANHNENKEY';
-  static String ngaysinhKey = 'DATAKEY';
-
   static String anhMacDinh = 'ANHMACDINH';
-  //static String LichSuTimKiem = 'LICHSUTIMKIEM';
 // tien trinh doc
   static void saveIdtruyenTienTrinh(String nameIdTruyen, int value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,13 +54,12 @@ class HelperFunctions {
   }
   // ignore: non_constant_identifier_names
 
-//email
   static Future<bool> saveEmailSF(String userEmail) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return await sf.setString(EmailKey, userEmail);
   }
+  //id
 
-//id
   static Future<bool> saveUserID(String userID) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return await sf.setString(IdUserKey, userID);

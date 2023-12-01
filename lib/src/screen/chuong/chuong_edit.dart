@@ -1,4 +1,4 @@
-// ignore_for_file:
+// ignore_for_file:, use_build_context_synchronously
 
 import 'dart:convert';
 import 'package:apparch/src/bloc/bloc_binhluan.dart';
@@ -77,11 +77,10 @@ class _EditChuongState extends State<EditChuong> {
           .deleteAllBinhLuanIdChuong(widget.idchuong);
       await DatabaseChuong(idchuong: widget.idchuong)
           .updateTinhTrangChuong(widget.idtruyen, 'Bản thảo');
-      // ignore:, use_build_context_synchronously
+
       LoadingDialog.hideLoadingDialog(context);
       return true;
     } catch (e) {
-      // ignore:, use_build_context_synchronously
       LoadingDialog.hideLoadingDialog(context);
       // MsgDialog.showSnackbar(context, Colors.red, 'Lỗi vui lòng thử lại');
       return false;
@@ -147,7 +146,7 @@ class _EditChuongState extends State<EditChuong> {
           };
           await DatabaseChuong()
               .updateOneChuong(widget.idtruyen, widget.idchuong, chuong);
-          // ignore: use_build_context_synchronously
+
           LoadingDialog.hideLoadingDialog(context);
           return true;
         } catch (e) {
@@ -332,10 +331,9 @@ class _EditChuongState extends State<EditChuong> {
             }
             if ((saveCreate == true && ktrdang == true) ||
                 (update == true && ktrdang == true)) {
-              // ignore:, use_build_context_synchronously
               MsgDialog.showSnackbar(
                   context, ColorClass.fiveColor, 'Đã đăng một chương mới!!');
-              // ignore:, use_build_context_synchronously
+
               Navigator.pop(context);
               // ignore:
               Navigator.pop(context);
@@ -352,18 +350,11 @@ class _EditChuongState extends State<EditChuong> {
               // goi ham update;
             }
             if (saveCreate == true || update == true) {
-              // ignore:
               MsgDialog.showSnackbar(context, ColorClass.fiveColor, 'Đã lưu');
-              // ignore:
-
-              // ignore:
-
-              // ignore:
             }
           } else if (value == 'Xoá') {
             print(value);
-            //kiem tu trang them moi hay trang chinh sua
-            // hoi xac nhan xoa
+
             MsgDialog.showXacNhanThongTin(
                 context,
                 'Bạn có chắc chắn muốn xoá chương này?',

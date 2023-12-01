@@ -40,10 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color.fromARGB(255, 129, 127, 127),
         // iconSize: 22,
         type: BottomNavigationBarType.shifting,
-        //  selectedFontSize: 14.0,
-        //selectedIconTheme: const IconThemeData(size: 24.0),
+
         unselectedItemColor: const Color.fromARGB(255, 63, 63, 63),
-        //   selectedItemColor: ColorClass.fiveColor,
+
         items: [
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           const BottomNavigationBarItem(
@@ -71,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context
                                   .read<BlocThongBao>()
                                   .getConutThongBaoMoi(user.id)
-                                  .toString(), // You can replace this with the actual notification count
+                                  .toString(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,

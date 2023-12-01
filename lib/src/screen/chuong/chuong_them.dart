@@ -200,6 +200,7 @@ class _InsertChuongState extends State<InsertChuong> {
                           await context
                               .read<BlocThongBao>()
                               .deleteAllThongBaoIdChuong(idchuong);
+                          // ignore: use_build_context_synchronously
                           await context
                               .read<BlocBinhLuan>()
                               .deleteAllBinhLuanIdChuong(idchuong);
@@ -207,6 +208,7 @@ class _InsertChuongState extends State<InsertChuong> {
                               .deleteOneChuong(widget.idtruyen);
                           // ignore: use_build_context_synchronously
                           LoadingDialog.hideLoadingDialog(context);
+                          // ignore: use_build_context_synchronously
                           MsgDialog.showSnackbar(
                               context, ColorClass.fiveColor, 'Đã xoá');
                           // ignore: use_build_context_synchronously
@@ -298,8 +300,6 @@ class _InsertChuongState extends State<InsertChuong> {
             controller: _quillEditorcontroller,
             showCodeBlock: false,
             showSearchButton: false,
-            //  showFontSize: false,
-            // showFontFamily: false,
             showInlineCode: false,
             showListBullets: false,
             showListCheck: false,
@@ -310,9 +310,6 @@ class _InsertChuongState extends State<InsertChuong> {
             showSuperscript: false,
             showSubscript: false,
             showLink: false,
-            // showIndent: false,
-            // showQuote: false,
-            //  showListNumbers: false,
           ),
           Expanded(
             child: Container(
@@ -329,51 +326,3 @@ class _InsertChuongState extends State<InsertChuong> {
     );
   }
 }
-
-
-
-/* Text(jsonEncode(
-                      _quillEditorcontroller.document.toDelta().toJson())),
-
-                  // hiem thi ra
-                  quill.QuillEditor.basic(
-                      controller: quill.QuillController(
-                        selection: const TextSelection.collapsed(offset: 0),
-                        document: quill.Document.fromJson(jsonDecode(
-                          jsonEncode(_quillEditorcontroller.document
-                              .toDelta()
-                              .toJson()), //// thong tin insert vào databas
-                        ) // thong tin hien thi ra
-                            ),
-                      ),
-                      readOnly: true),
-                  Container(
-                    height: 500,
-                    child: Column(
-                      children: [
-                        quill.QuillToolbar.basic(
-                          embedButtons: FlutterQuillEmbeds.buttons(),
-
-                          /*  quill.QuillCustomButton(
-                                icon: Icons.camera_alt,
-                                onTap: () {
-                                  pickImage();
-                                }), */
-
-                          controller: _quillEditorcontroller,
-                          // multiRowsDisplay: false,
-                        ),
-                        const Align(
-                            alignment: Alignment.topLeft, child: Text('Mô tả')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                            child: Container(
-                          color: Color.fromARGB(255, 224, 224, 224),
-                          padding: EdgeInsets.all(12),
-                          child: quill.QuillEditor.basic(
-                              controller: _quillEditorcontroller,
-                              embedBuilders: FlutterQuillEmbeds.builders(),
-                              readOnly: false),
-                        )),*/
